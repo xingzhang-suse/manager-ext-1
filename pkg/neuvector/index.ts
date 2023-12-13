@@ -1,6 +1,6 @@
 import { importTypes } from '@rancher/auto-import';
 import { IPlugin } from '@shell/core/types';
-import extensionRouting from './routing/extension-routing';
+import neuvectorRouting from './routing/neuvector-routing';
 
 // Init the package
 export default function(plugin: IPlugin) {
@@ -11,9 +11,9 @@ export default function(plugin: IPlugin) {
   // it will grab information such as `name` and `description`
   plugin.metadata = require('./package.json');
 
-  // Load a product
-  plugin.addProduct(require('./product'));
+  // Load NeuVectorå
+  plugin.addProduct(require('./neuvector'));
 
   // Add Vue Routes
-  plugin.addRoutes(extensionRouting);
+  plugin.addRoutes(neuvectorRouting);
 }
