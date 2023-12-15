@@ -2,12 +2,13 @@
 import { mapGetters } from 'vuex';
 import Loading from '@shell/components/Loading';
 import BarChart from './charts/BarChart';
+import BarChart2 from './charts/BarChart2';
 import SampleGrid from './grids/SampleGrid';
 import ScoreGauge from './charts/ScoreGauge';
 
 export default {
   components: {
-    Loading, BarChart, SampleGrid, ScoreGauge
+    Loading, BarChart, BarChart2, SampleGrid, ScoreGauge
   },
 
   mixins: [],
@@ -33,15 +34,27 @@ export default {
 <template>
   <Loading v-if="$fetchState.pending" />
   <div v-else class="dashboard">
-    <div class="head">
+    <div>
       <div class="head-title">
-        <h1 data-testid="nv-dashboard-title">
+        <h1 data-testid="nv-dashboard-title" class="mb-20">
           Dashboard
         </h1>
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
-      <BarChart />
-      <SampleGrid />
+      <div class="get-started">
+        <div class="head card-container p-20">
+          <div class="text-center">Top Vulnerable Containers</div>
+          <BarChart />
+        </div>
+        <div class="head card-container p-20">
+          <div class="text-center">Top Vulnerable Hosts</div>
+          <BarChart2 />
+        </div>
+      </div>
+      <div class="head card-container p-20">
+          <div>Ingress and Egress Exposure</div>
+          <SampleGrid />
+        </div>
       <!-- <ScoreGauge /> -->
       <div class="head-links">
         <a
@@ -110,6 +123,29 @@ export default {
       min-height: 420px;
       padding: 0;
     }
+  }
+}
+.container {
+  & .title {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 100px 0;
+  }
+
+  & .description {
+    line-height: 20px;
+  }
+
+  & .chart-route {
+    position: relative;
+  }
+
+  & .airgap-align {
+    justify-content: start;
   }
 }
 </style>
