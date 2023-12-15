@@ -65,10 +65,10 @@
     data() {
       return {
         chartData: {
-          labels: ['emailservice-844bc9d8cb-td97k', 'recommendationservice-557596fdcb-gr7ww', 'loadgenerator-5654bbdb6f-vlg9b', 'frontend-89857c76-ss4hn', 'currencyservice-76d4b755d6-tzvvb'],
+          labels: ['worker2', 'worker1', 'worker3', 'master', ''],
           datasets: [
             {
-              data: [61, 61, 61, 17, 13],
+              data: [999, 786, 786, 550, 0],
               label: 'High',
               backgroundColor: 'rgba(239, 83, 80, 0.3)',
               borderColor: '#ef5350',
@@ -78,7 +78,7 @@
               borderWidth: 2,
             },
             {
-              data: [66, 66, 65, 12, 16],
+              data: [1074, 896, 896, 589, 0],
               label: 'Medium',
               backgroundColor: 'rgba(255, 152, 0, 0.3)',
               borderColor: '#ff9800',
