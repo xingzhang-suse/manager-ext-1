@@ -1,7 +1,8 @@
 import { IPlugin } from '@shell/core/types';
 
 export function init($plugin: any, store: any) {
-  const NEUVECTOR = 'NeuVector1';
+  const NEUVECTOR = 'NeuVector Dashboard';
+  const NEUVECTOR_URL = 'NeuVector_Dashboard';
   const NEUVECTOR_DASHBOARD = 'Dashboard';
   const BLANK_CLUSTER = '_';
 
