@@ -65,28 +65,18 @@
     data() {
       return {
         chartData: {
-          labels: ['worker2', 'worker1', 'worker3', 'master', ''],
+          labels: ['Host: master', 've', '10.1.10.43', '782f087b36421fb3118f2925c8879c1edaf14ec9b38d166ca89a2e07ca2744d6', '10.1.7.11'],
           datasets: [
             {
-              data: [999, 786, 786, 550, 0],
-              label: 'High',
-              backgroundColor: 'rgba(239, 83, 80, 0.3)',
-              borderColor: '#ef5350',
-              hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
-              hoverBorderColor: '#ef5350',
-              barThickness: 15,
-              borderWidth: 2,
-            },
-            {
-              data: [1074, 896, 896, 589, 0],
-              label: 'Medium',
-              backgroundColor: 'rgba(255, 152, 0, 0.3)',
-              borderColor: '#ff9800',
-              hoverBackgroundColor: 'rgba(255, 152, 0, 0.3)',
-              hoverBorderColor: '#ff9800',
-              barThickness: 15,
-              borderWidth: 2,
-            },
+            label: this.t('dashboard.body.panel_title.DESTINATION'),
+            data:  [33, 22, 4, 4, 4],
+            backgroundColor:  ['rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)'],
+            borderColor: ['#ef5350', '#ef5350', '#ef5350', '#ef5350', '#ef5350'] ,
+            hoverBackgroundColor: ['rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)'],
+            hoverBorderColor: ['#ef5350', '#ef5350', '#ef5350', '#ef5350', '#ef5350'] ,
+            barThickness: 15,
+            borderWidth: 2
+            }
           ],
         },
         chartOptions: {

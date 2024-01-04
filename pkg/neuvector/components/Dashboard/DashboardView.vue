@@ -1,14 +1,43 @@
 <script>
-import { mapGetters } from 'vuex';
 import Loading from '@shell/components/Loading';
-import BarChart from './charts/BarChart';
-import BarChart2 from './charts/BarChart2';
-import SampleGrid from './grids/SampleGrid';
+import BarChart4TopVulnerableContainers from './charts/BarChart4TopVulnerableContainers';
+import BarChart4TopVulnerableHosts from './charts/BarChart4TopVulnerableHosts';
+import LineChart4SecurityEvents from './charts/LineChart4SecurityEvents';
+import BarChart4TopSecurityEventsBySource from './charts/BarChart4TopSecurityEventsBySource';
+import BarChart4TopSecurityEventsByDestination from './charts/BarChart4TopSecurityEventsByDestination';
+import PieChart4PolicyModeOfPods from './charts/PieChart4PolicyModeOfPods';
+import PieChart4PolicyModeOfServices from './charts/PieChart4PolicyModeOfServices';
+import PolicyModeOfServices from './contents/PolicyModeOfServices';
+import PolicyModeOfPods from './contents/PolicyModeOfPods';
+import BarChart4Exposures from './charts/BarChart4Exposures';
+import ScoreFactor from './contents/ScoreFactor';
+import ExposureGrid from './grids/ExposureGrid';
+import Instruction from './contents/Instruction';
+import Tabbed from '@shell/components/Tabbed';
+import Tab from '@shell/components/Tabbed/Tab';
+import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
 
 export default {
   components: {
-    Loading, BarChart, BarChart2, SampleGrid, ScoreGauge
+    Loading,
+    BarChart4TopVulnerableContainers,
+    BarChart4TopVulnerableHosts,
+    LineChart4SecurityEvents,
+    BarChart4TopSecurityEventsBySource,
+    BarChart4TopSecurityEventsByDestination,
+    PieChart4PolicyModeOfPods,
+    PieChart4PolicyModeOfServices,
+    PolicyModeOfServices,
+    PolicyModeOfPods,
+    BarChart4Exposures,
+    ScoreFactor,
+    ExposureGrid,
+    ScoreGauge,
+    Instruction,
+    Tabbed,
+    Tab,
+    ScoreFactorCommentSlider
   },
 
   mixins: [],
@@ -22,7 +51,138 @@ export default {
   // },
 
   computed: {
-    
+    getServiceConnRisk: function() {
+      return {
+        title: this.t('dashboard.heading.SERVICE_CONN'),
+        factors: [
+          {
+            category: this.t('enum.DISCOVER'),
+            amount: 19,
+            comment: 18
+          },
+          {
+            category: this.t('enum.MONITOR'),
+            amount: 2,
+            comment: 1
+          },
+          {
+            category: this.t('enum.PROTECT'),
+            amount: 3,
+            comment: 0
+          },
+        ],
+        subScore: 'height: 33%',
+        isFactorError: false,
+      }
+    },
+    getExposureRisk: function() {
+      return {
+        title: this.t('dashboard.heading.INGRESS_EGRESS'),
+        factors: [
+          {
+            category: this.t('enum.DISCOVER'),
+            amount: 3
+          },
+          {
+            category: this.t('dashboard.heading.THREATS'),
+            amount: 1
+          },
+          {
+            category: this.t('dashboard.heading.VIOLATIONS'),
+            amount: 2
+          },
+        ],
+        subScore: 'height: 81%',
+        isFactorError: false,
+      }
+    },
+    getVulnerabilityRisk: function() {
+      return {
+        title: this.t('dashboard.heading.VUL_EXPLOIT'),
+        factors: [
+          {
+            category: this.t('enum.DISCOVER'),
+            amount: 1107
+          },
+          {
+            category: this.t('enum.MONITOR'),
+            amount: 203
+          },
+          {
+            category: this.t('enum.PROTECT'),
+            amount: 43
+          },
+        ],
+        factorComment: [
+          `${this.t('dashboard.heading.CVE_DB_VERSION')}: 3.292`,
+          '(Dec 19, 2023)'
+        ],
+        subScore: 'height: 11%',
+        isFactorError: false,
+      }
+    },
+    getInstructions4Exposures: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.exposure.txt1'),
+          this.t('dashboard.help.exposure.txt2')
+        ]
+      };
+    },
+    getInstructions4SecurityEvents: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.criticalEvent.txt1'),
+          this.t('dashboard.help.criticalEvent.txt2')
+        ]
+      };
+    },
+    getInstructions4TopSecurityEventsInSource: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.top_security_events.txt1'),
+          this.t('dashboard.help.top_security_events.txt2'),
+          this.t('dashboard.help.top_security_events.txt2_1'),
+          this.t('dashboard.help.top_security_events.txt2_2'),
+          this.t('dashboard.help.top_security_events.txt2_3')
+        ]
+      };
+    },
+    getInstructions4TopSecurityEventsInDestination: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.top_security_events.txt3'),
+          this.t('dashboard.help.top_security_events.txt4'),
+          this.t('dashboard.help.top_security_events.txt4_1'),
+          this.t('dashboard.help.top_security_events.txt4_2'),
+          this.t('dashboard.help.top_security_events.txt4_3')
+        ]
+      };
+    },
+    getInstructions4TopVulnerablePods: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.top_vulnerable_pod.txt1'),
+          this.t('dashboard.help.top_vulnerable_pod.txt2')
+        ]
+      };
+    },
+    getInstructions4TopVulnerableNodes: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.top_vulnerable_node.txt1'),
+          this.t('dashboard.help.top_vulnerable_node.txt2')
+        ]
+      };
+    },
+    getInstructions4PodsMode: function() {
+      return {
+        textLines: [
+          this.t('dashboard.help.policy_mode_pod.txt1'),
+          this.t('dashboard.help.policy_mode_pod.txt2')
+        ]
+      };
+    }
   },
 
   methods: {
@@ -37,25 +197,116 @@ export default {
     <div>
       <div class="head-title">
         <h1 data-testid="nv-dashboard-title" class="mb-20">
-          Dashboard
+          {{ t('dashboard.TITLE') }}
         </h1>
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
-      <div class="get-started">
-        <div class="head card-container p-20">
-          <div class="text-center">Top Vulnerable Containers</div>
-          <BarChart />
+      <div class="card-container head">
+        <div class="get-started ">
+          <ScoreGauge title="POOR" value="23" nodesCnt="4" podsCnt="53"/>
+          <ScoreFactor
+            :riskFactor="getServiceConnRisk"
+          />
+          <ScoreFactor
+            :riskFactor="getExposureRisk"
+          />
+          <ScoreFactor
+            :riskFactor="getVulnerabilityRisk"
+          />
+          <ScoreFactorCommentSlider class="m-0"/>
         </div>
-        <div class="head card-container p-20">
-          <div class="text-center">Top Vulnerable Hosts</div>
-          <BarChart2 />
+        
+      </div>
+      <div class="head card-container p-20">
+        <div class="get-started">
+          <div>{{ t('dashboard.body.panel_title.CONTAINER_SEC') }}</div>
+          <Instruction
+            :instructions="getInstructions4Exposures"
+          />
+        </div>
+        <div class="get-started">
+          <BarChart4Exposures />
+          <Tabbed defaultTab="">
+            <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
+              <ExposureGrid />
+            </Tab>
+            <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
+              <ExposureGrid />
+            </Tab>
+          </Tabbed>
         </div>
       </div>
       <div class="head card-container p-20">
-          <div>Ingress and Egress Exposure</div>
-          <SampleGrid />
+        <div class="get-started">
+          <div>{{ t('dashboard.heading.CRITICAL_SECURITY_EVENT') }}</div>
+          <Instruction
+            :instructions="getInstructions4SecurityEvents"
+          />
         </div>
-      <!-- <ScoreGauge /> -->
+        <LineChart4SecurityEvents />
+      </div>
+      <div class="get-started">
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.TOP_SEC_EVENTS') }} - {{ t('dashboard.body.panel_title.SOURCE') }}</div>
+            <Instruction
+              :instructions="getInstructions4TopSecurityEventsInSource"
+            />
+          </div>
+          <BarChart4TopSecurityEventsBySource />
+        </div>
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.TOP_SEC_EVENTS') }} - {{ t('dashboard.body.panel_title.DESTINATION') }}</div>
+            <Instruction
+              :instructions="getInstructions4TopSecurityEventsInDestination"
+            />
+          </div>
+          <BarChart4TopSecurityEventsByDestination />
+        </div>
+      </div>
+      <div class="get-started">
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</div>
+            <Instruction
+              :instructions="getInstructions4TopVulnerablePods"
+            />
+          </div>
+          <BarChart4TopVulnerableContainers />
+        </div>
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_NODES') }}</div>
+            <Instruction
+              :instructions="getInstructions4TopVulnerableNodes"
+            />
+          </div>
+          <BarChart4TopVulnerableHosts />
+        </div>
+      </div>
+      <div class="get-started">
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.CONTAINER_MODE') }}</div>
+            <Instruction
+              :instructions="getInstructions4PodsMode"
+            />
+          </div>
+          <PieChart4PolicyModeOfPods />
+          <PolicyModeOfPods />
+        </div>
+        <div class="head card-container p-20">
+          <div class="get-started">
+            <div>{{ t('dashboard.body.panel_title.SERVICE_MODE') }}</div>
+            <Instruction
+              :instructions="getInstructions4PodsMode"
+            />
+          </div>
+          <PieChart4PolicyModeOfServices />
+          <PolicyModeOfServices />
+        </div>
+      </div>
       <div class="head-links">
         <a
           href="https://www.neuvector.com/"
@@ -116,7 +367,7 @@ export default {
 
   .get-started {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     grid-gap: 20px;
 
     .card-container {
@@ -147,5 +398,9 @@ export default {
   & .airgap-align {
     justify-content: start;
   }
+}
+
+.pull-right {
+  float: right !important;
 }
 </style>
