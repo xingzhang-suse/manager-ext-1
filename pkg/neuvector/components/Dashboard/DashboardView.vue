@@ -1,10 +1,12 @@
 <script>
 import { mapGetters } from 'vuex';
+import { SERVICE } from '@shell/config/types';
 import Loading from '@shell/components/Loading';
 import BarChart from './charts/BarChart';
 import BarChart2 from './charts/BarChart2';
 import SampleGrid from './grids/SampleGrid';
 import ScoreGauge from './charts/ScoreGauge';
+import { isEmpty } from 'lodash';
 
 export default {
   components: {
@@ -14,19 +16,57 @@ export default {
   mixins: [],
 
   async fetch() {
-    
+    if ( this.$store.getters['cluster/canList'](SERVICE) ) {
+      this.allServices = await this.$store.dispatch('cluster/findAll', { type: SERVICE });
+      console.log(this.neuvectorSvc);
+    }
+    this.login();
   },
 
-  // data() {
-   
-  // },
+  data() {
+    return {
+      allServices: null,
+      loginToken: null,
+    }
+  },
 
   computed: {
-    
+    neuvectorSvc() {
+      if ( this.allServices ) {
+        return this.allServices.find(svc => svc?.metadata?.name === 'neuvector-service-webui');
+      }
+      return null;
+    },
+    neuvectorProxy() {
+      const nv = this.neuvectorSvc;
+      if ( !isEmpty(nv) ) {
+        const base = `/api/v1/namespaces/${ nv.metadata.namespace }/services`;
+        const proxy = `/https:${ nv.metadata.name }:${ nv.spec.ports[0].port }/proxy`;
+
+        return location.origin + base + proxy;
+      }
+      return null;
+    }
   },
 
   methods: {
-  
+    login() {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+        body: JSON.stringify({ username: "", password: "" })
+      };
+      fetch(this.neuvectorProxy + '/auth', requestOptions)
+        .then(async response => {
+          const data = await response.json();
+          if (response.ok) {
+            this.loginToken = data.token.token;
+          }
+        })
+        .catch(error => {
+
+        })
+    }
   }
 };
 </script>
