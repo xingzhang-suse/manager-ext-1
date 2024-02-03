@@ -59,27 +59,44 @@
       plugins: {
         type: Array,
         default: () => {}
+      },
+      podMode: Array
+    },
+    computed: {
+      chartData: function() {
+        const modes = ['protect', 'monitor', 'discover', 'quarantined'];
+        let assetsPolicyModeLabels = new Array(modes.length);
+        let assetsPolicyModeData = new Array(modes.length);
+        assetsPolicyModeLabels = modes.map((mode) => {
+          return this.t(`enum.${mode.toUpperCase()}`);
+        });
+        let containerStateCount = {
+          protect: 0,
+          monitor: 0,
+          discover: 0,
+          quarantined: 0
+        };
+        this.podMode.forEach(container => {
+          containerStateCount[container.state.toLowerCase()] ++;
+        });
+        assetsPolicyModeData = Object.values(containerStateCount);
+        return {
+          labels: assetsPolicyModeLabels,
+          datasets: [
+            {
+              backgroundColor: ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)', 'rgba(33, 150, 243, 0.3)', 'rgba(233, 30, 99, 0.3)'],
+              borderColor: ['#186d33', '#4E39C1', '#2196F3', '#E91E63'],
+              hoverBackgroundColor: ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)','rgba(33, 150, 243, 0.3)', 'rgba(233, 30, 99, 0.3)'],
+              hoverBorderColor: ['#186d33', '#4E39C1', '#2196F3', '#E91E63'],
+              borderWidth: 2,
+              data: assetsPolicyModeData,
+            },
+          ],
+        };
       }
     },
     data() {
       return {
-        chartData: {
-          labels: [this.t('enum.PROTECT'), this.t('enum.MONITOR'), this.t('enum.DISCOVER'), this.t('dashboard.body.panel_title.QUARANTINED')],
-          datasets: [
-            {
-                backgroundColor:
-                ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)', 'rgba(33, 150, 243, 0.3)', 'rgba(233, 30, 99, 0.3)'],
-                borderColor:
-                ['#186d33', '#4E39C1', '#2196F3', '#E91E63'],
-                hoverBackgroundColor: 
-                ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)','rgba(33, 150, 243, 0.3)', 'rgba(233, 30, 99, 0.3)'],
-                hoverBorderColor:
-                ['#186d33', '#4E39C1', '#2196F3', '#E91E63'],
-                borderWidth: 2,
-                data: [1, 2, 16, 5],
-            },
-          ],
-        },
         chartOptions: {
           animation: false,
           plugins: {

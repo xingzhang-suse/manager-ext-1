@@ -11,7 +11,7 @@ export default function(plugin: IPlugin) {
   // it will grab information such as `name` and `description`
   plugin.metadata = require('./package.json');
 
-  // Load NeuVectorå
+  // Load NeuVector
   plugin.addProduct(require('./neuvector'));
 
   // Add Vue Routes

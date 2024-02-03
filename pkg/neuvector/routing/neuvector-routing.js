@@ -5,7 +5,7 @@ import ViewNamespacedResource from '@shell/pages/c/_cluster/_product/_resource/_
 import Dashboard from '../pages/c/_cluster/neuvector/index.vue';
 
 const BLANK_CLUSTER = '_';
-const NEUVECTOR = 'NeuVector Dashboard';
+const NEUVECTOR = 'NeuVector';
 const NEUVECTOR_URL = 'NeuVector_Dashboard';
 const NEUVECTOR_DASHBOARD = 'Dashboard';
 

@@ -2,7 +2,7 @@
     <div>
       <p>
         <small
-          ><center><span style="color: red">{{ title }}</span> ({{ value }})</center></small
+          ><center><span :style="{ 'color': scoreLevel.gaugeLabelColor }">{{ scoreLevel.gaugeLabel }}</span> ({{ scoreInfo.score.securityRiskScore }})</center></small
         >
       </p>
       <vue-gauge
@@ -16,8 +16,8 @@
             <td>{{ t("dashboard.heading.PODS") }}</td>
         </tr>
         <tr class="text-center dashboard-summary-value">
-            <td>{{ nodesCnt }}</td>
-            <td>{{ podsCnt }}</td>
+            <td>{{ scoreInfo.header_data.hosts }}</td>
+            <td>{{ scoreInfo.header_data.workloads.running_pods }}</td>
         </tr>
       </table>
     </div>
@@ -28,20 +28,44 @@
   export default {
     components: { VueGauge },
     props: {
-      title: String,
-      value: String,
-      nodesCnt: String,
-      podsCnt: String
+      scoreInfo: Object
+    },
+    computed: {
+      scoreLevel: function() {
+        let value = this.scoreInfo.score.securityRiskScore;
+        let gaugeLabel = '';
+        let gaugeLabelColor = '';
+        if (value <= 20) {
+          gaugeLabel = this.t(
+            'dashboard.body.policy_evaluation.GOOD'
+          );
+          gaugeLabelColor = '#00CC00';
+        } else if (value <= 50) {
+          gaugeLabel = this.t(
+            'dashboard.body.policy_evaluation.FAIR'
+          );
+          gaugeLabelColor = '#FF8000';
+        } else {
+          gaugeLabel = this.t(
+            'dashboard.body.policy_evaluation.POOR'
+          );
+          gaugeLabelColor = '#FF0000';
+        }
+        return {
+          gaugeLabel,
+          gaugeLabelColor,
+        };
+      }
     },
     data() {
       return {
         myOptions: {
           chartWidth: 150,
-          needleValue: this.value,
+          needleValue: this.scoreInfo.score.securityRiskScore,
           needleColor: "white",
-          arcDelimiters: [40, 70],
+          arcDelimiters: [20, 50],
           arcColors: ["rgb(255,84,84)", "rgb(239,214,19)", "rgb(61,204,91)"],
-          arcLabels: ["15", "40"],
+          arcLabels: ["20", "50"],
           rangeLabel: ["0", "100"],
           rangeLabelFontSize: 14,
         },

@@ -59,27 +59,40 @@
       plugins: {
         type: Array,
         default: () => {}
+      },
+      serviceMode: Array,
+      groupInfo: Object
+    },
+    computed: {
+      chartData: function() {
+        const modes = ['protect', 'monitor', 'discover'];
+        let assetsPolicyModeLabels = new Array(modes.length);
+        let assetsPolicyModeData = new Array(modes.length);
+        assetsPolicyModeLabels = modes.map((mode) => {
+          return this.t(`enum.${mode.toUpperCase()}`);
+        });
+        assetsPolicyModeData = [
+          this.groupInfo.protect_groups,
+          this.groupInfo.monitor_groups,
+          this.groupInfo.discover_groups
+        ];
+        return {
+          labels: assetsPolicyModeLabels,
+          datasets: [
+            {
+              backgroundColor: ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)', 'rgba(33, 150, 243, 0.3)'],
+              borderColor: ['#186d33', '#4E39C1', '#2196F3'],
+              hoverBackgroundColor: ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)', 'rgba(33, 150, 243, 0.3)'],
+              hoverBorderColor: ['#186d33', '#4E39C1', '#2196F3'],
+              borderWidth: 2,
+              data: assetsPolicyModeData,
+            },
+          ],
+        };
       }
     },
     data() {
       return {
-        chartData: {
-          labels: [this.t('enum.PROTECT'), this.t('enum.MONITOR'), this.t('enum.DISCOVER')],
-          datasets: [
-            {
-                backgroundColor:
-                ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)', 'rgba(33, 150, 243, 0.3)'],
-                borderColor:
-                ['#186d33', '#4E39C1', '#2196F3'],
-                hoverBackgroundColor: 
-                ['rgba(24, 109, 51, 0.3)', 'rgba(78, 57, 193, 0.3)','rgba(33, 150, 243, 0.3)'],
-                hoverBorderColor:
-                ['#186d33', '#4E39C1', '#2196F3'],
-                borderWidth: 2,
-                data: [6, 2, 16, ],
-            },
-          ],
-        },
         chartOptions: {
           animation: false,
           plugins: {

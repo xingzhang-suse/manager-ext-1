@@ -69,16 +69,41 @@
       plugins: {
         type: Array,
         default: () => {}
-      }
+      },
+      securityEventSummaryInfo: Object
     },
-    data() {
-      return {
-        chartData: {
-          labels: ['2023-05-16', '2023-06-07', '2023-06-12', '2023-06-15', '2023-06-16', '2023-06-20', '2023-06-23', '2023-06-24', '2023-07-03', '2023-08-07', '2023-08-31', '2023-09-05', '2023-09-21', '2023-09-23', '2023-10-06', '2023-10-19', '2023-10-26', '2023-11-02', '2023-11-21', '2023-11-22', '2023-11-28', '2023-12-05', '2023-12-07', '2023-12-08', '2023-12-14'],
+    computed: {
+      chartData: function() {
+        let securityEventsLabels = new Set();
+        this.securityEventSummaryInfo.critical.forEach((critical) => {
+          securityEventsLabels.add(critical[0]);
+        });
+        this.securityEventSummaryInfo.warning.forEach((warning) => {
+          securityEventsLabels.add(warning[0]);
+        });
+        securityEventsLabels = Array.from(securityEventsLabels).sort((a, b) => a - b);
+
+        let labelListLength = securityEventsLabels.length;
+        let criticalTotal = 0;
+        let warningTotal = 0
+        let criticalDataList = new Array(labelListLength);
+        let warningDataList = new Array(labelListLength);
+        this.securityEventSummaryInfo.critical.forEach((critical) => {
+          let index = securityEventsLabels.findIndex(label => label === critical[0]);
+          criticalDataList[index] = critical[1];
+          criticalTotal += critical[1];
+        });
+        this.securityEventSummaryInfo.warning.forEach((warning) => {
+          let index = securityEventsLabels.findIndex(label => label === warning[0]);
+          warningDataList[index] = warning[1];
+          warningTotal += warning[1];
+        });
+        return {
+          labels: securityEventsLabels,
           datasets: [
             {
-                label: `${this.t('enum.CRITICAL')}: 7`,
-                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                label: `${this.t('enum.CRITICAL')}: ${criticalTotal}`,
+                data: criticalDataList,
                 backgroundColor: 'rgba(239, 83, 80, 0.3)',
                 borderColor: '#ef5350',
                 hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
@@ -90,8 +115,8 @@
                 tension: 0.2,
             },
             {
-                label: `${this.t('enum.WARNING')}: 57`,
-                data: [2, 1, 6, 1, 9, 4, 2, 2, 1, 1, 0, 0, 3, 1, 0, 0, 1, 0, 1, 0, 2, 3, 2, 14, 1],
+                label: `${this.t('enum.WARNING')}: ${warningTotal}`,
+                data: warningDataList,
                 backgroundColor: 'rgba(239, 83, 80, 0.3)',
                 borderColor: '#ff9800',
                 hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
@@ -103,7 +128,11 @@
                 tension: 0.2,
             }
           ],
-        },
+        };
+      }
+    },
+    data() {
+      return {
         chartOptions: {
           animation: false,
           scales: {

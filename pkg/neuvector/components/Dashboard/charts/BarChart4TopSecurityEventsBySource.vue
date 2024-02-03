@@ -60,25 +60,42 @@
       plugins: {
         type: Array,
         default: () => {}
-      }
+      },
+      securityEventTop5BySource: Array
     },
-    data() {
-      return {
-        chartData: {
-          labels: ['Host: master', 've', '10.1.10.43', '782f087b36421fb3118f2925c8879c1edaf14ec9b38d166ca89a2e07ca2744d6', '10.1.7.11'],
+    computed: {
+      chartData: function() {
+        let topSecurityEventsLabels = new Array(5);
+        let topSecurityEventsData = new Array(5);
+        let barChartColors = new Array(5);
+        let barChartBorderColors = new Array(5);
+        topSecurityEventsLabels.fill('');
+        topSecurityEventsData.fill(0);
+        barChartColors.fill('rgba(239, 83, 80, 0.3)');
+        barChartBorderColors.fill('#ef5350');
+        this.securityEventTop5BySource.forEach((workloadEvents, index) => {
+          topSecurityEventsLabels[index] = workloadEvents[0]['source_workload_name'];
+          topSecurityEventsData[index] = workloadEvents.length;
+        });
+        return {
+          labels: topSecurityEventsLabels,
           datasets: [
             {
             label: this.t('dashboard.body.panel_title.SOURCE'),
-            data:  [33, 22, 4, 4, 4],
-            backgroundColor:  ['rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)'],
-            borderColor: ['#ef5350', '#ef5350', '#ef5350', '#ef5350', '#ef5350'] ,
-            hoverBackgroundColor: ['rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)', 'rgba(239, 83, 80, 0.3)'],
-            hoverBorderColor: ['#ef5350', '#ef5350', '#ef5350', '#ef5350', '#ef5350'] ,
+            data: topSecurityEventsData,
+            backgroundColor: barChartColors,
+            borderColor: barChartBorderColors,
+            hoverBackgroundColor: barChartColors,
+            hoverBorderColor: barChartBorderColors,
             barThickness: 15,
             borderWidth: 2
             }
           ],
-        },
+        };
+      }
+    },
+    data() {
+      return {
         chartOptions: {
           animation: false,
           indexAxis: 'y',

@@ -60,33 +60,78 @@
       plugins: {
         type: Array,
         default: () => {}
+      },
+      ingress: Array,
+      egress: Array
+    },
+    computed: {
+      chartData: function() {
+        let egressContainers = this.egress.flatMap(service => {
+          return service.children;
+        });
+        let ingressContainers = this.ingress.flatMap(service => {
+          return service.children;
+        });
+        let chartNumbers = {
+          ingress: new Map([
+            ['allow', 0],
+            ['deny', 0],
+            ['violate', 0],
+            ['threat', 0]
+          ]),
+          egress: new Map([
+            ['allow', 0],
+            ['deny', 0],
+            ['violate', 0],
+            ['threat', 0]
+          ])
+        };
+        this.accumulateData(ingressContainers, chartNumbers, 'ingress');
+        this.accumulateData(egressContainers, chartNumbers, 'egress');
+        return {
+          labels: [
+            this.t('dashboard.body.panel_title.ALLOW'),
+            this.t('dashboard.body.panel_title.DENY'),
+            this.t('dashboard.body.panel_title.ALERT'),
+            this.t('dashboard.body.panel_title.THREAT')
+          ],
+          datasets: [
+            {
+              data: Array.from(chartNumbers.ingress.values()),
+              label: this.t('dashboard.body.panel_title.INGRESS_CONTAINERS'),
+              backgroundColor: 'rgba(255, 13, 129, 0.2)',
+              borderColor: '#ff0d81',
+              hoverBackgroundColor: 'rgba(255, 13, 129, 0.2)',
+              hoverBorderColor: '#ff0d81',
+              borderWidth: 2,
+            },
+            {
+              data: Array.from(chartNumbers.egress.values()),
+              label: this.t('dashboard.body.panel_title.EGRESS_CONTAINERS'),
+              backgroundColor: 'rgba(255, 113, 1, 0.2)',
+              borderColor: '#ff7101',
+              hoverBackgroundColor: 'rgba(255, 113, 1, 0.2)',
+              hoverBorderColor: '#ff7101',
+              borderWidth: 2,
+            }
+          ]
+        };
+      }
+    },
+    methods: {
+      accumulateData: function(exposedContainers, chartNumbers, direction) {
+        exposedContainers.forEach(exposedContainer => {
+          if (exposedContainer.severity) {
+            chartNumbers[direction].set('threat', chartNumbers[direction].get('threat') + 1);
+          } else {
+            let policyAction = exposedContainer.policy_action.toLowerCase();
+            chartNumbers[direction].set(policyAction, chartNumbers[direction].get(policyAction) + 1);
+          }
+        });
       }
     },
     data() {
       return {
-        chartData: {
-          labels: ['Allow', 'Deny', 'Alert', 'Threat'],
-          datasets: [
-            {
-                data: [0,0,0,0],
-                label: this.t('dashboard.body.panel_title.INGRESS_CONTAINERS'),
-                backgroundColor: 'rgba(255, 13, 129, 0.2)',
-                borderColor: '#ff0d81',
-                hoverBackgroundColor: 'rgba(255, 13, 129, 0.2)',
-                hoverBorderColor: '#ff0d81',
-                borderWidth: 2,
-            },
-            {
-                data: [3,0,0,0],
-                label: this.t('dashboard.body.panel_title.EGRESS_CONTAINERS'),
-                backgroundColor: 'rgba(255, 113, 1, 0.2)',
-                borderColor: '#ff7101',
-                hoverBackgroundColor: 'rgba(255, 113, 1, 0.2)',
-                hoverBorderColor: '#ff7101',
-                borderWidth: 2,
-            },
-          ],
-        },
         chartOptions: {
           animation: false,
           indexAxis: 'x',

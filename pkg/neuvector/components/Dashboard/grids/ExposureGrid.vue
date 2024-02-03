@@ -28,6 +28,10 @@
 
   export default {
     name: "App",
+    props: {
+      exposureInfo: Array,
+      exposureType: String
+    },
     data() {
       return {
         columnDefs: null,
@@ -148,7 +152,7 @@
         {
           headerName: this.t('dashboard.body.panel_title.SERVICE'),
           field: 'service',
-          cellRenderer: ExposedServicePodGridServicePodCellComponent,
+          // cellRenderer: ExposedServicePodGridServicePodCellComponent,
           width: 280,
           sortable: false,
         },

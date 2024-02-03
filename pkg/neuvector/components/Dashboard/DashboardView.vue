@@ -17,6 +17,8 @@ import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
+import axios from 'axios';
+import { createYamlWithOptions } from '@shell/utils/create-yaml';
 
 export default {
   components: {
@@ -43,12 +45,62 @@ export default {
   mixins: [],
 
   async fetch() {
-    
+    axios.get(`../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/token_auth_server`).then(res => {console.log(res)});
+    axios({
+      url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
+      method: 'post',
+      data: {
+        username: '',
+        password: '',
+        isRancherSSOUrl: true
+      }
+    }).then(res => {
+      console.log(res);
+      axios({
+        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
+        method: 'get',
+        params: {
+          isGlobalUser: true,
+          domain: 'null'
+        },
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.scoreInfo = res.data;
+      });
+      axios({
+        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
+        method: 'get',
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.notificationInfo = res.data;
+      });
+      axios({
+        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
+        method: 'get',
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.detailsInfo = res.data;
+      });
+    });
   },
 
-  // data() {
-   
-  // },
+  data() {
+    return  {
+      scoreInfo: null,
+      notificationInfo: null,
+      detailsInfo: null
+    }
+  },
+
+  props: {
+    ns: String
+  },
 
   computed: {
     getServiceConnRisk: function() {
@@ -57,18 +109,18 @@ export default {
         factors: [
           {
             category: this.t('enum.DISCOVER'),
-            amount: 19,
-            comment: 18
+            amount: this.scoreInfo.header_data.groups.discover_groups,
+            comment: this.scoreInfo.header_data.groups.discover_groups_zero_drift
           },
           {
             category: this.t('enum.MONITOR'),
-            amount: 2,
-            comment: 1
+            amount: this.scoreInfo.header_data.groups.monitor_groups,
+            comment: this.scoreInfo.header_data.groups.monitor_groups_zero_drift
           },
           {
             category: this.t('enum.PROTECT'),
-            amount: 3,
-            comment: 0
+            amount: this.scoreInfo.header_data.groups.protect_groups,
+            comment: this.scoreInfo.header_data.groups.protect_groups_zero_drift
           },
         ],
         subScore: 'height: 33%',
@@ -81,15 +133,15 @@ export default {
         factors: [
           {
             category: this.t('enum.DISCOVER'),
-            amount: 3
+            amount: this.scoreInfo.header_data.workloads.discover_ext_eps
           },
           {
             category: this.t('dashboard.heading.THREATS'),
-            amount: 1
+            amount: this.scoreInfo.header_data.workloads.threat_ext_eps
           },
           {
             category: this.t('dashboard.heading.VIOLATIONS'),
-            amount: 2
+            amount: this.scoreInfo.header_data.workloads.violate_ext_eps
           },
         ],
         subScore: 'height: 81%',
@@ -102,15 +154,15 @@ export default {
         factors: [
           {
             category: this.t('enum.DISCOVER'),
-            amount: 1107
+            amount: this.scoreInfo.header_data.cves.discover_cves
           },
           {
             category: this.t('enum.MONITOR'),
-            amount: 203
+            amount: this.scoreInfo.header_data.cves.monitor_cves
           },
           {
             category: this.t('enum.PROTECT'),
-            amount: 43
+            amount: this.scoreInfo.header_data.cves.protect_cves
           },
         ],
         factorComment: [
@@ -186,7 +238,7 @@ export default {
   },
 
   methods: {
-  
+    
   }
 };
 </script>
@@ -202,8 +254,8 @@ export default {
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
       <div class="card-container head">
-        <div class="get-started ">
-          <ScoreGauge title="POOR" value="23" nodesCnt="4" podsCnt="53"/>
+        <div class="get-started " v-if="scoreInfo">
+          <ScoreGauge :scoreInfo="this.scoreInfo"/>
           <ScoreFactor
             :riskFactor="getServiceConnRisk"
           />
@@ -217,25 +269,25 @@ export default {
         </div>
         
       </div>
-      <div class="head card-container p-20">
+      <!-- <div class="head card-container p-20">
         <div class="get-started">
           <div>{{ t('dashboard.body.panel_title.CONTAINER_SEC') }}</div>
           <Instruction
             :instructions="getInstructions4Exposures"
           />
         </div>
-        <div class="get-started">
-          <BarChart4Exposures />
+        <div class="get-started" v-if="scoreInfo">
+          <BarChart4Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress"/>
           <Tabbed defaultTab="">
             <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
-              <ExposureGrid />
+              <ExposureGrid :exposureInfo="scoreInfo.ingress" exposureType="ingress"/>
             </Tab>
             <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
-              <ExposureGrid />
+              <ExposureGrid :exposureInfo="scoreInfo.egress" exposureType="egress"/>
             </Tab>
           </Tabbed>
         </div>
-      </div>
+      </div> -->
       <div class="head card-container p-20">
         <div class="get-started">
           <div>{{ t('dashboard.heading.CRITICAL_SECURITY_EVENT') }}</div>
@@ -243,7 +295,7 @@ export default {
             :instructions="getInstructions4SecurityEvents"
           />
         </div>
-        <LineChart4SecurityEvents />
+        <LineChart4SecurityEvents v-if="notificationInfo" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
       </div>
       <div class="get-started">
         <div class="head card-container p-20">
@@ -253,7 +305,7 @@ export default {
               :instructions="getInstructions4TopSecurityEventsInSource"
             />
           </div>
-          <BarChart4TopSecurityEventsBySource />
+          <BarChart4TopSecurityEventsBySource v-if="notificationInfo" :securityEventTop5BySource="notificationInfo.criticalSecurityEvents.top_security_events.source"/>
         </div>
         <div class="head card-container p-20">
           <div class="get-started">
@@ -262,7 +314,7 @@ export default {
               :instructions="getInstructions4TopSecurityEventsInDestination"
             />
           </div>
-          <BarChart4TopSecurityEventsByDestination />
+          <BarChart4TopSecurityEventsByDestination v-if="notificationInfo" :securityEventTop5ByDestination="notificationInfo.criticalSecurityEvents.top_security_events.destination"/>
         </div>
       </div>
       <div class="get-started">
@@ -273,7 +325,7 @@ export default {
               :instructions="getInstructions4TopVulnerablePods"
             />
           </div>
-          <BarChart4TopVulnerableContainers />
+          <BarChart4TopVulnerableContainers v-if="detailsInfo" :topVulContainers="detailsInfo.highPriorityVulnerabilities.containers"/>
         </div>
         <div class="head card-container p-20">
           <div class="get-started">
@@ -282,7 +334,7 @@ export default {
               :instructions="getInstructions4TopVulnerableNodes"
             />
           </div>
-          <BarChart4TopVulnerableHosts />
+          <BarChart4TopVulnerableHosts v-if="detailsInfo" :topVulHosts="detailsInfo.highPriorityVulnerabilities.nodes"/>
         </div>
       </div>
       <div class="get-started">
@@ -293,7 +345,7 @@ export default {
               :instructions="getInstructions4PodsMode"
             />
           </div>
-          <PieChart4PolicyModeOfPods />
+          <PieChart4PolicyModeOfPods v-if="detailsInfo" :podMode="detailsInfo.containers"/>
           <PolicyModeOfPods />
         </div>
         <div class="head card-container p-20">
@@ -303,7 +355,7 @@ export default {
               :instructions="getInstructions4PodsMode"
             />
           </div>
-          <PieChart4PolicyModeOfServices />
+          <PieChart4PolicyModeOfServices v-if="detailsInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
           <PolicyModeOfServices />
         </div>
       </div>

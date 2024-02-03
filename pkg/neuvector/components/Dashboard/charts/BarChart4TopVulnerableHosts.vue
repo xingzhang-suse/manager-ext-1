@@ -60,35 +60,51 @@
       plugins: {
         type: Array,
         default: () => {}
-      }
+      },
+      topVulHosts: Object
     },
-    data() {
-      return {
-        chartData: {
-          labels: ['worker2', 'worker1', 'worker3', 'master', ''],
+    computed: {
+      chartData: function() {
+        let topVulnerableAssetsLabel = new Array(5);
+        let topHighVulnerableAssetsData = new Array(5);
+        let topMediumVulnerableAssetsData = new Array(5);
+        topVulnerableAssetsLabel.fill('');
+        topHighVulnerableAssetsData.fill(0);
+        topMediumVulnerableAssetsData.fill(0);
+        this.topVulHosts.top5Nodes.forEach((asset, index) => {
+          topVulnerableAssetsLabel[index] = asset.name;
+          topHighVulnerableAssetsData[index] = asset.scan_summary.high;
+          topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
+        });
+        return {
+          labels: topVulnerableAssetsLabel,
           datasets: [
             {
-              data: [999, 786, 786, 550, 0],
+              data: topHighVulnerableAssetsData,
               label: this.t('enum.HIGH'),
               backgroundColor: 'rgba(239, 83, 80, 0.3)',
               borderColor: '#ef5350',
               hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
               hoverBorderColor: '#ef5350',
-              barThickness: 15,
+              barThickness: 8,
               borderWidth: 2,
             },
             {
-              data: [1074, 896, 896, 589, 0],
+              data: topMediumVulnerableAssetsData,
               label: this.t('enum.MEDIUM'),
               backgroundColor: 'rgba(255, 152, 0, 0.3)',
               borderColor: '#ff9800',
               hoverBackgroundColor: 'rgba(255, 152, 0, 0.3)',
               hoverBorderColor: '#ff9800',
-              barThickness: 15,
+              barThickness: 8,
               borderWidth: 2,
             },
           ],
-        },
+        };
+      }
+    },
+    data() {
+      return {
         chartOptions: {
           animation: false,
           indexAxis: 'y',
