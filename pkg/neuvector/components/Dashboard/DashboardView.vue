@@ -238,7 +238,7 @@ export default {
   },
 
   methods: {
-    
+  
   }
 };
 </script>
@@ -267,7 +267,7 @@ export default {
           />
           <ScoreFactorCommentSlider class="m-0"/>
         </div>
-        
+
       </div>
       <!-- <div class="head card-container p-20">
         <div class="get-started">
