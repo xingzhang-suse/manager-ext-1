@@ -60,35 +60,42 @@
       plugins: {
         type: Array,
         default: () => {}
+      },
+      securityEventTop5ByDestination: Array
+    },
+    computed: {
+      chartData: function() {
+        let topSecurityEventsLabels = new Array(5);
+        let topSecurityEventsData = new Array(5);
+        let barChartColors = new Array(5);
+        let barChartBorderColors = new Array(5);
+        topSecurityEventsLabels.fill('');
+        topSecurityEventsData.fill(0);
+        barChartColors.fill('rgba(239, 83, 80, 0.3)');
+        barChartBorderColors.fill('#ef5350');
+        this.securityEventTop5ByDestination.forEach((workloadEvents, index) => {
+          topSecurityEventsLabels[index] = workloadEvents[0]['destination_workload_name'];
+          topSecurityEventsData[index] = workloadEvents.length;
+        });
+        return {
+          labels: topSecurityEventsLabels,
+          datasets: [
+            {
+            label: this.t('dashboard.body.panel_title.DESTINATION'),
+            data: topSecurityEventsData,
+            backgroundColor: barChartColors,
+            borderColor: barChartBorderColors,
+            hoverBackgroundColor: barChartColors,
+            hoverBorderColor: barChartBorderColors,
+            barThickness: 15,
+            borderWidth: 2
+            }
+          ],
+        };
       }
     },
     data() {
       return {
-        chartData: {
-          labels: ['worker2', 'worker1', 'worker3', 'master', ''],
-          datasets: [
-            {
-              data: [999, 786, 786, 550, 0],
-              label: 'High',
-              backgroundColor: 'rgba(239, 83, 80, 0.3)',
-              borderColor: '#ef5350',
-              hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
-              hoverBorderColor: '#ef5350',
-              barThickness: 15,
-              borderWidth: 2,
-            },
-            {
-              data: [1074, 896, 896, 589, 0],
-              label: 'Medium',
-              backgroundColor: 'rgba(255, 152, 0, 0.3)',
-              borderColor: '#ff9800',
-              hoverBackgroundColor: 'rgba(255, 152, 0, 0.3)',
-              hoverBorderColor: '#ff9800',
-              barThickness: 15,
-              borderWidth: 2,
-            },
-          ],
-        },
         chartOptions: {
           animation: false,
           indexAxis: 'y',

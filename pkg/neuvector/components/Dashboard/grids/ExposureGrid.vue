@@ -1,22 +1,37 @@
 <template>
     <ag-grid-vue
       id="agGrid"
-      style="width: 100%; height: 200px"
+      style="width: 100%; height: 300px"
       class="ag-theme-balham-dark"
       :columnDefs="columnDefs"
       :rowData="rowData"
       :gridOptions="gridOptions"
     >
     </ag-grid-vue>
-  </template>
+</template>
   
-  <script>
+<script>
+  import Vue from 'vue';
   import "ag-grid-community/styles/ag-grid.css";
   import "ag-grid-community/styles/ag-theme-balham.min.css";
   import { AgGridVue } from "ag-grid-vue";
+  // import ExposedServicePodGridServicePodCellComponent from './components/ExposedServicePodGridServicePodCellComponent';
   
+  const ExposedServicePodGridServicePodCellComponent = Vue.extend(
+    {template: '<span>{{ valueCubed() }}</span>',
+   methods: {
+       valueCubed() {
+           return 'test'+this.params.value;
+       }
+   }}
+  )
+
   export default {
     name: "App",
+    props: {
+      exposureInfo: Array,
+      exposureType: String
+    },
     data() {
       return {
         columnDefs: null,
@@ -25,7 +40,7 @@
       };
     },
     components: {
-      AgGridVue,
+      AgGridVue
     },
     beforeMount() {
       const colourMap = {
@@ -135,14 +150,14 @@
       };
       this.columnDefs = [
         {
-          headerName: 'Service',
+          headerName: this.t('dashboard.body.panel_title.SERVICE'),
           field: 'service',
-          cellRenderer: 'serviceCellRenderer',
+          // cellRenderer: ExposedServicePodGridServicePodCellComponent,
           width: 280,
           sortable: false,
         },
         {
-          headerName: 'Pods',
+          headerName: this.t('dashboard.body.panel_title.PODS'),
           field: 'children',
           valueFormatter: params => {
             return params.value.length;
@@ -155,7 +170,7 @@
           hide: true,
         },
         {
-          headerName: 'Policy Mode',
+          headerName: this.t('dashboard.body.panel_title.POLICY_MODE'),
           field: 'policy_mode',
           cellRenderer: params => {
             let mode = '';
@@ -165,7 +180,7 @@
               if (!labelCode) return null;
               else
                 return `<span class='type-label policy_mode ${labelCode}'>${
-                  mode
+                  this.t(`dashboard.body.panel_title.${mode.toUpperCase()}`)
                 }</span>`;
             }
             return null;
@@ -176,7 +191,7 @@
           sortable: false,
         },
         {
-          headerName: 'Action',
+          headerName: this.t('dashboard.body.panel_title.POLICY_ACTION'),
           field: 'policy_action',
           cellRenderer: params => {
             if (params.data) {
@@ -184,7 +199,7 @@
                     class='action-label px-1 ${
                      colourMap[params.data.policy_action.toLowerCase()]
                     }'>
-                      ${params.data.policy_action}
+                    ${this.t(`dashboard.body.panel_title.${params.data.policy_action.toUpperCase()}`)}
                   </span>`;
             }
             return null;
@@ -556,7 +571,7 @@
         suppressMaintainUnsortedOrder: true,
         suppressScrollOnNewData: true,
         components: {
-        //   serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
+          // serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
         //   actionCellRenderer: ExposedServicePodGridActionCellComponent,
         //   conversationEntryListRenderer: ConversationEntryListComponent
         },

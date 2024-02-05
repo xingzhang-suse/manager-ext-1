@@ -60,35 +60,51 @@
       plugins: {
         type: Array,
         default: () => {}
-      }
+      },
+      topVulHosts: Object
     },
-    data() {
-      return {
-        chartData: {
-          labels: ['emailservice-844bc9d8cb-td97k', 'recommendationservice-557596fdcb-gr7ww', 'loadgenerator-5654bbdb6f-vlg9b', 'frontend-89857c76-ss4hn', 'currencyservice-76d4b755d6-tzvvb'],
+    computed: {
+      chartData: function() {
+        let topVulnerableAssetsLabel = new Array(5);
+        let topHighVulnerableAssetsData = new Array(5);
+        let topMediumVulnerableAssetsData = new Array(5);
+        topVulnerableAssetsLabel.fill('');
+        topHighVulnerableAssetsData.fill(0);
+        topMediumVulnerableAssetsData.fill(0);
+        this.topVulHosts.top5Nodes.forEach((asset, index) => {
+          topVulnerableAssetsLabel[index] = asset.name;
+          topHighVulnerableAssetsData[index] = asset.scan_summary.high;
+          topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
+        });
+        return {
+          labels: topVulnerableAssetsLabel,
           datasets: [
             {
-              data: [61, 61, 61, 17, 13],
-              label: 'High',
+              data: topHighVulnerableAssetsData,
+              label: this.t('enum.HIGH'),
               backgroundColor: 'rgba(239, 83, 80, 0.3)',
               borderColor: '#ef5350',
               hoverBackgroundColor: 'rgba(239, 83, 80, 0.3)',
               hoverBorderColor: '#ef5350',
-              barThickness: 15,
+              barThickness: 8,
               borderWidth: 2,
             },
             {
-              data: [66, 66, 65, 12, 16],
-              label: 'Medium',
+              data: topMediumVulnerableAssetsData,
+              label: this.t('enum.MEDIUM'),
               backgroundColor: 'rgba(255, 152, 0, 0.3)',
               borderColor: '#ff9800',
               hoverBackgroundColor: 'rgba(255, 152, 0, 0.3)',
               hoverBorderColor: '#ff9800',
-              barThickness: 15,
+              barThickness: 8,
               borderWidth: 2,
             },
           ],
-        },
+        };
+      }
+    },
+    data() {
+      return {
         chartOptions: {
           animation: false,
           indexAxis: 'y',

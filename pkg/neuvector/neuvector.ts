@@ -1,10 +1,18 @@
 import { IPlugin } from '@shell/core/types';
 
 export function init($plugin: any, store: any) {
-  const NEUVECTOR = 'NeuVector Dashboard';
+  const NEUVECTOR = 'NeuVector';
   const NEUVECTOR_URL = 'NeuVector_Dashboard';
   const NEUVECTOR_DASHBOARD = 'Dashboard';
   const BLANK_CLUSTER = '_';
+
+  const opts = {
+    name:        'neuvector',
+    ifHaveGroup: '',
+    ifHave:      '',
+  };
+
+  store.commit('type-map/product', opts);
 
   const { product,
     configureType,

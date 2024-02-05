@@ -30,9 +30,12 @@
     "@babel/preset-env": "^7.23.6",
     "ag-grid-community": "^31.0.1",
     "ag-grid-vue": "^31.0.1",
+    "axios": "^1.6.7",
     "chart.js": "3.8.0",
     "vue-chartjs": "4.0.0",
     "vue-class-component": "^7.2.6",
+    "vue-concise-slider": "3.3.6",
+    "vue-gauge": "1.0.3",
     "vue-property-decorator": "^9.1.2",
     "vue-speedometer": "1.8.0"
   }

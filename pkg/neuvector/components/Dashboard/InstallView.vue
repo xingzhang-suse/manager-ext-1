@@ -16,9 +16,9 @@ export default {
     
   },
 
-  data() {
+  // data() {
    
-  },
+  // },
 
   async mounted() {
     
