@@ -1,5 +1,6 @@
 <template>
     <Pie
+      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -10,10 +11,14 @@
       :width="width"
       :height="height"
     />
+    <div class="message-content" v-else>
+      <EmptyDataMessage icon="icon-warning" color="#FBC02D" :message="t('dashboard.body.message.NO_MANAGED_SERVICES')"/>
+    </div>
   </template>
   
   <script>
-  import { Pie } from 'vue-chartjs/legacy'
+  import { Pie } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -29,7 +34,8 @@
   export default {
     name: 'PieChart',
     components: {
-        Pie
+        Pie,
+        EmptyDataMessage
     },
     props: {
       chartId: {
@@ -71,11 +77,16 @@
         assetsPolicyModeLabels = modes.map((mode) => {
           return this.t(`enum.${mode.toUpperCase()}`);
         });
-        assetsPolicyModeData = [
-          this.groupInfo.protect_groups,
-          this.groupInfo.monitor_groups,
-          this.groupInfo.discover_groups
-        ];
+        if (this.groupInfo.protect_groups === 0 && this.groupInfo.monitor_groups && this.groupInfo.discover_groups) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          assetsPolicyModeData = [
+            this.groupInfo.protect_groups,
+            this.groupInfo.monitor_groups,
+            this.groupInfo.discover_groups
+          ];
+        }
         return {
           labels: assetsPolicyModeLabels,
           datasets: [
@@ -110,7 +121,8 @@
             },
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }

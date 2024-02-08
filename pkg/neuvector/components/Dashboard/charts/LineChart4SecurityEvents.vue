@@ -1,5 +1,6 @@
 <template>
     <LineChartGenerator
+      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -10,10 +11,14 @@
       :width="width"
       :height="height"
     />
+    <div class="message-content" v-else>
+      <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_CRITICAL_SECURITY_EVENT')"/>
+    </div>
   </template>
   
   <script>
-  import { Line as LineChartGenerator } from 'vue-chartjs/legacy'
+  import { Line as LineChartGenerator } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -39,7 +44,8 @@
   export default {
     name: 'BarChart',
     components: {
-      LineChartGenerator
+      LineChartGenerator,
+      EmptyDataMessage
     },
     props: {
       chartId: {
@@ -88,16 +94,21 @@
         let warningTotal = 0
         let criticalDataList = new Array(labelListLength);
         let warningDataList = new Array(labelListLength);
-        this.securityEventSummaryInfo.critical.forEach((critical) => {
-          let index = securityEventsLabels.findIndex(label => label === critical[0]);
-          criticalDataList[index] = critical[1];
-          criticalTotal += critical[1];
-        });
-        this.securityEventSummaryInfo.warning.forEach((warning) => {
-          let index = securityEventsLabels.findIndex(label => label === warning[0]);
-          warningDataList[index] = warning[1];
-          warningTotal += warning[1];
-        });
+        if (this.securityEventSummaryInfo.critical.length === 0 && this.securityEventSummaryInfo.warning.length === 0) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          this.securityEventSummaryInfo.critical.forEach((critical) => {
+            let index = securityEventsLabels.findIndex(label => label === critical[0]);
+            criticalDataList[index] = critical[1];
+            criticalTotal += critical[1];
+          });
+          this.securityEventSummaryInfo.warning.forEach((warning) => {
+            let index = securityEventsLabels.findIndex(label => label === warning[0]);
+            warningDataList[index] = warning[1];
+            warningTotal += warning[1];
+          });
+        }
         return {
           labels: securityEventsLabels,
           datasets: [
@@ -159,7 +170,8 @@
             }
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }

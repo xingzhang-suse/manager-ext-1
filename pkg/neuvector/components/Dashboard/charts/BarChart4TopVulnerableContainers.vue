@@ -1,19 +1,24 @@
 <template>
-    <Bar
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
-    />
-  </template>
+  <Bar
+    v-if="!isEmptyData"
+    :chart-options="chartOptions"
+    :chart-data="chartData"
+    :chart-id="chartId"
+    :dataset-id-key="datasetIdKey"
+    :plugins="plugins"
+    :css-classes="cssClasses"
+    :styles="styles"
+    :width="width"
+    :height="height"
+  />
+  <div class="message-content" v-else>
+    <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_VULNERABLE_CONTAINER')"/>
+  </div>
+</template>
   
-  <script>
-  import { Bar } from 'vue-chartjs/legacy'
+<script>
+  import { Bar } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -30,7 +35,8 @@
   export default {
     name: 'BarChart',
     components: {
-      Bar
+      Bar,
+      EmptyDataMessage
     },
     props: {
       chartId: {
@@ -71,11 +77,17 @@
         topVulnerableAssetsLabel.fill('');
         topHighVulnerableAssetsData.fill(0);
         topMediumVulnerableAssetsData.fill(0);
-        this.topVulContainers.top5Containers.forEach((asset, index) => {
-          topVulnerableAssetsLabel[index] = asset.display_name;
-          topHighVulnerableAssetsData[index] = asset.high4Dashboard;
-          topMediumVulnerableAssetsData[index] = asset.medium4Dashboard;
-        });
+        if (this.topVulContainers.top5Containers.length === 0) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          this.topVulContainers.top5Containers.forEach((asset, index) => {
+            topVulnerableAssetsLabel[index] = asset.display_name;
+            topHighVulnerableAssetsData[index] = asset.high4Dashboard;
+            topMediumVulnerableAssetsData[index] = asset.medium4Dashboard;
+          });
+        }
+        
         return {
           labels: topVulnerableAssetsLabel,
           datasets: [
@@ -130,9 +142,20 @@
             }
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }
   </script>
+
+
+<style lang="scss">
+.message-content {
+    height: 100%;
+    align-content: center;
+    display: grid;
+    text-align: center;
+}
+</style>
   

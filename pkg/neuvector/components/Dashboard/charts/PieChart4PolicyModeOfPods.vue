@@ -1,5 +1,6 @@
 <template>
     <Pie
+      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -10,10 +11,14 @@
       :width="width"
       :height="height"
     />
+    <div class="message-content" v-else>
+      <EmptyDataMessage icon="icon-warning" color="#FBC02D" :message="t('dashboard.body.message.NO_MANAGED_CONTAINERS')"/>
+    </div>
   </template>
   
   <script>
-  import { Pie } from 'vue-chartjs/legacy'
+  import { Pie } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -29,7 +34,8 @@
   export default {
     name: 'PieChart',
     components: {
-        Pie
+        Pie,
+        EmptyDataMessage
     },
     props: {
       chartId: {
@@ -76,9 +82,14 @@
           discover: 0,
           quarantined: 0
         };
-        this.podMode.forEach(container => {
-          containerStateCount[container.state.toLowerCase()] ++;
-        });
+        if (this.podMode.length === 0) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          this.podMode.forEach(container => {
+            containerStateCount[container.state.toLowerCase()] ++;
+          });
+        }
         assetsPolicyModeData = Object.values(containerStateCount);
         return {
           labels: assetsPolicyModeLabels,
@@ -114,7 +125,8 @@
             },
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }

@@ -19,8 +19,12 @@ jobs:
       with:
         node-version: '16'
 
+    - name: Install dependencies (root)
+      run: yarn install
+    
     - name: Install dependencies
       run: yarn install
+      working-directory: pkg/neuvector
 
     - name: Install yq
       run: |
