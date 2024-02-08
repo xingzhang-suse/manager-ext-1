@@ -27,7 +27,6 @@ export default {
   computed: {
     hasSchema() {
       if ( this.allServices ) {
-        this.allServices.forEach(svc => console.log(svc));
         this.index = this.allServices.findIndex(svc => svc?.id.includes('neuvector-service-webui'));
         console.log('index:',this.index)
       }
