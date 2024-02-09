@@ -1,5 +1,6 @@
 <template>
     <Bar
+      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -10,10 +11,14 @@
       :width="width"
       :height="height"
     />
+    <div class="message-content" v-else>
+      <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_SEC_EVENTS')"/>
+    </div>
   </template>
   
   <script>
-  import { Bar } from 'vue-chartjs/legacy'
+  import { Bar } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -30,7 +35,8 @@
   export default {
     name: 'BarChart',
     components: {
-      Bar
+      Bar,
+      EmptyDataMessage
     },
     props: {
       chartId: {
@@ -73,10 +79,15 @@
         topSecurityEventsData.fill(0);
         barChartColors.fill('rgba(239, 83, 80, 0.3)');
         barChartBorderColors.fill('#ef5350');
-        this.securityEventTop5ByDestination.forEach((workloadEvents, index) => {
-          topSecurityEventsLabels[index] = workloadEvents[0]['destination_workload_name'];
-          topSecurityEventsData[index] = workloadEvents.length;
-        });
+        if (this.securityEventTop5ByDestination.length === 0) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          this.securityEventTop5ByDestination.forEach((workloadEvents, index) => {
+            topSecurityEventsLabels[index] = workloadEvents[0]['destination_workload_name'];
+            topSecurityEventsData[index] = workloadEvents.length;
+          });
+        }
         return {
           labels: topSecurityEventsLabels,
           datasets: [
@@ -121,7 +132,8 @@
             }
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }

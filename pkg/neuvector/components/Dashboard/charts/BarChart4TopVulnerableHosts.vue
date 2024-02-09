@@ -1,5 +1,6 @@
 <template>
     <Bar
+      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -10,10 +11,14 @@
       :width="width"
       :height="height"
     />
+    <div class="message-content" v-else>
+      <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_VULNERABLE_NODE')"/>
+    </div>
   </template>
   
   <script>
-  import { Bar } from 'vue-chartjs/legacy'
+  import { Bar } from 'vue-chartjs/legacy';
+  import EmptyDataMessage from '../contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -30,7 +35,8 @@
   export default {
     name: 'BarChart',
     components: {
-      Bar
+      Bar,
+      EmptyDataMessage
     },
     props: {
       chartId: {
@@ -71,11 +77,16 @@
         topVulnerableAssetsLabel.fill('');
         topHighVulnerableAssetsData.fill(0);
         topMediumVulnerableAssetsData.fill(0);
-        this.topVulHosts.top5Nodes.forEach((asset, index) => {
-          topVulnerableAssetsLabel[index] = asset.name;
-          topHighVulnerableAssetsData[index] = asset.scan_summary.high;
-          topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
-        });
+        if (this.topVulHosts.top5Nodes.length === 0) {
+          this.isEmptyData = true;
+        } else {
+          this.isEmptyData = false;
+          this.topVulHosts.top5Nodes.forEach((asset, index) => {
+            topVulnerableAssetsLabel[index] = asset.name;
+            topHighVulnerableAssetsData[index] = asset.scan_summary.high;
+            topMediumVulnerableAssetsData[index] = asset.scan_summary.medium;
+          });
+        }
         return {
           labels: topVulnerableAssetsLabel,
           datasets: [
@@ -130,9 +141,20 @@
             }
           },
           maintainAspectRatio: false
-        }
+        },
+        isEmptyData: false
       }
     }
   }
-  </script>
+</script>
+
+<style lang="scss">
+.message-content {
+    height: 100%;
+    align-content: center;
+    display: grid;
+    text-align: center;
+}
+</style>
+  
   

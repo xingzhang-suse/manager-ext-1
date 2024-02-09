@@ -18,7 +18,7 @@ import Tab from '@shell/components/Tabbed/Tab';
 import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
 import axios from 'axios';
-import { createYamlWithOptions } from '@shell/utils/create-yaml';
+import Exposures from './panels/Exposures';
 
 export default {
   components: {
@@ -39,13 +39,16 @@ export default {
     Instruction,
     Tabbed,
     Tab,
-    ScoreFactorCommentSlider
+    ScoreFactorCommentSlider,
+    Exposures
   },
 
   mixins: [],
 
   async fetch() {
-    axios.get(`../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/token_auth_server`).then(res => {console.log(res)});
+    this.scoreInfo = null;
+    this.notificationInfo = null;
+    this.detailsInfo = null;
     axios({
       url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
@@ -56,6 +59,8 @@ export default {
       }
     }).then(res => {
       console.log(res);
+      this.token = res.data.token.token;
+      this.isAuthErr = false;
       axios({
         url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
         method: 'get',
@@ -87,6 +92,10 @@ export default {
       }).then(res => {
         this.detailsInfo = res.data;
       });
+    })
+    .catch(err => {
+      console.log(err);
+      this.isAuthErr = true;
     });
   },
 
@@ -94,7 +103,9 @@ export default {
     return  {
       scoreInfo: null,
       notificationInfo: null,
-      detailsInfo: null
+      detailsInfo: null,
+      isAuthErr: false,
+      token: null
     }
   },
 
@@ -245,6 +256,7 @@ export default {
 
 <template>
   <Loading v-if="$fetchState.pending" />
+  <div v-else-if="isAuthErr">Authentication Error!</div>
   <div v-else class="dashboard">
     <div>
       <div class="head-title">
@@ -255,7 +267,7 @@ export default {
       </div>
       <div class="card-container head">
         <div class="get-started " v-if="scoreInfo">
-          <ScoreGauge :scoreInfo="this.scoreInfo"/>
+          <ScoreGauge :scoreInfo="scoreInfo"/>
           <ScoreFactor
             :riskFactor="getServiceConnRisk"
           />
@@ -269,7 +281,7 @@ export default {
         </div>
 
       </div>
-      <!-- <div class="head card-container p-20">
+      <div class="head card-container p-20">
         <div class="get-started">
           <div>{{ t('dashboard.body.panel_title.CONTAINER_SEC') }}</div>
           <Instruction
@@ -277,17 +289,9 @@ export default {
           />
         </div>
         <div class="get-started" v-if="scoreInfo">
-          <BarChart4Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress"/>
-          <Tabbed defaultTab="">
-            <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
-              <ExposureGrid :exposureInfo="scoreInfo.ingress" exposureType="ingress"/>
-            </Tab>
-            <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
-              <ExposureGrid :exposureInfo="scoreInfo.egress" exposureType="egress"/>
-            </Tab>
-          </Tabbed>
+          <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns"/>
         </div>
-      </div> -->
+      </div>
       <div class="head card-container p-20">
         <div class="get-started">
           <div>{{ t('dashboard.heading.CRITICAL_SECURITY_EVENT') }}</div>
@@ -355,7 +359,7 @@ export default {
               :instructions="getInstructions4PodsMode"
             />
           </div>
-          <PieChart4PolicyModeOfServices v-if="detailsInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
+          <PieChart4PolicyModeOfServices v-if="detailsInfo && scoreInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
           <PolicyModeOfServices />
         </div>
       </div>
