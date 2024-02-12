@@ -1,10 +1,17 @@
 <script>
 import BarChart4Exposures from '../charts/BarChart4Exposures';
+import ExposureGrid from '../grids/ExposureGrid';
+import Tabbed from '@shell/components/Tabbed';
+import Tab from '@shell/components/Tabbed/Tab';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     components: {
-        BarChart4Exposures
+        BarChart4Exposures,
+        ExposureGrid,
+        Tabbed,
+        Tab,
     },
 
     async fetch() {
@@ -20,12 +27,14 @@ export default {
             data: ipList
         })
         .then(res => {
-            this.hierarchicalIngressList = parseExposureHierarchicalData(
-                this.addIpLocation(this.scoreInfo.ingress, ipMap, 'ingress')
+            this.ipMap = res.data.ip_map;
+            this.hierarchicalIngressList = this.parseExposureHierarchicalData(
+                this.addIpLocation(this.ingress, this.ipMap, 'ingress')
             ) || [];
-            this.hierarchicalEgressList = parseExposureHierarchicalData(
-                this.addIpLocation(this.scoreInfo.egress, ipMap, 'egress')
+            this.hierarchicalEgressList = this.parseExposureHierarchicalData(
+                this.addIpLocation(this.egress, this.ipMap, 'egress')
             ) || [];
+            console.log("this.hierarchicalIngressList", this.hierarchicalIngressList, this.hierarchicalEgressList)
         })
         .catch(err => {});
     },
@@ -64,30 +73,91 @@ export default {
                 }
                 });
                 let hierarchicalExposure = {
-                workload_id: '',
-                peerEndpoint: '',
-                service: k,
-                policy_mode: v[0].policy_mode,
-                workload: '',
-                bytes: 0,
-                sessions: 0,
-                severity: '',
-                policy_action: '',
-                event_type: '',
-                protocols: '',
-                applications: Array.from(applicationSet),
-                ports: [],
-                entries: summarizeEntries(v),
-                children: v.map(child => ({
-                    ...child,
-                    service: '',
-                })),
+                    workload_id: '',
+                    peerEndpoint: '',
+                    service: k,
+                    policy_mode: v[0].policy_mode,
+                    workload: '',
+                    bytes: 0,
+                    sessions: 0,
+                    severity: '',
+                    policy_action: '',
+                    event_type: '',
+                    protocols: '',
+                    applications: Array.from(applicationSet),
+                    ports: [],
+                    entries: this.summarizeEntries(v),
+                    children: v.map(child => ({
+                        ...child,
+                        service: '',
+                    })),
                 };
                 hierarchicalExposures.push(
-                JSON.parse(JSON.stringify(hierarchicalExposure))
+                    JSON.parse(JSON.stringify(hierarchicalExposure))
                 );
             });
             return hierarchicalExposures;
+        },
+        addIpLocation: function(exposureList, ipMap, direction) {
+            return exposureList
+            .sort((a, b) => (a.service + a.pod_name).localeCompare(b.service + b.pod_name))
+            .map((exposure) => {
+                exposure.entries = exposure.entries?.map(entry => {
+                    entry.id = uuidv4();
+                    entry.ip = direction === 'ingress' ? entry.client_ip : entry.server_ip;
+                    entry.country_code = ipMap[entry.ip || ''].country_code.toLowerCase();
+                    entry.country_name = ipMap[entry.ip || ''].country_name;
+                    return entry;
+                }) || [];
+                return exposure;
+            });
+        },
+        summarizeEntries: function(exposedPods) {
+            let entryMap = {};
+            exposedPods.forEach(expsosedPod => {
+                expsosedPod.entries.forEach(entry => {
+                if (entryMap[entry.ip]) {
+                    entryMap[entry.ip].applications = this.accumulateProtocols(
+                    entryMap[entry.ip].applications,
+                    entry.application
+                    );
+                    entryMap[entry.ip].sessions += entry.sessions;
+                    entryMap[entry.ip].policy_action = this.accumulateActionLevel(
+                    entryMap[entry.ip].action,
+                    entry.policy_action
+                    );
+                } else {
+                    entryMap[entry.ip] = {
+                    applications: [entry.application],
+                    sessions: entry.sessions,
+                    policy_action: entry.policy_action,
+                    ip: entry.ip,
+                    fqdn: entry.fqdn || '',
+                    country_code: entry.country_code,
+                    country_name: entry.country_name,
+                    };
+                }
+                });
+            });
+            return Object.values(entryMap);
+        },
+        accumulateActionLevel: function(
+            accuAction = 'allow',
+            currAction
+        ) {
+            const actionMap = {
+                deny: 3,
+                alert: 2,
+                allow: 1,
+            };
+            return actionMap[accuAction.toLowerCase()] >
+                actionMap[currAction.toLowerCase()]
+                ? accuAction
+                : currAction;
+        },
+        accumulateProtocols: function(accuApps, currApp) {
+            if (!accuApps.includes(currApp)) accuApps.push(currApp);
+            return accuApps;
         }
     },
 
@@ -113,13 +183,15 @@ export default {
 </script>
 
 <template>
-    <!-- <BarChart4Exposures :hierarchicalExposures="hierarchicalExposures"/> -->
-    <!-- <Tabbed defaultTab="">
-        <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
-            <ExposureGrid :exposureInfo="scoreInfo.ingress" exposureType="ingress"/>
-        </Tab>
-        <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
-            <ExposureGrid :exposureInfo="scoreInfo.egress" exposureType="egress"/>
-        </Tab>
-    </Tabbed> -->
+    <div class="get-started" v-if="hierarchicalIngressList && hierarchicalEgressList">
+        <BarChart4Exposures :hierarchicalIngressList="hierarchicalIngressList" :hierarchicalEgressList="hierarchicalEgressList"/>
+        <Tabbed defaultTab="">
+            <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
+                <ExposureGrid :exposureInfo="hierarchicalIngressList" exposureType="ingress"/>
+            </Tab>
+            <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
+                <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="egress"/>
+            </Tab>
+        </Tabbed>
+    </div>
 </template>

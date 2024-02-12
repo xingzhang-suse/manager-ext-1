@@ -13,8 +13,6 @@ import BarChart4Exposures from './charts/BarChart4Exposures';
 import ScoreFactor from './contents/ScoreFactor';
 import ExposureGrid from './grids/ExposureGrid';
 import Instruction from './contents/Instruction';
-import Tabbed from '@shell/components/Tabbed';
-import Tab from '@shell/components/Tabbed/Tab';
 import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
 import axios from 'axios';
@@ -37,8 +35,6 @@ export default {
     ExposureGrid,
     ScoreGauge,
     Instruction,
-    Tabbed,
-    Tab,
     ScoreFactorCommentSlider,
     Exposures
   },
@@ -288,7 +284,7 @@ export default {
             :instructions="getInstructions4Exposures"
           />
         </div>
-        <div class="get-started" v-if="scoreInfo">
+        <div v-if="scoreInfo">
           <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns"/>
         </div>
       </div>
