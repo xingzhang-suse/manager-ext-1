@@ -61,14 +61,16 @@
         type: Array,
         default: () => {}
       },
-      hierarchicalExposures: Object
+      hierarchicalIngressList: Array,
+      hierarchicalEgressList: Array
     },
     computed: {
       chartData: function() {
-        let egressContainers = this.hierarchicalExposures.egress.flatMap(service => {
+        console.log("this.hierarchicalEgressList", this.hierarchicalEgressList, this.hierarchicalIngressList)
+        let egressContainers = this.hierarchicalEgressList.flatMap(service => {
           return service.children;
         });
-        let ingressContainers = this.hierarchicalExposures.ingress.flatMap(service => {
+        let ingressContainers = this.hierarchicalIngressList.flatMap(service => {
           return service.children;
         });
         let chartNumbers = {
