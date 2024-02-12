@@ -1,11 +1,17 @@
 <script>
 import BarChart4Exposures from '../charts/BarChart4Exposures';
+import ExposureGrid from '../grids/ExposureGrid';
+import Tabbed from '@shell/components/Tabbed';
+import Tab from '@shell/components/Tabbed/Tab';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
     components: {
-        BarChart4Exposures
+        BarChart4Exposures,
+        ExposureGrid,
+        Tabbed,
+        Tab,
     },
 
     async fetch() {
@@ -177,15 +183,15 @@ export default {
 </script>
 
 <template>
-    <div v-if="hierarchicalIngressList && hierarchicalEgressList">
+    <div class="get-started" v-if="hierarchicalIngressList && hierarchicalEgressList">
         <BarChart4Exposures :hierarchicalIngressList="hierarchicalIngressList" :hierarchicalEgressList="hierarchicalEgressList"/>
-        <!-- <Tabbed defaultTab="">
+        <Tabbed defaultTab="">
             <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
-                <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="ingress"/>
+                <ExposureGrid :exposureInfo="hierarchicalIngressList" exposureType="ingress"/>
             </Tab>
             <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
-                <ExposureGrid :exposureInfo="shierarchicalEgressList" exposureType="egress"/>
+                <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="egress"/>
             </Tab>
-        </Tabbed> -->
+        </Tabbed>
     </div>
 </template>
