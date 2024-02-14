@@ -17,9 +17,9 @@ import { refreshCharts } from '../../utils/chart';
 
 export default {
   props: {
-    hasSchema: {
-      type:     Boolean,
-      default:  false
+    uiService: {
+      type:     Object,
+      default:  () => {}
     }
   },
 
@@ -31,7 +31,7 @@ export default {
   mixins: [ResourceFetch],
 
   async fetch() {
-    if ( !this.hasSchema ) {
+    if ( !this.uiService ) {
       this.debouncedRefreshCharts = debounce((init = false) => {
         refreshCharts({
           store: this.$store, chartName: NEUVECTOR_CHARTS.CONTROLLER, init
@@ -40,19 +40,9 @@ export default {
 
       this.reloadReady = false;
 
-      const inStore = this.currentProduct.inStore;
-      const hash = [];
-      const listTypes = [SERVICE, CATALOG.CLUSTER_REPO];
+      await this.$fetchType(CATALOG.CLUSTER_REPO);
 
-      listTypes.forEach((type) => {
-        if ( this.$store.getters[`${ inStore }/canList`](type) ) {
-          hash.push(this.$fetchType(type));
-        }
-      }); 
-
-      await allHash(hash);
-
-      if ( !this.kubewardenRepo || !this.controllerChart ) {
+      if ( !this.neuvectorRepo || !this.controllerChart ) {
         this.debouncedRefreshCharts(true);
       }
     }
@@ -66,16 +56,8 @@ export default {
    }
   },
 
-  async mounted() {
-    
-  },
-
-  watch: {
-    
-  },
-
   computed: {
-    ...mapGetters(['currentCluster', 'currentProduct']),
+    ...mapGetters(['currentCluster']),
     ...mapGetters({
       charts: 'catalog/charts', repos: 'catalog/repos', t: 'i18n/t'
     }),
@@ -157,7 +139,7 @@ export default {
       <div class="description">
         {{ t("neuvector.dashboard.description") }}
       </div>
-      <div class="chart-route" v-if="!hasSchema">
+      <div class="chart-route" v-if="!uiService">
         <Loading v-if="!controllerChart && !reloadReady" mode="relative" class="mt-20" />
         <template v-else-if="!controllerChart && reloadReady">
           <Banner color="warning">
