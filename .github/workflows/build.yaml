@@ -1,42 +1,29 @@
-name: yarn CI
+name: Build and Release Extension Charts
 
 on:
-  push:
-    branches:
-      - main  # Adjust the branch name as needed
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - main
+  release:
+    types: [released]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-
-    - name: Install dependencies (root)
-      run: yarn install
-    
-    - name: Install dependencies
-      run: yarn install
-      working-directory: pkg/neuvector
-
-    - name: Install yq
-      run: |
-        sudo add-apt-repository ppa:rmescandon/yq
-        sudo apt update
-        sudo apt install yq
-
-    - name: Install Helm
-      run: |
-        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-        chmod +x get_helm.sh
-        ./get_helm.sh
-
-    - name: Run Yarn command
-      run: yarn publish-pkgs -s "neuvector/manager-ext" -b "main"
+  build-extension-charts:
+    uses: rancher/dashboard/.github/workflows/build-extension-charts.yml@master
+    permissions:
+      actions: write
+      contents: write
+      deployments: write
+      pages: write
+    with:
+      target_branch: main
+      tagged_release: ${{ github.ref_name }}

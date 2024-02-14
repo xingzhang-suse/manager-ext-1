@@ -11,9 +11,6 @@ export default {
   async fetch() {
     if ( this.$store.getters['cluster/canList'](SERVICE) ) {
       this.allServices = await this.$store.dispatch('cluster/findAll', { type: SERVICE }, { root: true });
-      
-      console.log(this.allServices);
-      console.log(this.$store.getters['cluster/findAll'])
     }
   },
 
@@ -25,18 +22,18 @@ export default {
   },
 
   computed: {
-    hasSchema() {
-      if ( this.allServices ) {
-        this.index = this.allServices.findIndex(svc => svc?.id.includes('neuvector-service-webui'));
-        console.log('index:',this.index)
+    uiService() {
+      if ( Array.isArray(this.allServices) && this.allServices.length ) {
+        return this.allServices.find(svc => svc?.id?.includes('neuvector-service-webui'));
       }
-      return this.index !== -1;
+
+      return null;
     }
   }
 };
 </script>
 
 <template>
-  <InstallView v-if="!hasSchema" :has-schema="hasSchema"/>
-  <DashboardView v-else :ns="this.allServices[this.index].metadata.namespace"/>
+  <InstallView v-if="!uiService" :ui-service="uiService" />
+  <DashboardView v-else :ns="uiService.metadata.namespace"/>
 </template>

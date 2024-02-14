@@ -1,10 +1,7 @@
 import { IPlugin } from '@shell/core/types';
 
-export function init($plugin: any, store: any) {
-  const NEUVECTOR = 'NeuVector';
-  const NEUVECTOR_URL = 'NeuVector_Dashboard';
-  const NEUVECTOR_DASHBOARD = 'Dashboard';
-  const BLANK_CLUSTER = '_';
+export function init($plugin: IPlugin, store: any) {
+  const NEUVECTOR = 'neuvector';
 
   const opts = {
     name:        'neuvector',
@@ -14,10 +11,11 @@ export function init($plugin: any, store: any) {
 
   store.commit('type-map/product', opts);
 
-  const { product,
-    configureType,
+  const {
+    product,
     virtualType,
-    basicType } = $plugin.DSL(store, NEUVECTOR);
+    basicType
+  } = $plugin.DSL(store, NEUVECTOR);
 
   product({
     icon:    'pod_security',
@@ -25,15 +23,15 @@ export function init($plugin: any, store: any) {
   });
 
   virtualType({
-    labelKey: 'Dashboard',
-    name:     NEUVECTOR_DASHBOARD,
-    overview:    true,
-    route:    {
+    labelKey:   'neuvector.dashboard.label',
+    name:       'neuvector-overview',
+    namespaced: false,
+    route:      {
       name:   `c-cluster-${ NEUVECTOR }`,
       params: { product: NEUVECTOR },
-      meta:   { pkg: NEUVECTOR, product: NEUVECTOR }
+      meta:   { pkg: NEUVECTOR, product: NEUVECTOR },
     }
   });
 
-  basicType([NEUVECTOR_DASHBOARD]);
+  basicType(['neuvector-overview']);
 }
