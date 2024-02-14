@@ -165,7 +165,8 @@ export default {
         token: String,
         ns: String,
         ingress: Array,
-        egress: Array
+        egress: Array,
+        rancherTheme: String
     },
 
     data() {
@@ -187,10 +188,10 @@ export default {
         <BarChart4Exposures :hierarchicalIngressList="hierarchicalIngressList" :hierarchicalEgressList="hierarchicalEgressList"/>
         <Tabbed defaultTab="">
             <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
-                <ExposureGrid :exposureInfo="hierarchicalIngressList" exposureType="ingress"/>
+                <ExposureGrid :exposureInfo="hierarchicalIngressList" exposureType="ingress" :rancherTheme="rancherTheme"/>
             </Tab>
             <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
-                <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="egress"/>
+                <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="egress" :rancherTheme="rancherTheme"/>
             </Tab>
         </Tabbed>
     </div>

@@ -241,6 +241,13 @@ export default {
           this.t('dashboard.help.policy_mode_pod.txt2')
         ]
       };
+    },
+    rancherTheme() {
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(';');
+      let rTheme = cookieArray.find(item => item.includes('R_THEME'));
+      console.log("rTheme.split('=')[1]", rTheme.split('=')[1])
+      return rTheme.split('=')[1];
     }
   },
 
@@ -252,7 +259,7 @@ export default {
 
 <template>
   <Loading v-if="$fetchState.pending" />
-  <div v-else-if="isAuthErr">Authentication Error!</div>
+  <div v-else-if="isAuthErr" :rancherTheme="rancherTheme">Authentication Error!</div>
   <div v-else class="dashboard">
     <div>
       <div class="head-title">
@@ -263,7 +270,7 @@ export default {
       </div>
       <div class="card-container head">
         <div class="get-started " v-if="scoreInfo">
-          <ScoreGauge :scoreInfo="scoreInfo"/>
+          <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
           <ScoreFactor
             :riskFactor="getServiceConnRisk"
           />
@@ -273,7 +280,7 @@ export default {
           <ScoreFactor
             :riskFactor="getVulnerabilityRisk"
           />
-          <ScoreFactorCommentSlider class="m-0"/>
+          <ScoreFactorCommentSlider :rancherTheme="rancherTheme" class="m-0"/>
         </div>
 
       </div>
@@ -285,7 +292,7 @@ export default {
           />
         </div>
         <div v-if="scoreInfo">
-          <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns"/>
+          <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
         </div>
       </div>
       <div class="head card-container p-20">
