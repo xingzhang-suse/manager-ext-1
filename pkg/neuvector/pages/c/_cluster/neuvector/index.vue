@@ -37,6 +37,6 @@ export default {
 </script>
 
 <template>
-  <InstallView v-if="!hasSchema" :has-schema="hasSchema" />
+  <InstallView v-if="!hasSchema" :has-schema="hasSchema"/>
   <DashboardView v-else :ns="this.allServices[this.index].metadata.namespace"/>
 </template>

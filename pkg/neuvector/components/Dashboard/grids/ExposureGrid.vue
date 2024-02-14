@@ -2,7 +2,7 @@
     <ag-grid-vue
       id="agGrid"
       style="width: 100%; height: 300px"
-      class="ag-theme-balham-dark"
+      :class="rancherTheme === 'light' ? 'ag-theme-balham' : 'ag-theme-balham-dark'"
       :columnDefs="columnDefs"
       :rowData="rowData"
       :gridOptions="gridOptions"
@@ -30,7 +30,8 @@
     name: "App",
     props: {
       exposureInfo: Array,
-      exposureType: String
+      exposureType: String,
+      rancherTheme: String
     },
     data() {
       return {
@@ -264,27 +265,3 @@
     },
   };
   </script>
-  <style lang="scss">
-  
-  .ag-theme-custom-dark {
-    // Custom dark theme styles
-    // Example:
-    background-color: #333;
-    color: #fff;
-  }
-  
-  .ag-theme-custom-dark .ag-header {
-    // Custom header styles
-  }
-  
-  .ag-theme-custom-dark .ag-row {
-    // Custom row styles
-  }
-  
-  // Apply the custom dark theme class to the ag-grid-vue component
-  .ag-theme-custom-dark {
-    .ag-root {
-      // Custom root styles
-    }
-  }
-  </style>

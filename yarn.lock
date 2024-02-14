@@ -7494,7 +7494,7 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-ejs@^2.4.1, ejs@^2.6.1:
+ejs@^2.6.1:
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
@@ -9219,11 +9219,6 @@ hard-source-webpack-plugin@^0.13.1:
     webpack-sources "^1.0.1"
     write-json-file "^2.3.0"
 
-harmony-reflect@^1.4.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/harmony-reflect/-/harmony-reflect-1.6.2.tgz#31ecbd32e648a34d030d86adb67d4d47547fe710"
-  integrity sha512-HIp/n38R9kQjDEziXyDTuW3vvoxxyxjxFzXLrBr18uB47GnSt+G9D29fqrpM5ZkspMcPICud3XsBJQ4Y2URg8g==
-
 has-ansi@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/has-ansi/-/has-ansi-2.0.0.tgz#34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
@@ -9352,13 +9347,6 @@ he@1.2.0, he@1.2.x, he@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
-
-helm@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/helm/-/helm-0.2.1.tgz#378c4fe4d22e9aa0372752e2e5daaa91d116df96"
-  integrity sha512-MIP0MZ7YPFww/6UCInMLSiQErSyyPhMh4I2+RHpS8JxIxqyMuVR5Rt+Xcka1jtuFrLzvmsQdZYs0bmk+itAT7w==
-  dependencies:
-    path-to-regexp "^1.0.1"
 
 hex-color-regex@^1.1.0:
   version "1.1.0"
@@ -12813,7 +12801,7 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==
 
-path-to-regexp@^1.0.1, path-to-regexp@^1.7.0:
+path-to-regexp@^1.7.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.8.0.tgz#887b3ba9d84393e87a0a0b9f4cb756198b53548a"
   integrity sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==
@@ -17250,20 +17238,3 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
-
-yp-css@latest:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/yp-css/-/yp-css-1.0.3.tgz#1a98452fe5e1774161cc539b1943fbfc14264244"
-  integrity sha512-9NSFb3/AK7+VWTSjrRcfZjG5qXCWbG6KMMlPhjKDpGuET9l3s2+aS644g00wZBGEpLnHbGXj1PWDhlJLMdcW8g==
-  dependencies:
-    ejs "^2.4.1"
-
-yp@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/yp/-/yp-2.0.3.tgz#f380db6989aa745780e576b333fe0d6867bb3320"
-  integrity sha512-HzN/ogyifwk7FKzC9DbDPIYlbDoaSVU7fx86qzeDED2yYIFtx7IDq9Jq6iT119e6Cus6jXW/ocVHNmYmcwldWA==
-  dependencies:
-    co "^4.6.0"
-    harmony-reflect "^1.4.2"
-    mkdirp "^0.5.1"
-    yp-css latest

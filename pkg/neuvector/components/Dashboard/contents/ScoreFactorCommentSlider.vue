@@ -3,7 +3,7 @@
     <slider ref="slider" :options="options" @slide='slide' @tap='onTap' @init='onInit' style="white-space: unset;">
         <slideritem v-for="(item,index) in someList" :key="index" style="display: block; font-size: 12px;">
             <h5><strong>{{ item.title }}</strong></h5>
-            <p style="text-align: left;">{{ item.content }}</p>
+            <p :style="rancherTheme === 'light' ? 'color: #888' : 'color: #fff' + ' text-align: left;'">{{ item.content }}</p>
             <!-- <ToggleSwitch /> -->
         </slideritem>
         <div slot="loading">loading...</div>
@@ -40,6 +40,9 @@ data () {
        loop: true
      }
    }
+ },
+ props: {
+  rancherTheme: String
  },
  components: {
    slider,

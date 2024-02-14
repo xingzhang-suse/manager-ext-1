@@ -28,7 +28,8 @@
   export default {
     components: { VueGauge },
     props: {
-      scoreInfo: Object
+      scoreInfo: Object,
+      rancherTheme: String
     },
     computed: {
       scoreLevel: function() {
@@ -62,11 +63,10 @@
         myOptions: {
           chartWidth: 150,
           needleValue: this.scoreInfo.score.securityRiskScore,
-          needleColor: "white",
+          needleColor: this.rancherTheme === 'light' ? 'black' : 'white',
           arcDelimiters: [20, 50],
           arcColors: ["rgb(255,84,84)", "rgb(239,214,19)", "rgb(61,204,91)"],
-          arcLabels: ["20", "50"],
-          rangeLabel: ["0", "100"],
+          rangeLabel: ["", ""],
           rangeLabelFontSize: 14,
         },
       };
