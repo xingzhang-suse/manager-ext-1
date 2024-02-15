@@ -1,5 +1,6 @@
 <script>
 import BarChart4Exposures from '../charts/BarChart4Exposures';
+import ExposureReport from '../buttons/ExposureReport';
 import ExposureGrid from '../grids/ExposureGrid';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
@@ -9,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default {
     components: {
         BarChart4Exposures,
+        ExposureReport,
         ExposureGrid,
         Tabbed,
         Tab,
@@ -186,13 +188,25 @@ export default {
 <template>
     <div class="get-started" v-if="hierarchicalIngressList && hierarchicalEgressList">
         <BarChart4Exposures :hierarchicalIngressList="hierarchicalIngressList" :hierarchicalEgressList="hierarchicalEgressList"/>
-        <Tabbed defaultTab="">
+        <Tabbed defaultTab="" class="exposure-grid-group">
             <Tab name="ingress" :label="t('dashboard.body.panel_title.INGRESS')">
                 <ExposureGrid :exposureInfo="hierarchicalIngressList" exposureType="ingress" :rancherTheme="rancherTheme"/>
             </Tab>
             <Tab name="egress" :label="t('dashboard.body.panel_title.EGRESS')">
                 <ExposureGrid :exposureInfo="hierarchicalEgressList" exposureType="egress" :rancherTheme="rancherTheme"/>
             </Tab>
+            <ExposureReport class="exposure-report-btn" :ingress="ingress" :egress="egress"/>
         </Tabbed>
     </div>
 </template>
+
+<style>
+    .exposure-grid-group {
+        position: relative;
+    }
+    .exposure-report-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
