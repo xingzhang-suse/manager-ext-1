@@ -65,6 +65,6 @@ export default {
 
 <style>
     .sm-btn {
-        min-height: 25px;
+        min-height: 20px;
     }
 </style>

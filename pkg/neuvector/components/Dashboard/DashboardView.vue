@@ -17,6 +17,8 @@ import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
 import axios from 'axios';
 import Exposures from './panels/Exposures';
+import DashboardReport from './contents/DashboardReport';
+import DashboardReportSelection from './buttons/DashboardReportSelection';
 
 export default {
   components: {
@@ -36,7 +38,9 @@ export default {
     ScoreGauge,
     Instruction,
     ScoreFactorCommentSlider,
-    Exposures
+    Exposures,
+    DashboardReport,
+    DashboardReportSelection
   },
 
   mixins: [],
@@ -246,8 +250,7 @@ export default {
       const decodedCookie = decodeURIComponent(document.cookie);
       const cookieArray = decodedCookie.split(';');
       let rTheme = cookieArray.find(item => item.includes('R_THEME'));
-      console.log("rTheme.split('=')[1]", rTheme.split('=')[1])
-      return rTheme.split('=')[1];
+      return rTheme ? rTheme.split('=')[1] : 'dark';
     }
   },
 
@@ -261,11 +264,13 @@ export default {
   <Loading v-if="$fetchState.pending" />
   <div v-else-if="isAuthErr" :rancherTheme="rancherTheme">Authentication Error!</div>
   <div v-else class="dashboard">
-    <div>
+    <DashboardReport class="printable-area"/>
+    <div class="screen-area">
       <div class="head-title">
         <h1 data-testid="nv-dashboard-title" class="mb-20">
           {{ t('dashboard.TITLE') }}
         </h1>
+        <DashboardReportSelection/>
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
       <div class="card-container head">
@@ -379,7 +384,7 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -406,7 +411,7 @@ export default {
       }
 
       span {
-        background: var(--primary);
+        // background: var(--primary);
         border-radius: var(--border-radius);
         padding: 4px 8px;
       }
@@ -461,5 +466,55 @@ export default {
 
 .pull-right {
   float: right !important;
+}
+
+@media print {
+  @page {
+    size: landscape;
+    @bottom-right {
+      content: counter(page) ' of ' counter(pages);
+    }
+  }
+  .screen-area,
+  #__layout nav,
+  #__layout header {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  // #__layout main {
+  //   margin-top: 0;
+  //   margin-bottom: 0;
+  //   margin-left: 0;
+  //   border: none;
+  // }
+  // .nv-section {
+  //   border-top: none;
+  //   padding-top: 4px;
+  //   padding-bottom: 0;
+  //   padding-left: 0;
+  //   padding-right: 0;
+  // }
+  .printable-area {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: auto;
+    width: 1000px;
+  }
+  .pagebreak {
+    clear: both;
+    page-break-after: always;
+  }
+}
+@media screen {
+  .printable-area {
+    visibility: hidden;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    width: 1000px;
+  }
 }
 </style>
