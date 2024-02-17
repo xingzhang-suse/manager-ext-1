@@ -1,7 +1,7 @@
 <template>
     <ag-grid-vue
       id="agGrid"
-      style="width: 100%; height: 300px"
+      style="width: 100%; height: 200px"
       :class="rancherTheme === 'light' ? 'ag-theme-balham' : 'ag-theme-balham-dark'"
       :columnDefs="columnDefs"
       :rowData="rowData"

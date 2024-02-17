@@ -19,6 +19,8 @@ import axios from 'axios';
 import Exposures from './panels/Exposures';
 import DashboardReport from './contents/DashboardReport';
 import DashboardReportSelection from './buttons/DashboardReportSelection';
+import Tabbed from '@shell/components/Tabbed';
+import Tab from '@shell/components/Tabbed/Tab';
 
 export default {
   components: {
@@ -40,7 +42,9 @@ export default {
     ScoreFactorCommentSlider,
     Exposures,
     DashboardReport,
-    DashboardReportSelection
+    DashboardReportSelection,
+    Tabbed,
+    Tab,
   },
 
   mixins: [],
@@ -273,104 +277,105 @@ export default {
         <DashboardReportSelection/>
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
-      <div class="card-container head">
-        <div class="get-started " v-if="scoreInfo">
-          <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
-          <ScoreFactor
-            :riskFactor="getServiceConnRisk"
-          />
-          <ScoreFactor
-            :riskFactor="getExposureRisk"
-          />
-          <ScoreFactor
-            :riskFactor="getVulnerabilityRisk"
-          />
-          <ScoreFactorCommentSlider :rancherTheme="rancherTheme" class="m-0"/>
-        </div>
+      <div class="get-started " v-if="scoreInfo">
+        <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
+        <ScoreFactor
+          :riskFactor="getServiceConnRisk"
+        />
+        <ScoreFactor
+          :riskFactor="getExposureRisk"
+        />
+        <ScoreFactor
+          :riskFactor="getVulnerabilityRisk"
+        />
+        <ScoreFactorCommentSlider :rancherTheme="rancherTheme" class="m-0"/>
+      </div>
 
-      </div>
-      <div class="head card-container p-20">
-        <div class="get-started">
-          <div>{{ t('dashboard.body.panel_title.CONTAINER_SEC') }}</div>
-          <Instruction
-            :instructions="getInstructions4Exposures"
-          />
-        </div>
-        <div v-if="scoreInfo">
-          <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
-        </div>
-      </div>
-      <div class="head card-container p-20">
-        <div class="get-started">
-          <div>{{ t('dashboard.heading.CRITICAL_SECURITY_EVENT') }}</div>
-          <Instruction
-            :instructions="getInstructions4SecurityEvents"
-          />
-        </div>
-        <LineChart4SecurityEvents v-if="notificationInfo" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
-      </div>
-      <div class="get-started">
-        <div class="head card-container p-20">
+
+      <Tabbed defaultTab="" style="margin: 30px 0;"> <!-- background-color: var(--scrollbar-thumb-dropdown)-->
+        <Tab name="exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
           <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.TOP_SEC_EVENTS') }} - {{ t('dashboard.body.panel_title.SOURCE') }}</div>
             <Instruction
-              :instructions="getInstructions4TopSecurityEventsInSource"
+              :instructions="getInstructions4Exposures"
             />
           </div>
-          <BarChart4TopSecurityEventsBySource v-if="notificationInfo" :securityEventTop5BySource="notificationInfo.criticalSecurityEvents.top_security_events.source"/>
-        </div>
-        <div class="head card-container p-20">
+          <div v-if="scoreInfo">
+            <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
+          </div>
+        </Tab>
+        <Tab name="top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
           <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.TOP_SEC_EVENTS') }} - {{ t('dashboard.body.panel_title.DESTINATION') }}</div>
+            <div>
+              <div class="get-started">
+                <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</div>
+                <Instruction
+                  :instructions="getInstructions4TopVulnerablePods"
+                />
+              </div>
+              <BarChart4TopVulnerableContainers v-if="detailsInfo" :topVulContainers="detailsInfo.highPriorityVulnerabilities.containers"/>
+            </div>
+            <div>
+              <div class="get-started">
+                <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_NODES') }}</div>
+                <Instruction
+                  :instructions="getInstructions4TopVulnerableNodes"
+                />
+              </div>
+              <BarChart4TopVulnerableHosts v-if="detailsInfo" :topVulHosts="detailsInfo.highPriorityVulnerabilities.nodes"/>
+            </div>
+          </div>
+        </Tab>
+        <Tab name="security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
+          <div class="get-started">
             <Instruction
-              :instructions="getInstructions4TopSecurityEventsInDestination"
+              :instructions="getInstructions4SecurityEvents"
             />
           </div>
-          <BarChart4TopSecurityEventsByDestination v-if="notificationInfo" :securityEventTop5ByDestination="notificationInfo.criticalSecurityEvents.top_security_events.destination"/>
-        </div>
-      </div>
-      <div class="get-started">
-        <div class="head card-container p-20">
+          <LineChart4SecurityEvents v-if="notificationInfo" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
           <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</div>
-            <Instruction
-              :instructions="getInstructions4TopVulnerablePods"
-            />
+            <div>
+              <div class="get-started">
+                <Instruction
+                  :instructions="getInstructions4TopSecurityEventsInSource"
+                />
+              </div>
+              <BarChart4TopSecurityEventsBySource v-if="notificationInfo" :securityEventTop5BySource="notificationInfo.criticalSecurityEvents.top_security_events.source"/>
+            </div>
+            <div>
+              <div class="get-started">
+                <Instruction
+                  :instructions="getInstructions4TopSecurityEventsInDestination"
+                />
+              </div>
+              <BarChart4TopSecurityEventsByDestination v-if="notificationInfo" :securityEventTop5ByDestination="notificationInfo.criticalSecurityEvents.top_security_events.destination"/>
+            </div>
           </div>
-          <BarChart4TopVulnerableContainers v-if="detailsInfo" :topVulContainers="detailsInfo.highPriorityVulnerabilities.containers"/>
-        </div>
-        <div class="head card-container p-20">
+        </Tab>
+        <Tab name="policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
           <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_NODES') }}</div>
-            <Instruction
-              :instructions="getInstructions4TopVulnerableNodes"
-            />
+            <div>
+              <div class="get-started">
+                <div>{{ t('dashboard.body.panel_title.CONTAINER_MODE') }}</div>
+                <Instruction
+                  :instructions="getInstructions4PodsMode"
+                />
+              </div>
+              <PieChart4PolicyModeOfPods v-if="detailsInfo" :podMode="detailsInfo.containers"/>
+              <PolicyModeOfPods />
+            </div>
+            <div>
+              <div class="get-started">
+                <div>{{ t('dashboard.body.panel_title.SERVICE_MODE') }}</div>
+                <Instruction
+                  :instructions="getInstructions4PodsMode"
+                />
+              </div>
+              <PieChart4PolicyModeOfServices v-if="detailsInfo && scoreInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
+              <PolicyModeOfServices />
+            </div>
           </div>
-          <BarChart4TopVulnerableHosts v-if="detailsInfo" :topVulHosts="detailsInfo.highPriorityVulnerabilities.nodes"/>
-        </div>
-      </div>
-      <div class="get-started">
-        <div class="head card-container p-20">
-          <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.CONTAINER_MODE') }}</div>
-            <Instruction
-              :instructions="getInstructions4PodsMode"
-            />
-          </div>
-          <PieChart4PolicyModeOfPods v-if="detailsInfo" :podMode="detailsInfo.containers"/>
-          <PolicyModeOfPods />
-        </div>
-        <div class="head card-container p-20">
-          <div class="get-started">
-            <div>{{ t('dashboard.body.panel_title.SERVICE_MODE') }}</div>
-            <Instruction
-              :instructions="getInstructions4PodsMode"
-            />
-          </div>
-          <PieChart4PolicyModeOfServices v-if="detailsInfo && scoreInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
-          <PolicyModeOfServices />
-        </div>
-      </div>
+        </Tab>
+      </Tabbed>
       <div class="head-links">
         <a
           href="https://www.neuvector.com/"

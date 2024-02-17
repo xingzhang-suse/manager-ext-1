@@ -53,7 +53,7 @@
       },
       height: {
         type: Number,
-        default: 400
+        default: 200
       },
       cssClasses: {
         default: '',
@@ -92,7 +92,7 @@
           labels: topSecurityEventsLabels,
           datasets: [
             {
-            label: this.t('dashboard.body.panel_title.SOURCE'),
+            label: `${this.t('dashboard.body.panel_title.TOP_SEC_EVENTS')} - ${this.t('dashboard.body.panel_title.SOURCE')}`,
             data: topSecurityEventsData,
             backgroundColor: barChartColors,
             borderColor: barChartBorderColors,
