@@ -373,6 +373,7 @@ dashboard:
       SEC_EVENTS: Security Events
       TOP_THREAT: Top Threats
       TOP_VIOLATIONS: Top Violations
+      TOP_VULNERABLE_ASSETS: Top Vulnerable Assets
       TOP_VULNERABLE_CONTAINERS: Top Vulnerable Pods
       TOP_VULNERABLE_NODES: Top Vulnerable Nodes
       TOP_INCIDENTS_CONTAINERS: Top Incidents by Pods
