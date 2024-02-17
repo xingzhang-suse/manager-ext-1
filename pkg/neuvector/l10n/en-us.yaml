@@ -776,3 +776,5 @@ dashboard:
         (for the top 10 impactful vulnerabilities)
   report:
     TITLE: Security Event and Risk Report
+    ALL: All Namespaces
+    REPORT: Report
