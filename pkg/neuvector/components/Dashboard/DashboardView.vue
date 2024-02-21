@@ -109,7 +109,8 @@ export default {
       notificationInfo: null,
       detailsInfo: null,
       isAuthErr: false,
-      token: null
+      token: null,
+      isRefreshed: false
     }
   },
 
@@ -250,7 +251,7 @@ export default {
         ]
       };
     },
-    rancherTheme() {
+    rancherTheme: function() {
       const decodedCookie = decodeURIComponent(document.cookie);
       const cookieArray = decodedCookie.split(';');
       let rTheme = cookieArray.find(item => item.includes('R_THEME'));
@@ -259,7 +260,15 @@ export default {
   },
 
   methods: {
-  
+    changeTab: function(event) {
+      //This logic is a workaround for line chart's size initilization issue in chart.js lib
+      if (event.selectedName === '1-security-events'){
+        this.isRefreshed = false;
+        setTimeout(() => {
+          this.isRefreshed = true;
+        }, 200);
+      }
+    }
   }
 };
 </script>
@@ -292,8 +301,8 @@ export default {
       </div>
 
 
-      <Tabbed defaultTab="" style="margin: 30px 0;"> <!-- background-color: var(--scrollbar-thumb-dropdown)-->
-        <Tab name="exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
+      <Tabbed defaultTab="" style="margin: 30px 0;" @changed="changeTab"> <!-- background-color: var(--scrollbar-thumb-dropdown)-->
+        <Tab name="3-exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
           <div class="get-started">
             <Instruction
               :instructions="getInstructions4Exposures"
@@ -303,7 +312,7 @@ export default {
             <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
           </div>
         </Tab>
-        <Tab name="top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
+        <Tab name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
           <div class="get-started">
             <div>
               <div class="get-started">
@@ -325,13 +334,15 @@ export default {
             </div>
           </div>
         </Tab>
-        <Tab name="security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
-          <div class="get-started">
-            <Instruction
-              :instructions="getInstructions4SecurityEvents"
-            />
+        <Tab name="1-security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
+          <div>
+            <div class="get-started">
+              <Instruction
+                :instructions="getInstructions4SecurityEvents"
+              />
+            </div>
+            <LineChart4SecurityEvents v-if="notificationInfo && isRefreshed" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
           </div>
-          <LineChart4SecurityEvents v-if="notificationInfo" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
           <div class="get-started">
             <div>
               <div class="get-started">
@@ -351,7 +362,7 @@ export default {
             </div>
           </div>
         </Tab>
-        <Tab name="policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
+        <Tab name="2-policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
           <div class="get-started">
             <div>
               <div class="get-started">

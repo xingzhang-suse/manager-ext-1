@@ -1,20 +1,20 @@
 <template>
-    <LineChartGenerator
-      v-if="!isEmptyData"
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
-    />
-    <div class="message-content" v-else>
-      <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_CRITICAL_SECURITY_EVENT')"/>
-    </div>
-  </template>
+  <LineChartGenerator
+    v-if="!isEmptyData"
+    :chart-options="chartOptions"
+    :chart-data="chartData"
+    :chart-id="chartId"
+    :dataset-id-key="datasetIdKey"
+    :plugins="plugins"
+    :css-classes="cssClasses"
+    :styles="styles"
+    :width="width"
+    :height="height"
+  />
+  <div class="message-content" v-else>
+    <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_CRITICAL_SECURITY_EVENT')"/>
+  </div>
+</template>
   
   <script>
   import { Line as LineChartGenerator } from 'vue-chartjs/legacy';
@@ -42,7 +42,7 @@
   )
   
   export default {
-    name: 'BarChart',
+    name: 'lineChart',
     components: {
       LineChartGenerator,
       EmptyDataMessage
@@ -58,7 +58,7 @@
       },
       width: {
         type: Number,
-        default: 300
+        default: 400
       },
       height: {
         type: Number,
