@@ -278,7 +278,20 @@ export default {
 
 <template>
   <Loading v-if="$fetchState.pending" />
-  <div v-else-if="isAuthErr" :rancherTheme="rancherTheme">Authentication Error!</div>
+  <div v-else-if="isAuthErr" :rancherTheme="rancherTheme" class="container">
+    <div class="title p-10">
+      <h1 class="mb-20" data-testid="nv-auth-error">
+        {{ t('neuvector.dashboard.error.auth') }}
+      </h1>
+      <div class="chart-route">
+        <Banner color="warning">
+          <button class="ml-10 btn role-primary" @click="$fetch">
+            {{ t('generic.reload') }}
+          </button>
+        </Banner>
+      </div>
+    </div>
+  </div>
   <div v-else class="dashboard">
     <DashboardReport/>
     <div class="screen-area">
