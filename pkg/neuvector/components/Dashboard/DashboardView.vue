@@ -256,6 +256,9 @@ export default {
       const cookieArray = decodedCookie.split(';');
       let rTheme = cookieArray.find(item => item.includes('R_THEME'));
       return rTheme ? rTheme.split('=')[1] : 'dark';
+    },
+    ssoLink: function() {
+      return `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/login`;
     }
   },
 
@@ -266,7 +269,7 @@ export default {
         this.isRefreshed = false;
         setTimeout(() => {
           this.isRefreshed = true;
-        }, 200);
+        }, 5);
       }
     }
   }
@@ -277,7 +280,7 @@ export default {
   <Loading v-if="$fetchState.pending" />
   <div v-else-if="isAuthErr" :rancherTheme="rancherTheme">Authentication Error!</div>
   <div v-else class="dashboard">
-    <DashboardReport class="printable-area"/>
+    <DashboardReport/>
     <div class="screen-area">
       <div class="head-title">
         <h1 data-testid="nv-dashboard-title" class="mb-20">
@@ -387,14 +390,22 @@ export default {
           </div>
         </Tab>
       </Tabbed>
-      <div class="head-links">
-        <a
-          href="https://www.neuvector.com/"
-          target="_blank"
-          rel="neuvector portal"
-        >
-          NeuVector
-        </a>
+      <div class="links">
+        <div class="link-container">
+          <a :href="ssoLink" target="_blank" rel="noopener noreferrer">
+            <div class="link-logo">
+              <img src="../../assets/neuvector-logo.png">
+            </div>
+            <div class="link-content">
+              <span>NeuVector</span>
+              <i class="icon icon-external-link pull-right"></i>
+              <hr>
+              <div class="description">
+                <span>Full Lifecycle Container Security</span>
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -483,6 +494,51 @@ export default {
 .pull-right {
   float: right !important;
 }
+.links {
+    position: fixed;
+    bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.links .link-container {
+    position: relative;
+    background-color: var(--input-bg);
+    border-radius: var(--border-radius);
+    border: solid 1px var(--input-border);
+    display: flex;
+    flex-basis: 40%;
+    margin: 0 10px 10px 0;
+    max-width: 325px;
+    min-height: 100px;
+    border-left: solid 10px var(--primary);
+}
+
+.links .link-container>* {
+    align-items: center;
+    display: flex;
+    flex: 1 0;
+    padding: 10px;
+}
+.links .link-container>* .link-content {
+    width: 100%;
+    margin-left: 10px;
+}
+.links .link-container>* .link-logo {
+    text-align: center;
+    width: 60px;
+    height: 60px;
+    border-radius: calc(var(--border-radius)*2);
+    background-color: #fff;
+}
+.links .link-container>* .link-content, .links .link-container>* .link-logo {
+    display: inline-block;
+    height: 100%;
+}
+A {
+    color: var(--link);
+    text-decoration: none;
+}
 
 @media print {
   @page {
@@ -516,6 +572,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+    overflow-y: auto;
     height: auto;
     width: 1000px;
   }
