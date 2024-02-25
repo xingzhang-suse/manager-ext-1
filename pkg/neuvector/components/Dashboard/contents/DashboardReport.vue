@@ -15,7 +15,7 @@ export default {
             <div class="page-cover-logo"></div>
             <div class="page-cover-title">
                 {{ t('dashboard.report.TITLE') }}
-                <div class="margin-top-m" style="font-size: 30px;">{{domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : ''}}</div>
+                <!-- <div class="margin-top-m" style="font-size: 30px;">{{domain ? '&nbsp;(&nbsp;' + domain + '&nbsp;)' : ''}}</div> -->
             </div>
         </div>
         <div class="report-summary pagebreak">
