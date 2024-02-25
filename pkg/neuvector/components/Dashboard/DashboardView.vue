@@ -300,12 +300,12 @@ export default {
         <ScoreFactor
           :riskFactor="getVulnerabilityRisk"
         />
-        <ScoreFactorCommentSlider :rancherTheme="rancherTheme" class="m-0"/>
+        <ScoreFactorCommentSlider :rancherTheme="rancherTheme" :score="scoreInfo.score.securityRiskScore" class="m-0"/>
       </div>
 
 
       <Tabbed defaultTab="" style="margin: 30px 0;" @changed="changeTab"> <!-- background-color: var(--scrollbar-thumb-dropdown)-->
-        <Tab name="3-exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
+        <Tab :weight="2" name="3-exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
           <div class="get-started">
             <Instruction
               :instructions="getInstructions4Exposures"
@@ -315,7 +315,7 @@ export default {
             <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
           </div>
         </Tab>
-        <Tab name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
+        <Tab :weight="0" name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
           <div class="get-started">
             <div>
               <div class="get-started">
@@ -337,7 +337,7 @@ export default {
             </div>
           </div>
         </Tab>
-        <Tab name="1-security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
+        <Tab :weight="3" name="1-security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
           <div>
             <div class="get-started">
               <Instruction
@@ -365,7 +365,7 @@ export default {
             </div>
           </div>
         </Tab>
-        <Tab name="2-policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
+        <Tab :weight="1" name="2-policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
           <div class="get-started">
             <div>
               <div class="get-started">
