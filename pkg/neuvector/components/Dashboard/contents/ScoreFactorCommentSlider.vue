@@ -10,7 +10,9 @@
           </div>
           <div v-else-if="item.type === 'vulnerabilities'">
             <h5><strong>{{ item.title }}</strong></h5>
-            <VulnerabilitiesInstruction/>
+            <p :style="rancherTheme === 'light' ? 'color: #888' : 'color: #fff' + ' text-align: left;'">
+              <VulnerabilitiesInstruction :token="token" :ns="ns" :autoScan="autoScan"/>
+            </p>
           </div>
           <div v-else>
             <h5><strong>{{ item.title }}</strong></h5>
@@ -25,7 +27,6 @@
 import { slider, slideritem } from 'vue-concise-slider'
 import ScoreInstruction from './ScoreInstruction';
 import VulnerabilitiesInstruction from './VulnerabilitiesInstruction';
-// import ToggleSwitch from '@shell/components/form/ToggleSwitch';
 
 export default {
 data () {
@@ -62,7 +63,10 @@ data () {
  },
  props: {
   rancherTheme: String,
-  score: Number
+  ns: String,
+  token: String,
+  score: Number,
+  autoScan: Boolean
  },
  components: {
    slider,

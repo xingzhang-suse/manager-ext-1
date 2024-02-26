@@ -53,6 +53,7 @@ export default {
     this.scoreInfo = null;
     this.notificationInfo = null;
     this.detailsInfo = null;
+    this.autoScanInfo = null;
     axios({
       url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
@@ -96,6 +97,16 @@ export default {
       }).then(res => {
         this.detailsInfo = res.data;
       });
+      axios({
+        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
+        method: 'get',
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.autoScanInfo = res.data;
+        console.log(this.autoScanInfo.config)
+      })
     })
     .catch(err => {
       console.log(err);
@@ -108,6 +119,7 @@ export default {
       scoreInfo: null,
       notificationInfo: null,
       detailsInfo: null,
+      autoScanInfo: null,
       isAuthErr: false,
       token: null,
       isRefreshed: false
@@ -313,7 +325,7 @@ export default {
         <ScoreFactor
           :riskFactor="getVulnerabilityRisk"
         />
-        <ScoreFactorCommentSlider :rancherTheme="rancherTheme" :score="scoreInfo.score.securityRiskScore" class="m-0"/>
+        <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
       </div>
 
 
@@ -407,7 +419,7 @@ export default {
         <div class="link-container">
           <a :href="ssoLink" target="_blank" rel="noopener noreferrer">
             <div class="link-logo">
-              <img src="../../assets/neuvector-logo.png">
+              <img src="../../assets/neuvector-logo.svg">
             </div>
             <div class="link-content">
               <span>NeuVector</span>
