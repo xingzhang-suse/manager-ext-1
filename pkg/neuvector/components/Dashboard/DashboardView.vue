@@ -18,7 +18,8 @@ import ScoreGauge from './charts/ScoreGauge';
 import axios from 'axios';
 import Exposures from './panels/Exposures';
 import DashboardReport from './contents/DashboardReport';
-import DashboardReportSelection from './buttons/DashboardReportSelection';
+import DashboardReportSection from './contents/DashboardReportSection';
+import SSOMenu from './contents/SSOMenu';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 
@@ -42,7 +43,8 @@ export default {
     ScoreFactorCommentSlider,
     Exposures,
     DashboardReport,
-    DashboardReportSelection,
+    DashboardReportSection,
+    SSOMenu,
     Tabbed,
     Tab,
   },
@@ -270,7 +272,7 @@ export default {
       return rTheme ? rTheme.split('=')[1] : 'dark';
     },
     ssoLink: function() {
-      return `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/login`;
+      return `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
     }
   },
 
@@ -311,21 +313,26 @@ export default {
         <h1 data-testid="nv-dashboard-title" class="mb-20">
           {{ t('dashboard.TITLE') }}
         </h1>
-        <DashboardReportSelection/>
         <!-- <span v-if="version">{{ version }}</span> -->
       </div>
-      <div class="get-started " v-if="scoreInfo">
-        <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
-        <ScoreFactor
-          :riskFactor="getServiceConnRisk"
-        />
-        <ScoreFactor
-          :riskFactor="getExposureRisk"
-        />
-        <ScoreFactor
-          :riskFactor="getVulnerabilityRisk"
-        />
-        <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
+      <div v-if="scoreInfo">
+        <div class="get-started" style="margin-bottom: 15px;">
+          <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
+          <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
+          <DashboardReportSection />
+          <SSOMenu :ns="ns" :ssoLink="ssoLink"/>
+        </div>
+        <div class="get-started">
+          <ScoreFactor
+            :riskFactor="getServiceConnRisk"
+          />
+          <ScoreFactor
+            :riskFactor="getExposureRisk"
+          />
+          <ScoreFactor
+            :riskFactor="getVulnerabilityRisk"
+          />
+        </div>
       </div>
 
 
@@ -415,23 +422,6 @@ export default {
           </div>
         </Tab>
       </Tabbed>
-      <div class="links">
-        <div class="link-container">
-          <a :href="ssoLink" target="_blank" rel="noopener noreferrer">
-            <div class="link-logo">
-              <img src="../../assets/neuvector-logo.svg">
-            </div>
-            <div class="link-content">
-              <span>NeuVector</span>
-              <i class="icon icon-external-link pull-right"></i>
-              <hr>
-              <div class="description">
-                <span>Full Lifecycle Container Security</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 </template>

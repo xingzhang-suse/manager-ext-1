@@ -100,7 +100,7 @@
         & > td {
             float: left;
             height: 16px;
-            background-color: #7e8da2;
+            background-color: transparent;
             -webkit-print-color-adjust: exact;
             color: #fff;
             width: 50px;

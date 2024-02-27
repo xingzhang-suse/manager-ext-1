@@ -14,7 +14,7 @@ export default {
 
 <template>
   <div class="dropdown">
-  <span class="icon"><i class="icon-info" /></span>
+  <span class="icon"><i class="icon-info" style="font-size: 15px;"></i></span>
   
   <div class="dropdown-content">
     <div v-for="instruction in instructions.textLines">{{ instruction }}</div>
