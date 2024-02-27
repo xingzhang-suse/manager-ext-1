@@ -255,6 +255,10 @@ dashboard:
   ALL_NAMESPACE: All Namespaces
   CURR_NAMESPACE_VIEW: Current namespace view
   CONVERSATIONS: Conversations
+  SSO_MENU: Open NeuVector UI in New Window
+  NETWORK_POLICY: Network Policy
+  VULNERBILITIES: Vulnerabilities
+  SEC_EVENT: Security Event
   summary:
     HOST: Hosts
     POD: Pod
@@ -777,5 +781,6 @@ dashboard:
         (for the top 10 impactful vulnerabilities)
   report:
     TITLE: Security Event and Risk Report
+    DESC: Generate and download the latest risk report for a selected namespace or all namespaces
     ALL: All Namespaces
     REPORT: Report

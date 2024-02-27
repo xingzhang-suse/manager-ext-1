@@ -37,7 +37,7 @@ export default {
 
 <style>
   .report-btn {
-    margin-top: -20px;
+    margin-top: 10px;
     width: 100px;
   }
   .report-btn .btn {
