@@ -55,6 +55,7 @@ export default {
     this.scoreInfo = null;
     this.notificationInfo = null;
     this.detailsInfo = null;
+    this.autoScanInfo = null;
     axios({
       url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
@@ -98,6 +99,16 @@ export default {
       }).then(res => {
         this.detailsInfo = res.data;
       });
+      axios({
+        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
+        method: 'get',
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.autoScanInfo = res.data;
+        console.log(this.autoScanInfo.config)
+      })
     })
     .catch(err => {
       console.log(err);
@@ -110,6 +121,7 @@ export default {
       scoreInfo: null,
       notificationInfo: null,
       detailsInfo: null,
+      autoScanInfo: null,
       isAuthErr: false,
       token: null,
       isRefreshed: false
@@ -280,7 +292,20 @@ export default {
 
 <template>
   <Loading v-if="$fetchState.pending" />
-  <div v-else-if="isAuthErr" :rancherTheme="rancherTheme">Authentication Error!</div>
+  <div v-else-if="isAuthErr" :rancherTheme="rancherTheme" class="container">
+    <div class="title p-10">
+      <h1 class="mb-20" data-testid="nv-auth-error">
+        {{ t('neuvector.dashboard.error.auth') }}
+      </h1>
+      <div class="chart-route">
+        <Banner color="warning">
+          <button class="ml-10 btn role-primary" @click="$fetch">
+            {{ t('generic.reload') }}
+          </button>
+        </Banner>
+      </div>
+    </div>
+  </div>
   <div v-else class="dashboard">
     <DashboardReport/>
     <div class="screen-area">
@@ -293,13 +318,13 @@ export default {
       <div v-if="scoreInfo">
         <div class="get-started" style="margin-bottom: 15px;">
           <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
-          <ScoreFactorCommentSlider :rancherTheme="rancherTheme" :score="scoreInfo.score.securityRiskScore" class="m-0"/>
+          <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
           <DashboardReportSection />
           <SSOMenu :ns="ns" :ssoLink="ssoLink"/>
         </div>
         <div class="get-started">
           <ScoreFactor
-          :riskFactor="getServiceConnRisk"
+            :riskFactor="getServiceConnRisk"
           />
           <ScoreFactor
             :riskFactor="getExposureRisk"

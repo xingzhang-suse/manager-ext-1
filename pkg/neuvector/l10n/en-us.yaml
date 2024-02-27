@@ -1,7 +1,7 @@
 neuvector:
   title: NeuVector
   dashboard:
-    label: 'Overview'
+    label: "Overview"
     description: |
       NeuVector Full Lifecycle Container Security Platform delivers the only cloud-native security with uncompromising end-to-end protection from DevOps vulnerability protection to automated run-time security, and featuring a true Layer 7 container firewall.
     appInstall:
@@ -10,6 +10,8 @@ neuvector:
       versionError:
         title: Chart Version not found.
         message: Unable to determine the latest stable version of the neuvector chart. Please make sure the Helm repository is configured correctly.
+    error:
+      auth: Authentication Error!
 general:
   FILTER: Filter...
   NO_ROWS: No row to show

@@ -125,11 +125,12 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <Loading v-if="$fetchState.pending" />
+  <div v-else class="container">
     <div v-if="!install" class="title p-10">
       <div class="logo mt-20 mb-10">
         <img
-          src="../../assets/neuvector-logo.png"
+          src="../../assets/neuvector-logo.svg"
           height="64"
         />
       </div>
