@@ -20,6 +20,7 @@ import Exposures from './panels/Exposures';
 import DashboardReport from './contents/DashboardReport';
 import DashboardReportSection from './contents/DashboardReportSection';
 import SSOMenu from './contents/SSOMenu';
+import VulnerabilitiesInstruction from './contents/VulnerabilitiesInstruction';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 
@@ -47,6 +48,7 @@ export default {
     SSOMenu,
     Tabbed,
     Tab,
+    VulnerabilitiesInstruction,
   },
 
   mixins: [],
@@ -348,7 +350,13 @@ export default {
           </div>
         </Tab>
         <Tab :weight="0" name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
-          <div class="get-started">
+          <div v-if="autoScanInfo && !autoScanInfo.config.auto_scan" class="text-center" style="width: 100%; height: 200px; display: table;">
+            <div style="display: table-cell; vertical-align: middle;">
+              <i class="icon-warning" style="font-size: 40px; color: #FBC02D"></i>
+              <VulnerabilitiesInstruction  :token="token" :ns="ns" :autoScan="autoScan"/>
+            </div>
+          </div>
+          <div v-else-if="autoScanInfo && autoScanInfo.config.auto_scan" class="get-started">
             <div>
               <div class="get-started">
                 <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</div>
