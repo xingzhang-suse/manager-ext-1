@@ -1,4 +1,5 @@
 <template>
+  <div>
     <ag-grid-vue
       id="agGrid"
       style="width: 100%; height: 200px"
@@ -8,9 +9,12 @@
       :gridOptions="gridOptions"
     >
     </ag-grid-vue>
+    <ExposureModal v-if="showModal" :selectedRow="selectedRow" :rancherTheme="rancherTheme" @close="closeModal"></ExposureModal>
+  </div>
 </template>
   
 <script>
+  import ExposureModal from '../panels/ExposureModal';
   import Vue from 'vue';
   import "ag-grid-community/styles/ag-grid.css";
   import "ag-grid-community/styles/ag-theme-balham.min.css";
@@ -37,11 +41,14 @@
       return {
         columnDefs: null,
         rowData: null,
-        gridOptions: null
+        gridOptions: null,
+        selectedRow: null,
+        showModal: false
       };
     },
     components: {
-      AgGridVue
+      AgGridVue,
+      ExposureModal
     },
     beforeMount() {
       const colourMap = {
@@ -195,7 +202,7 @@
           headerName: this.t('dashboard.body.panel_title.POLICY_ACTION'),
           field: 'policy_action',
           cellRenderer: params => {
-            if (params.data) {
+            if (params.data && params.data.policy_action) {
               return `<span ng-class='{\'policy-remove\': data.remove}'
                     class='action-label px-1 ${
                      colourMap[params.data.policy_action.toLowerCase()]
@@ -232,23 +239,28 @@
           sortAscending: '<em class="fa fa-sort-alpha-down"></em>',
           sortDescending: '<em class="fa fa-sort-alpha-up"></em>',
         },
-
-        onColumnResized: params => {
-          params.api.resetRowHeights();
+        onRowSelected: params => {
+          if (params.node.isSelected()) {
+            this.selectedRow = params.data;
+            this.showModal = true;
+          }
         },
-        isExternalFilterPresent: () => true,
-        doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
-        getRowId: params => params.data.id,
-        getRowHeight: params => !!params.data.parent_id ? 100 : 30,
-        isFullWidthCell: node => !!node.data.parent_id,
+        // onColumnResized: params => {
+        //   params.api.resetRowHeights();
+        // },
+        // isExternalFilterPresent: () => true,
+        // doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
+        // getRowId: params => params.data.id,
+        // getRowHeight: params => !!params.data.parent_id ? 100 : 30,
+        // isFullWidthCell: node => !!node.data.parent_id,
         // fullWidthCellRenderer: 'conversationEntryListRenderer',
-        suppressMaintainUnsortedOrder: true,
-        suppressScrollOnNewData: true,
-        components: {
-          // serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
+        // suppressMaintainUnsortedOrder: true,
+        // suppressScrollOnNewData: true,
+        // components: {
+        //   serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
         //   actionCellRenderer: ExposedServicePodGridActionCellComponent,
         //   conversationEntryListRenderer: ConversationEntryListComponent
-        },
+        // },
 
         onGridReady: params => {
           setTimeout(() => {
@@ -263,5 +275,10 @@
         overlayNoRowsTemplate: `<span class="overlay">No rows to show</span>`,
       };
     },
+    methods: {
+      closeModal() {
+        this.showModal = false;
+      }
+    }
   };
   </script>
