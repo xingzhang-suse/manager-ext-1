@@ -87,3 +87,8 @@ data () {
   }
 }
 </script>
+<style lang="scss">
+  .swiper-container-horizontal>*>.slider-pagination-bullet {
+    background: #aaa none repeat scroll 0 0;
+  }
+</style>

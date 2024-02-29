@@ -321,7 +321,7 @@ export default {
         <div class="get-started" style="margin-bottom: 15px;">
           <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
           <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
-          <DashboardReportSection />
+          <!-- <DashboardReportSection /> -->
           <SSOMenu :ns="ns" :ssoLink="ssoLink"/>
         </div>
         <div class="get-started">
