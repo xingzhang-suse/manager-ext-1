@@ -271,7 +271,10 @@ export default {
       const decodedCookie = decodeURIComponent(document.cookie);
       const cookieArray = decodedCookie.split(';');
       let rTheme = cookieArray.find(item => item.includes('R_THEME'));
-      return rTheme ? rTheme.split('=')[1] : 'dark';
+      let rPcs = cookieArray.find(item => item.includes('R_PCS'));
+      return rTheme && rTheme.split('=')[1] !== 'auto' ?
+        rTheme.split('=')[1] : 
+        (rPcs ? rPcs.split('=')[1] : 'dark');
     },
     ssoLink: function() {
       return `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
