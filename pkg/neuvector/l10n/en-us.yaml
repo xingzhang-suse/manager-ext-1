@@ -437,6 +437,7 @@ dashboard:
       ALLOW: Allow
       DENY: Deny
       ALERT: Alert
+      VIOLATE: Alert
       THREAT: Threat
       VUL_POD: Vulnerable Pods
       VUL_NODE: Vulnerable Nodes

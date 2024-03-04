@@ -349,7 +349,7 @@ export default {
             />
           </div>
           <div v-if="scoreInfo">
-            <Exposures :ingress="scoreInfo.ingress" :egress="scoreInfo.egress" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
+            <Exposures :ingress="scoreInfo.ingress.filter(ingress => ingress.policy_action !== 'open')" :egress="scoreInfo.egress.filter(egress => egress.policy_action !== 'open')" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
           </div>
         </Tab>
         <Tab :weight="0" name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">

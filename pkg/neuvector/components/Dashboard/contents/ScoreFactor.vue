@@ -53,7 +53,7 @@ export default {
           {{factor.amount}}
         </td>
         <td style="text-align: left;" v-if="factor.comment">
-          (<em class="eos-icons icon-18">anchor</em>{{factor.comment}})
+          (<i class="icon-anchor" ></i>{{factor.comment}})
         </td>
       </tr>
       <tr class="pl-sm" style="font-size: 10px;" v-if="riskFactor.factorComment">

@@ -83,7 +83,7 @@ export default {
                     bytes: 0,
                     sessions: 0,
                     severity: '',
-                    policy_action: '',
+                    policy_action: v[0].policy_action,
                     event_type: '',
                     protocols: '',
                     applications: Array.from(applicationSet),
@@ -94,9 +94,11 @@ export default {
                         service: '',
                     })),
                 };
-                hierarchicalExposures.push(
-                    JSON.parse(JSON.stringify(hierarchicalExposure))
-                );
+                if (hierarchicalExposure.policy_action !== 'open') {
+                    hierarchicalExposures.push(
+                        JSON.parse(JSON.stringify(hierarchicalExposure))
+                    );
+                }
             });
             return hierarchicalExposures;
         },
@@ -119,24 +121,33 @@ export default {
             exposedPods.forEach(expsosedPod => {
                 expsosedPod.entries.forEach(entry => {
                 if (entryMap[entry.ip]) {
-                    entryMap[entry.ip].applications = this.accumulateProtocols(
-                    entryMap[entry.ip].applications,
-                    entry.application
-                    );
+                    if (entry.application) {
+                        entryMap[entry.ip].applications = this.accumulateProtocols(
+                            entryMap[entry.ip].applications,
+                            entry.application
+                        );
+                    }
+                    if (entry.port) {
+                        entryMap[entry.ip].applications = this.accumulateProtocols(
+                            entryMap[entry.ip].applications,
+                            entry.port
+                        );
+                    }
+                    entryMap[entry.ip].applications = entryMap[entry.ip].applications.filter(app => !!app);
                     entryMap[entry.ip].sessions += entry.sessions;
-                    entryMap[entry.ip].policy_action = this.accumulateActionLevel(
-                    entryMap[entry.ip].action,
+                        entryMap[entry.ip].policy_action = this.accumulateActionLevel(
+                        entryMap[entry.ip].action,
                     entry.policy_action
                     );
                 } else {
                     entryMap[entry.ip] = {
-                    applications: [entry.application],
-                    sessions: entry.sessions,
-                    policy_action: entry.policy_action,
-                    ip: entry.ip,
-                    fqdn: entry.fqdn || '',
-                    country_code: entry.country_code,
-                    country_name: entry.country_name,
+                        applications: [entry.application],
+                        sessions: entry.sessions,
+                        policy_action: entry.policy_action,
+                        ip: entry.ip,
+                        fqdn: entry.fqdn || '',
+                        country_code: entry.country_code,
+                        country_name: entry.country_name,
                     };
                 }
                 });
