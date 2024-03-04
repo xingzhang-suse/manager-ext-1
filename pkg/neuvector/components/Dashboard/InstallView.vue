@@ -153,7 +153,7 @@ export default {
           </Banner>
         </template>
         <template v-else>
-          <button class="btn role-primary mt-20" data-testid="kw-app-install-button" :disabled="!controllerChart" @click.prevent="chartRoute">
+          <button class="btn role-primary mt-20" data-testid="nv-app-install-button" :disabled="!controllerChart" @click.prevent="chartRoute">
             {{ t("neuvector.dashboard.appInstall.button") }}
           </button>
         </template>

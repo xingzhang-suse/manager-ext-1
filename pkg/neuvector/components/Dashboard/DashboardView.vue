@@ -488,10 +488,10 @@ export default {
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     grid-gap: 20px;
 
-    .card-container {
-      min-height: 420px;
-      padding: 0;
-    }
+    // .card-container {
+    //   min-height: 420px;
+    //   padding: 0;
+    // }
   }
 }
 .container {
