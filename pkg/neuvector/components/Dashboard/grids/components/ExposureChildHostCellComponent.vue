@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     imgSrc() {
-      return '../../../../assets/img/country-flag/' + this.params.data.country_code.toLowerCase() + '.svg';
+      return require('../../../../assets/img/country-flag/' + this.params.data.country_code.toLowerCase() + '.svg');
     }
   },
   methods: {
