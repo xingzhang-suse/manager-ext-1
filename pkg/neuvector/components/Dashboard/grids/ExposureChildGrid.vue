@@ -16,6 +16,8 @@
     import "ag-grid-community/styles/ag-grid.css";
     import "ag-grid-community/styles/ag-theme-balham.min.css";
     import { AgGridVue } from "ag-grid-vue";
+    import ExposureChildHostCellComponent from "./components/ExposureChildHostCellComponent";
+
     export default {
       props: {
         exposureInfo: Array,
@@ -33,6 +35,7 @@
       },
       components: {
         AgGridVue,
+        ExposureChildHostCellComponent
       },
       beforeMount() {
         const colourMap = {
@@ -142,32 +145,26 @@
         };
         this.columnDefs = [
           {
-            headerName: this.t('dashboard.summary.POD'),
-            field: 'pod_name',
+            headerName: this.t('dashboard.body.panel_title.EXTERNAL_HOST'),
+            field: 'ip',
+            tooltipField: 'ip',
+            cellRenderer: 'ExposureChildHostCellComponent',
             width: 280,
             minWidth: 280,
             sortable: false
           },
           {
-            headerName: 'Parent ID',
-            field: 'parent_id',
-            hide: true,
+            headerName: this.t('dashboard.body.panel_title.SESSIONS'),
+            field: 'sessions',
+            width: 150,
+            minWidth: 150,
+            sortable: false
           },
           {
-            headerName: this.t('dashboard.body.panel_title.POLICY_MODE'),
-            field: 'policy_mode',
-            cellRenderer: params => {
-              let mode = '';
-              if (params.data && params.value) {
-                mode = params.value;
-                let labelCode = colourMap[params.value];
-                if (!labelCode) return null;
-                else
-                  return `<span class='type-label policy_mode ${labelCode}'>${
-                    this.t(`dashboard.body.panel_title.${mode.toUpperCase()}`)
-                  }</span>`;
-              }
-              return null;
+            headerName: this.t('dashboard.body.panel_title.APPLICATIONS'),
+            field: 'applications',
+            valueFormatter: params => {
+              return params.value.join(', ');
             },
             width: 150,
             maxWidth: 150,
@@ -215,7 +212,6 @@
             sortAscending: '<em class="fa fa-sort-alpha-down"></em>',
             sortDescending: '<em class="fa fa-sort-alpha-up"></em>',
           },
-  
           onGridReady: params => {
             setTimeout(() => {
               params.api.sizeColumnsToFit();

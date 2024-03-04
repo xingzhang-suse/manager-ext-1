@@ -1,15 +1,15 @@
 <template>
   <div class="modal-backdrop">
-    <div class="modal">
+    <div class="modal" :class="rancherTheme">
       <Card :buttonAction="close" :buttonText="'Close'" :sticky="true">
         <template v-slot:title>
-          <h5 class="p-10">
+          <h5 class="p-10" :style="rancherTheme === 'light' ? 'color: #888' : 'color: #fff'">
             {{ selectedRow.service }}
           </h5>
         </template>
         <template v-slot:body>
           <div class="p-10">
-            <ExposureChildGrid :exposureInfo="selectedRow.children" exposureType="ingress" :rancherTheme="rancherTheme"/>
+            <ExposureChildGrid :exposureInfo="selectedRow.entries" exposureType="ingress" :rancherTheme="rancherTheme"/>
           </div>
           <!-- {{ selectedRow.children }} -->
         </template>
@@ -19,12 +19,14 @@
 </template>
 
 <script>
+  import AsyncButton from '@shell/components/AsyncButton';
   import { Card } from '@components/Card';
   import ExposureChildGrid from '../grids/ExposureChildGrid'
 
   export default {
     components: {
       Card,
+      AsyncButton,
       ExposureChildGrid
     },
     props: {
@@ -54,12 +56,22 @@
   }
 
   .modal {
-    min-width: 600px;
+    min-width: 800px;
     max-width: 1000px;
-    background: #FFFFFF;
-    box-shadow: 2px 2px 20px 1px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;
+
+    &.light {
+      background: #FFFFFF;
+    }
+
+    &.dark {
+      background: #1b1c21;
+    }
+
+    & .card-container {
+      margin: 0;
+    }
   }
 </style>
