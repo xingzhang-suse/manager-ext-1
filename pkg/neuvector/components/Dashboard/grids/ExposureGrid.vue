@@ -239,29 +239,12 @@
           sortAscending: '<em class="fa fa-sort-alpha-down"></em>',
           sortDescending: '<em class="fa fa-sort-alpha-up"></em>',
         },
-        onRowSelected: params => {
+        onRowClicked: params => {
           if (params.node.isSelected()) {
             this.selectedRow = params.data;
             this.showModal = true;
           }
         },
-        // onColumnResized: params => {
-        //   params.api.resetRowHeights();
-        // },
-        // isExternalFilterPresent: () => true,
-        // doesExternalFilterPass: params => !params.data.parent_id || params.data.visible,
-        // getRowId: params => params.data.id,
-        // getRowHeight: params => !!params.data.parent_id ? 100 : 30,
-        // isFullWidthCell: node => !!node.data.parent_id,
-        // fullWidthCellRenderer: 'conversationEntryListRenderer',
-        // suppressMaintainUnsortedOrder: true,
-        // suppressScrollOnNewData: true,
-        // components: {
-        //   serviceCellRenderer: ExposedServicepodGridServicepodCellComponent,
-        //   actionCellRenderer: ExposedServicePodGridActionCellComponent,
-        //   conversationEntryListRenderer: ConversationEntryListComponent
-        // },
-
         onGridReady: params => {
           setTimeout(() => {
             params.api.sizeColumnsToFit();
