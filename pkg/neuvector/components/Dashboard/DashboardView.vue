@@ -57,7 +57,6 @@ export default {
     this.scoreInfo = null;
     this.notificationInfo = null;
     this.detailsInfo = null;
-    this.autoScanInfo = null;
     axios({
       url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
@@ -101,16 +100,6 @@ export default {
       }).then(res => {
         this.detailsInfo = res.data;
       });
-      axios({
-        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
-        method: 'get',
-        headers: {
-          token: res.data.token.token
-        }
-      }).then(res => {
-        this.autoScanInfo = res.data;
-        console.log(this.autoScanInfo.config)
-      })
     })
     .catch(err => {
       console.log(err);
@@ -123,7 +112,6 @@ export default {
       scoreInfo: null,
       notificationInfo: null,
       detailsInfo: null,
-      autoScanInfo: null,
       isAuthErr: false,
       token: null,
       isRefreshed: false
@@ -323,7 +311,7 @@ export default {
       <div v-if="scoreInfo">
         <div class="get-started" style="margin-bottom: 15px;">
           <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
-          <ScoreFactorCommentSlider v-if="autoScanInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="autoScanInfo.config.auto_scan" class="m-0"/>
+          <ScoreFactorCommentSlider v-if="detailsInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="detailsInfo.autoScanConfig" class="m-0"/>
           <!-- <DashboardReportSection /> -->
           <SSOMenu :ns="ns" :ssoLink="ssoLink"/>
         </div>
@@ -353,7 +341,7 @@ export default {
           </div>
         </Tab>
         <Tab :weight="0" name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
-          <div v-if="autoScanInfo && !autoScanInfo.config.auto_scan && detailsInfo && detailsInfo.highPriorityVulnerabilities.containers.top5Containers.length === 0 && detailsInfo.highPriorityVulnerabilities.top5Nodes.nodes === 0"
+          <div v-if="detailsInfo && !detailsInfo.autoScanConfig && detailsInfo.highPriorityVulnerabilities.containers.top5Containers.length === 0 && detailsInfo.highPriorityVulnerabilities.nodes.top5Nodes.length === 0"
             class="text-center" style="width: 100%; height: 200px; display: table;">
             <div style="display: table-cell; vertical-align: middle;">
               <i class="icon-warning" style="font-size: 40px; color: #FBC02D"></i>
