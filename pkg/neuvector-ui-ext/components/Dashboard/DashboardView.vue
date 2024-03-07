@@ -58,7 +58,7 @@ export default {
     this.notificationInfo = null;
     this.detailsInfo = null;
     axios({
-      url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
+      url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
       data: {
         username: '',
@@ -70,7 +70,7 @@ export default {
       this.token = res.data.token.token;
       this.isAuthErr = false;
       axios({
-        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
+        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
         method: 'get',
         params: {
           isGlobalUser: true,
@@ -83,7 +83,7 @@ export default {
         this.scoreInfo = res.data;
       });
       axios({
-        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
+        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
         method: 'get',
         headers: {
           token: res.data.token.token
@@ -92,7 +92,7 @@ export default {
         this.notificationInfo = res.data;
       });
       axios({
-        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
+        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
         method: 'get',
         headers: {
           token: res.data.token.token
@@ -265,7 +265,7 @@ export default {
         (rPcs ? rPcs.split('=')[1] : 'dark');
     },
     ssoLink: function() {
-      return `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
+      return `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
     }
   },
 
