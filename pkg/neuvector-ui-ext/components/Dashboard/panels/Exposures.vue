@@ -21,7 +21,7 @@ export default {
         this.hierarchicalIngressList = null,
         this.hierarchicalEgressList = null
         axios({
-            url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/ip-geo`,
+            url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/ip-geo`,
             method: 'patch',
             headers: {
             token: this.token
