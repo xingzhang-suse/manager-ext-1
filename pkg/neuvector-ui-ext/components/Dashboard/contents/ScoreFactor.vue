@@ -17,6 +17,7 @@ export default {
             {
                 category: String,
                 amount: Number,
+                type: String,
                 comment: String,
             }
         ],
@@ -53,7 +54,7 @@ export default {
           {{factor.amount}}
         </td>
         <td style="text-align: left;" v-if="factor.comment">
-          (<i class="icon-anchor" ></i>{{factor.comment}})
+          (&nbsp;<i class="icon-anchor" ></i>{{factor.type}}:&nbsp;{{factor.comment}}&nbsp;)
         </td>
       </tr>
       <tr class="pl-sm" style="font-size: 10px;" v-if="riskFactor.factorComment">

@@ -11,7 +11,7 @@
           <div v-else-if="item.type === 'vulnerabilities'">
             <h5><strong>{{ item.title }}</strong></h5>
             <p :style="rancherTheme === 'light' ? 'color: #888' : 'color: #fff' + ' text-align: left;'">
-              <VulnerabilitiesInstruction :token="token" :ns="ns" :autoScan="autoScan"/>
+              <VulnerabilitiesInstruction :token="token" :ns="ns" :autoScan="autoScan" :currentClusterId="currentClusterId"/>
             </p>
           </div>
           <div v-else>
@@ -66,7 +66,8 @@ data () {
   ns: String,
   token: String,
   score: Number,
-  autoScan: Boolean
+  autoScan: Boolean,
+  currentClusterId: String
  },
  components: {
    slider,

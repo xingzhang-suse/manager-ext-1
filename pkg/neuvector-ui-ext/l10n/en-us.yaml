@@ -95,6 +95,7 @@ enum:
   MONITOR: Monitor
   PROTECT: Protect
   ZERODRIFT: Zero Drift
+  ZERODRIFT_TYPE: Zero-Drift
   BASIC: Basic
   DEFAULT: Default
   UNMANAGED: Un-managed

@@ -58,8 +58,9 @@ export default {
     this.scoreInfo = null;
     this.notificationInfo = null;
     this.detailsInfo = null;
+    this.currentCluster = this.$store.getters['currentCluster'];
     axios({
-      url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
+      url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
       method: 'post',
       data: {
         username: '',
@@ -71,7 +72,7 @@ export default {
       this.token = res.data.token.token;
       this.isAuthErr = false;
       axios({
-        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
+        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
         method: 'get',
         params: {
           isGlobalUser: true,
@@ -84,7 +85,7 @@ export default {
         this.scoreInfo = res.data;
       });
       axios({
-        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
+        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
         method: 'get',
         headers: {
           token: res.data.token.token
@@ -93,7 +94,7 @@ export default {
         this.notificationInfo = res.data;
       });
       axios({
-        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
+        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
         method: 'get',
         headers: {
           token: res.data.token.token
@@ -102,7 +103,7 @@ export default {
         this.detailsInfo = res.data;
       });
       axios({
-        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/summary`,
+        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/summary`,
         method: 'get',
         headers: {
           token: res.data.token.token
@@ -125,7 +126,8 @@ export default {
       summaryInfo: null,
       isAuthErr: false,
       token: null,
-      isRefreshed: false
+      isRefreshed: false,
+      currentCluster: null
     }
   },
 
@@ -141,16 +143,19 @@ export default {
           {
             category: this.t('enum.DISCOVER'),
             amount: this.scoreInfo.header_data.groups.discover_groups,
+            type: this.t('enum.ZERODRIFT_TYPE'),
             comment: this.scoreInfo.header_data.groups.discover_groups_zero_drift
           },
           {
             category: this.t('enum.MONITOR'),
             amount: this.scoreInfo.header_data.groups.monitor_groups,
+            type: this.t('enum.ZERODRIFT_TYPE'),
             comment: this.scoreInfo.header_data.groups.monitor_groups_zero_drift
           },
           {
             category: this.t('enum.PROTECT'),
             amount: this.scoreInfo.header_data.groups.protect_groups,
+            type: this.t('enum.ZERODRIFT_TYPE'),
             comment: this.scoreInfo.header_data.groups.protect_groups_zero_drift
           },
         ],
@@ -276,7 +281,7 @@ export default {
         (rPcs ? rPcs.split('=')[1] : 'dark');
     },
     ssoLink: function() {
-      return `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
+      return `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
     }
   },
 
@@ -322,9 +327,9 @@ export default {
       <div v-if="scoreInfo">
         <div class="get-started" style="margin-bottom: 15px;">
           <ScoreGauge :rancherTheme="rancherTheme" :scoreInfo="scoreInfo"/>
-          <ScoreFactorCommentSlider v-if="detailsInfo" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="detailsInfo.autoScanConfig" class="m-0"/>
+          <ScoreFactorCommentSlider v-if="detailsInfo && currentCluster" :rancherTheme="rancherTheme" :token="token" :ns="ns" :score="scoreInfo.score.securityRiskScore" :autoScan="detailsInfo.autoScanConfig" :currentClusterId="currentCluster.id" class="m-0"/>
           <!-- <DashboardReportSection /> -->
-          <SSOMenu :ns="ns" :ssoLink="ssoLink"/>
+          <SSOMenu v-if="this.currentCluster" :ns="ns" :ssoLink="ssoLink"/>
         </div>
         <div class="get-started">
           <ScoreFactor
@@ -349,7 +354,7 @@ export default {
             />
           </div>
           <div v-if="scoreInfo">
-            <Exposures :ingress="scoreInfo.ingress.filter(ingress => ingress.policy_action !== 'open')" :egress="scoreInfo.egress.filter(egress => egress.policy_action !== 'open')" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
+            <Exposures v-if="currentCluster" :currentClusterId="currentCluster.id" :ingress="scoreInfo.ingress.filter(ingress => ingress.policy_action !== 'open')" :egress="scoreInfo.egress.filter(egress => egress.policy_action !== 'open')" :token="token" :ns="ns" :rancherTheme="rancherTheme"/>
           </div>
         </Tab>
         <Tab :weight="0" name="4-top-vulnerable-assets" :label="t('dashboard.body.panel_title.TOP_VULNERABLE_ASSETS')">
