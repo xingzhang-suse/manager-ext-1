@@ -23,6 +23,7 @@ import SSOMenu from './contents/SSOMenu';
 import VulnerabilitiesInstruction from './contents/VulnerabilitiesInstruction';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
+import dayjs from 'dayjs';
 
 export default {
   components: {
@@ -100,6 +101,15 @@ export default {
       }).then(res => {
         this.detailsInfo = res.data;
       });
+      axios({
+        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/summary`,
+        method: 'get',
+        headers: {
+          token: res.data.token.token
+        }
+      }).then(res => {
+        this.summaryInfo = res.data.summary;
+      });
     })
     .catch(err => {
       console.log(err);
@@ -112,6 +122,7 @@ export default {
       scoreInfo: null,
       notificationInfo: null,
       detailsInfo: null,
+      summaryInfo: null,
       isAuthErr: false,
       token: null,
       isRefreshed: false
@@ -186,8 +197,8 @@ export default {
           },
         ],
         factorComment: [
-          `${this.t('dashboard.heading.CVE_DB_VERSION')}: 3.292`,
-          '(Dec 19, 2023)'
+          `${this.t('dashboard.heading.CVE_DB_VERSION')}: ${this.summaryInfo.cvedb_version}`,
+          `(${dayjs(this.summaryInfo.cvedb_create_time).format('MMM DD, YYYY')})`
         ],
         subScore: 'height: 11%',
         isFactorError: false,
@@ -323,6 +334,7 @@ export default {
             :riskFactor="getExposureRisk"
           />
           <ScoreFactor
+            v-if="summaryInfo"
             :riskFactor="getVulnerabilityRisk"
           />
         </div>

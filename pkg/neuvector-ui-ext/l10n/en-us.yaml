@@ -258,9 +258,9 @@ dashboard:
   CURR_NAMESPACE_VIEW: Current namespace view
   CONVERSATIONS: Conversations
   SSO_MENU: Open NeuVector UI in New Window
-  NETWORK_POLICY: Network Policy
+  NETWORK_POLICY: Security Policy
   VULNERBILITIES: Vulnerabilities
-  SEC_EVENT: Security Event
+  SEC_EVENT: Security Events
   summary:
     HOST: Hosts
     POD: Pod
