@@ -30,7 +30,7 @@ export default {
   methods: {
     toggleAutoScan(autoScan) {
       axios({
-        url: `../../api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
+        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
         method: 'post',
         headers: {
           token: this.token
