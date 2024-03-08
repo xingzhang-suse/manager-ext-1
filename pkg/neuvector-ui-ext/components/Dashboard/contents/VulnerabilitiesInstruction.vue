@@ -20,7 +20,8 @@ export default {
   props: {
     autoScan: Boolean,
     token: String,
-    ns: String
+    ns: String,
+    currentClusterId: String
   },
   components: {
     ToggleSwitch,
@@ -30,7 +31,7 @@ export default {
   methods: {
     toggleAutoScan(autoScan) {
       axios({
-        url: `/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
+        url: `/k8s/clusters/${ this.currentClusterId }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
         method: 'post',
         headers: {
           token: this.token
