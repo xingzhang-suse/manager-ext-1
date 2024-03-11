@@ -362,7 +362,7 @@ export default {
             class="text-center" style="width: 100%; height: 200px; display: table;">
             <div style="display: table-cell; vertical-align: middle;">
               <i class="icon-warning" style="font-size: 40px; color: #FBC02D"></i>
-              <VulnerabilitiesInstruction  :token="token" :ns="ns" :autoScan="autoScan"/>
+              <VulnerabilitiesInstruction  :token="token" :currentClusterId="currentCluster.id" :ns="ns" :autoScan="autoScan"/>
             </div>
           </div>
           <div v-else class="get-started">
