@@ -5,15 +5,3 @@
 hs_err_pid*
 node_modules
 .DS_Store
-/babel.config.js
-/package.json
-/tsconfig.json
-/vue.config.js
-/yarn.lock
-/assets
-/charts
-/dist
-/dist-pkg
-/extensions
-/index.yaml
-/yarn.lock
