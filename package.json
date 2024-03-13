@@ -1,6 +1,6 @@
 {
   "name": "manager-ext",
-  "version": "1.0.0-b1",
+  "version": "1.0.0",
   "private": false,
   "engines": {
     "node": ">=16"
