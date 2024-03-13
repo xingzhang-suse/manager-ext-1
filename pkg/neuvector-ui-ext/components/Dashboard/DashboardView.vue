@@ -348,9 +348,10 @@ export default {
 
       <Tabbed defaultTab="" style="margin: 30px 0;" @changed="changeTab"> <!-- background-color: var(--scrollbar-thumb-dropdown)-->
         <Tab :weight="2" name="3-exposure" :label="t('dashboard.body.panel_title.CONTAINER_SEC')">
-          <div class="get-started">
-            <Instruction
+          <div>
+            <Instruction style="display: inline-block;"
               :instructions="getInstructions4Exposures"
+              instructionId="exposures"
             />
           </div>
           <div v-if="scoreInfo">
@@ -367,19 +368,21 @@ export default {
           </div>
           <div v-else class="get-started">
             <div>
-              <div class="get-started">
-                <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</div>
-                <Instruction
+              <div class="mb-10" style="line-height: 15px;">
+                <span class="mr-10">{{ t('dashboard.body.panel_title.TOP_VULNERABLE_CONTAINERS') }}</span>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4TopVulnerablePods"
+                  instructionId="top-vul-pods"
                 />
               </div>
               <BarChart4TopVulnerableContainers v-if="detailsInfo" :topVulContainers="detailsInfo.highPriorityVulnerabilities.containers"/>
             </div>
             <div>
-              <div class="get-started">
-                <div>{{ t('dashboard.body.panel_title.TOP_VULNERABLE_NODES') }}</div>
-                <Instruction
+              <div class="mb-10" style="line-height: 15px;">
+                <span class="mr-10">{{ t('dashboard.body.panel_title.TOP_VULNERABLE_NODES') }}</span>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4TopVulnerableNodes"
+                  instructionId="top-vul-nodes"
                 />
               </div>
               <BarChart4TopVulnerableHosts v-if="detailsInfo" :topVulHosts="detailsInfo.highPriorityVulnerabilities.nodes"/>
@@ -388,26 +391,29 @@ export default {
         </Tab>
         <Tab :weight="3" name="1-security-events" :label="t('dashboard.body.panel_title.SEC_EVENTS')">
           <div>
-            <div class="get-started">
-              <Instruction
+            <div>
+              <Instruction style="display: inline-block;"
                 :instructions="getInstructions4SecurityEvents"
+                  instructionId="sec-event"
               />
             </div>
             <LineChart4SecurityEvents v-if="notificationInfo && isRefreshed" :securityEventSummaryInfo="notificationInfo.criticalSecurityEvents.summary"/>
           </div>
           <div class="get-started">
             <div>
-              <div class="get-started">
-                <Instruction
+              <div>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4TopSecurityEventsInSource"
+                  instructionId="top-sec-events-source"
                 />
               </div>
               <BarChart4TopSecurityEventsBySource v-if="notificationInfo" :securityEventTop5BySource="notificationInfo.criticalSecurityEvents.top_security_events.source"/>
             </div>
             <div>
-              <div class="get-started">
-                <Instruction
+              <div>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4TopSecurityEventsInDestination"
+                  instructionId="top-sec-events-destination"
                 />
               </div>
               <BarChart4TopSecurityEventsByDestination v-if="notificationInfo" :securityEventTop5ByDestination="notificationInfo.criticalSecurityEvents.top_security_events.destination"/>
@@ -417,20 +423,22 @@ export default {
         <Tab :weight="1" name="2-policy-mode" :label="t('dashboard.body.panel_title.POLICY_MODE')">
           <div class="get-started">
             <div>
-              <div class="get-started">
-                <div>{{ t('dashboard.body.panel_title.CONTAINER_MODE') }}</div>
-                <Instruction
+              <div class="mb-10" style="line-height: 15px;">
+                <span class="mr-10">{{ t('dashboard.body.panel_title.CONTAINER_MODE') }}</span>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4PodsMode"
+                  instructionId="policy-mode-pods"
                 />
               </div>
               <PieChart4PolicyModeOfPods v-if="detailsInfo" :podMode="detailsInfo.containers"/>
               <PolicyModeOfPods />
             </div>
             <div>
-              <div class="get-started">
-                <div>{{ t('dashboard.body.panel_title.SERVICE_MODE') }}</div>
-                <Instruction
+              <div class="mb-10" style="line-height: 15px;">
+                <span class="mr-10">{{ t('dashboard.body.panel_title.SERVICE_MODE') }}</span>
+                <Instruction style="display: inline-block;"
                   :instructions="getInstructions4PodsMode"
+                  instructionId="policy-mode-services"
                 />
               </div>
               <PieChart4PolicyModeOfServices v-if="detailsInfo && scoreInfo" :serviceMode="detailsInfo.services" :groupInfo="scoreInfo.header_data.groups"/>
