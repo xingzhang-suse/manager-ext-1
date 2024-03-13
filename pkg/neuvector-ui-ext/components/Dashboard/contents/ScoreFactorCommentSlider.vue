@@ -1,7 +1,7 @@
 <template>
     <div style="width:100%;margin:20px auto;height:150px">
     <slider ref="slider" :options="options" @slide='slide' @tap='onTap' @init='onInit' style="white-space: unset;">
-        <slideritem v-for="(item,index) in instructionList" :key="index" style="display: block; font-size: 12px;">
+        <slideritem v-for="(item,index) in instructionList" :key="index" style="display: block; font-size: 14px; text-align: left; margin: 0 5px;">
           <div v-if="item.type === 'score'">
             <h5><strong>{{ item.title }}</strong></h5>
             <p :style="rancherTheme === 'light' ? 'color: #888' : 'color: #fff' + ' text-align: left;'">
