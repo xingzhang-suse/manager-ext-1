@@ -5,21 +5,31 @@ export default {
   },
 
   props: {
+    instructionId: String,
     instructions: {
         textLines: [String]
+    }
+  },
+
+  methods: {
+    showInstruction: function(event) {
+      const elDropDown = document.getElementById(this.instructionId);
+      const elInstructionText = document.getElementById('wrap-' + this.instructionId).previousElementSibling;
+      if (elInstructionText)
+        elDropDown.style.left = (0 - elInstructionText.offsetWidth) + 'px';
     }
   }
 };
 </script>
 
 <template>
-  <div class="dropdown">
-  <span class="icon"><i class="icon-info" style="font-size: 15px;"></i></span>
-  
-  <div class="dropdown-content">
-    <div v-for="instruction in instructions.textLines">{{ instruction }}</div>
+  <div :id="'wrap-' + instructionId" class="dropdown">
+    <span class="icon"><i class="icon-info" style="font-size: 15px;" @mouseover="showInstruction($event)"></i></span>
+    
+    <div :id="instructionId" class="dropdown-content">
+      <div v-for="instruction in instructions.textLines">{{ instruction }}</div>
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="scss" scoped>
@@ -40,11 +50,12 @@ export default {
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 20px;
+    bottom: 20px;
     background-color: #1f1f20;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 100;
     padding: 12px 16px;
+    width: calc(50vw - 180px);
 }
 
 /* Show the dropdown content on hover */

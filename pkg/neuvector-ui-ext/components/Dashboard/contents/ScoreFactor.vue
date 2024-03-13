@@ -40,13 +40,19 @@ export default {
 <template>
   <div class="padding-left-0 padding-right-0 risk-section">
   <div class="risk-section-titles">
-    <div class="text-center title">
+    <div class="text-left title">
       {{riskFactor.title}}
     </div>
     <div class="subtitle">
     </div>
   </div>
   <div class="risk-section-details" v-if="!riskFactor.isFactorError">
+    <div class="pull-left">
+      <div class="secure-rank-wrap">
+        <div class="secure-rank"></div>
+        <div class="empty" :style="riskFactor.subScore"></div>
+      </div>
+    </div>
     <table class="margin-top-s pull-left">
       <tr v-for="factor in riskFactor.factors">
         <td>{{factor.category}}</td>
@@ -62,13 +68,6 @@ export default {
         <strong class="text-muted">{{riskFactor.factorComment[1]}}</strong>
       </tr>
     </table>
-
-    <div class="pull-right">
-      <div class="secure-rank-wrap">
-        <div class="secure-rank"></div>
-        <div class="empty" :style="riskFactor.subScore"></div>
-      </div>
-    </div>
   </div>
   <div v-else class="server-error-sm risk-section-details">
     <div>
