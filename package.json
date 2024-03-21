@@ -24,7 +24,7 @@
     "css-loader": "6.7.3",
     "ag-grid-community": "^31.0.1",
     "ag-grid-vue": "^31.0.1",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "chart.js": "3.8.0",
     "file-saver": "^2.0.5",
     "uuid": "^8.3.2",
@@ -41,6 +41,7 @@
   },
   "resolutions": {
     "**/webpack": "4",
-    "@types/node": "^16"
+    "@types/node": "^16",
+    "**/d3-color": "^3.1.0"
   }
 }
