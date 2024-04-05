@@ -2,6 +2,7 @@
 import DashboardView from '../../../../components/Dashboard/DashboardView';
 import InstallView from '../../../../components/Dashboard/InstallView';
 import { SERVICE } from '@shell/config/types';
+import { NV_CONST } from '../../../../types/neuvector';
 
 export default {
   name: 'Dashboard',
@@ -24,7 +25,7 @@ export default {
   computed: {
     uiService() {
       if ( Array.isArray(this.allServices) && this.allServices.length ) {
-        return this.allServices.find(svc => svc?.id?.includes('neuvector-service-webui'));
+        return this.allServices.find(svc => svc?.id?.includes(NV_CONST.NV_SERVICE));
       }
 
       return null;

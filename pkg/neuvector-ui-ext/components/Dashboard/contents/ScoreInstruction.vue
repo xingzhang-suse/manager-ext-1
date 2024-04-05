@@ -11,14 +11,15 @@
    </span>
 </template>
 <script>
+    import { NV_CONST } from '../../../types/neuvector';
     export default {
         props: {
             score: Number
         },
         computed: {
             scoreLevel: function() {
-                return this.score <= 20 ? 'good' :
-                    this.score > 50 ? 'poor' : 'fair';
+                return this.score <= NV_CONST.SCORE_LEVEL.GOOD ? this.t('dashboard.body.panel_title.policy_evaluation.GOOD') :
+                    this.score > NV_CONST.SCORE_LEVEL.FAIR ? this.t('dashboard.body.panel_title.policy_evaluation.POOR') : this.t('dashboard.body.panel_title.policy_evaluation.FAIR');
             },
         },
         methods: {

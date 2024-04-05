@@ -11,7 +11,7 @@
 </template>
 <script>
 import { ToggleSwitch } from '@components/Form/ToggleSwitch';
-import axios from 'axios';
+import { updateAutoScan } from '../../../plugins/dashborad-class';
 
 export default {
   fetch() {
@@ -29,17 +29,13 @@ export default {
   computed: {
   },
   methods: {
-    toggleAutoScan(autoScan) {
-      axios({
-        url: `/k8s/clusters/${ this.currentClusterId }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/scan/config`,
-        method: 'post',
-        headers: {
-          token: this.token
-        },
-        data: {config: {auto_scan: autoScan}}
-      }).then(res => {
+    async toggleAutoScan(autoScan) {
+      try {
+        let autoScanRes = await updateAutoScan(autoScan);
         this.autoScan = autoScan;
-      }).catch(err => {});
+      } catch(error) {
+        console.error(error);
+      }
     }
   }
 }

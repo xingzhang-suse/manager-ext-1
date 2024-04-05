@@ -13,6 +13,7 @@
   </template>
   
   <script>
+  import { NV_CONST } from '../../../../types/neuvector';
   export default {
     props: {
       params: {
@@ -71,12 +72,12 @@
                 level.push(levelMap[this.params.data.severity.toLowerCase()]);
             } else if (
                 this.params.data.policy_action &&
-                (this.params.data.policy_action.toLowerCase() === "deny" ||
-                this.params.data.policy_action.toLowerCase() === "violate")
+                (this.params.data.policy_action.toLowerCase() === NV_CONST.POLICY_ACTION.DENY ||
+                this.params.data.policy_action.toLowerCase() === NV_CONST.POLICY_ACTION.VIOLATE)
             ) {
                 level.push(levelMap[this.params.data.policy_action.toLowerCase()]);
             } else {
-                if (!this.params.data.policy_mode) this.params.data.policy_mode = "discover";
+                if (!this.params.data.policy_mode) this.params.data.policy_mode = NV_CONST.MODE.DISCOVER;
                 level.push(levelMap[this.params.data.policy_mode.toLowerCase()]);
             }
             let serviceColor = colorArray[Math.min(...level)];
@@ -89,17 +90,17 @@
             let level = 0;
             if (this.params.data.severity) {
                 level = levelMap[this.params.data.severity.toLowerCase()];
-                actionType = actionTypeIconMap["threat"];
+                actionType = actionTypeIconMap[NV_CONST.POLICY_ACTION.THREAT];
             } else if (
                 this.params.data.policy_action &&
-                (this.params.data.policy_action.toLowerCase() === "deny" ||
-                this.params.data.policy_action.toLowerCase() === "violate")
+                (this.params.data.policy_action.toLowerCase() === NV_CONST.POLICY_ACTION.DENY ||
+                this.params.data.policy_action.toLowerCase() === NV_CONST.POLICY_ACTION.VIOLATE)
             ) {
                 level = levelMap[this.params.data.policy_action.toLowerCase()];
                 actionType =
                 actionTypeIconMap[this.params.data.policy_action.toLowerCase()];
             } else {
-                if (!this.params.data.policy_mode) this.params.data.policy_mode = "discover";
+                if (!this.params.data.policy_mode) this.params.data.policy_mode = NV_CONST.MODE.DISCOVER;
                 level = levelMap[this.params.data.policy_mode.toLowerCase()];
                 actionType =
                 actionTypeIconMap[this.params.data.policy_mode.toLowerCase()];
