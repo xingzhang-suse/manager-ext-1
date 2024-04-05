@@ -2,6 +2,7 @@
 import { arrayToCsv } from '../../../utils/common';
 import { saveAs } from 'file-saver';
 import dayjs from 'dayjs';
+import { NV_CONST } from '../../../types/neuvector';
 export default {
   components: {
 
@@ -14,8 +15,8 @@ export default {
 
   methods: {
     buttonAction: function() {
-        let ingressReport = this.getExposureReportData(this.ingress, 'ingress');
-        let egressReport = this.getExposureReportData(this.egress, 'egress');
+        let ingressReport = this.getExposureReportData(this.ingress, NV_CONST.INGRESS);
+        let egressReport = this.getExposureReportData(this.egress, NV_CONST.EGRESS);
 
         let exposureReport = ingressReport.concat(egressReport);
 

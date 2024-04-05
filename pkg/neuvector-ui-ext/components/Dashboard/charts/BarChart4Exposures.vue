@@ -13,7 +13,8 @@
   </template>
   
   <script>
-  import { Bar } from 'vue-chartjs/legacy'
+  import { Bar } from 'vue-chartjs/legacy';
+  import { NV_CONST } from '../../../types/neuvector';
   
   import {
     Chart as ChartJS,
@@ -75,20 +76,20 @@
         });
         let chartNumbers = {
           ingress: new Map([
-            ['allow', 0],
-            ['deny', 0],
-            ['violate', 0],
-            ['threat', 0]
+            [NV_CONST.POLICY_ACTION.ALLOW, 0],
+            [NV_CONST.POLICY_ACTION.DENY, 0],
+            [NV_CONST.POLICY_ACTION.VIOLATE, 0],
+            [NV_CONST.POLICY_ACTION.THREAT, 0]
           ]),
           egress: new Map([
-            ['allow', 0],
-            ['deny', 0],
-            ['violate', 0],
-            ['threat', 0]
+            [NV_CONST.POLICY_ACTION.ALLOW, 0],
+            [NV_CONST.POLICY_ACTION.DENY, 0],
+            [NV_CONST.POLICY_ACTION.VIOLATE, 0],
+            [NV_CONST.POLICY_ACTION.THREAT, 0]
           ])
         };
-        this.accumulateData(ingressContainers, chartNumbers, 'ingress');
-        this.accumulateData(egressContainers, chartNumbers, 'egress');
+        this.accumulateData(ingressContainers, chartNumbers, NV_CONST.INGRESS);
+        this.accumulateData(egressContainers, chartNumbers, NV_CONST.EGRESS);
         return {
           labels: [
             this.t('dashboard.body.panel_title.ALLOW'),
@@ -123,7 +124,7 @@
       accumulateData: function(exposedContainers, chartNumbers, direction) {
         exposedContainers.forEach(exposedContainer => {
           if (exposedContainer.severity) {
-            chartNumbers[direction].set('threat', chartNumbers[direction].get('threat') + 1);
+            chartNumbers[direction].set(NV_CONST.POLICY_ACTION.THREAT, chartNumbers[direction].get(NV_CONST.POLICY_ACTION.THREAT) + 1);
           } else {
             let policyAction = exposedContainer.policy_action.toLowerCase();
             chartNumbers[direction].set(policyAction, chartNumbers[direction].get(policyAction) + 1);

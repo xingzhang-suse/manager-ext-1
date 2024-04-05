@@ -25,6 +25,8 @@
   
   <script>
   import VueGauge from "vue-gauge";
+  import { NV_CONST, RANCHER_CONST } from '../../../types/neuvector';
+
   export default {
     components: { VueGauge },
     props: {
@@ -36,21 +38,21 @@
         let value = this.scoreInfo.score.securityRiskScore;
         let gaugeLabel = '';
         let gaugeLabelColor = '';
-        if (value <= 20) {
+        if (value <= NV_CONST.SCORE_LEVEL.GOOD) {
           gaugeLabel = this.t(
             'dashboard.body.policy_evaluation.GOOD'
           );
-          gaugeLabelColor = '#00CC00';
-        } else if (value <= 50) {
+          gaugeLabelColor = NV_CONST.SCORE_COLOR.GOOD;
+        } else if (value <= NV_CONST.SCORE_LEVEL.POOR) {
           gaugeLabel = this.t(
             'dashboard.body.policy_evaluation.FAIR'
           );
-          gaugeLabelColor = '#FF8000';
+          gaugeLabelColor = NV_CONST.SCORE_COLOR.FAIR;
         } else {
           gaugeLabel = this.t(
             'dashboard.body.policy_evaluation.POOR'
           );
-          gaugeLabelColor = '#FF0000';
+          gaugeLabelColor = NV_CONST.SCORE_COLOR.POOR;
         }
         return {
           gaugeLabel,
@@ -63,7 +65,7 @@
         myOptions: {
           chartWidth: 150,
           needleValue: this.scoreInfo.score.securityRiskScore,
-          needleColor: this.rancherTheme === 'light' ? 'black' : 'white',
+          needleColor: this.rancherTheme === RANCHER_CONST.THEME.LIGHT ? 'black' : 'white',
           arcDelimiters: [20, 50],
           arcColors: ["rgb(255,84,84)", "rgb(239,214,19)", "rgb(61,204,91)"],
           rangeLabel: ["", ""],

@@ -4,8 +4,9 @@ import ExposureReport from '../buttons/ExposureReport';
 import ExposureGrid from '../grids/ExposureGrid';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { getIpInfo } from '../../../plugins/dashborad-class';
+import { NV_CONST } from '../../../types/neuvector';
 
 export default {
     components: {
@@ -20,25 +21,21 @@ export default {
         let ipList = this.getIpList(this.ingress, this.egress);
         this.hierarchicalIngressList = null,
         this.hierarchicalEgressList = null
-        axios({
-            url: `/k8s/clusters/${ this.currentClusterId }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/ip-geo`,
-            method: 'patch',
-            headers: {
-            token: this.token
-            },
-            data: ipList
-        })
-        .then(res => {
-            this.ipMap = res.data.ip_map;
+
+        try {
+            let ipInfoRes = await getIpInfo(ipList);
+
+            this.ipMap = ipInfoRes.data.ip_map;
             this.hierarchicalIngressList = this.parseExposureHierarchicalData(
-                this.addIpLocation(this.ingress, this.ipMap, 'ingress')
+                this.addIpLocation(this.ingress, this.ipMap, NV_CONST.INGRESS)
             ) || [];
             this.hierarchicalEgressList = this.parseExposureHierarchicalData(
-                this.addIpLocation(this.egress, this.ipMap, 'egress')
+                this.addIpLocation(this.egress, this.ipMap, NV_CONST.EGRESS)
             ) || [];
             console.log("this.hierarchicalIngressList", this.hierarchicalIngressList, this.hierarchicalEgressList)
-        })
-        .catch(err => {});
+        } catch(error) {
+            console.error(error);
+        }
     },
 
     methods: {
@@ -94,7 +91,7 @@ export default {
                         service: '',
                     })),
                 };
-                if (hierarchicalExposure.policy_action !== 'open') {
+                if (hierarchicalExposure.policy_action !== NV_CONST.POLICY_ACTION.OPEN) {
                     hierarchicalExposures.push(
                         JSON.parse(JSON.stringify(hierarchicalExposure))
                     );
@@ -108,7 +105,7 @@ export default {
             .map((exposure) => {
                 exposure.entries = exposure.entries?.map(entry => {
                     entry.id = uuidv4();
-                    entry.ip = direction === 'ingress' ? entry.client_ip : entry.server_ip;
+                    entry.ip = direction === NV_CONST.INGRESS ? entry.client_ip : entry.server_ip;
                     entry.country_code = ipMap[entry.ip || ''].country_code.toLowerCase();
                     entry.country_name = ipMap[entry.ip || ''].country_name;
                     return entry;

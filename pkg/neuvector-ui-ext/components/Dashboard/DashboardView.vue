@@ -15,7 +15,6 @@ import ExposureGrid from './grids/ExposureGrid';
 import Instruction from './contents/Instruction';
 import ScoreFactorCommentSlider from './contents/ScoreFactorCommentSlider';
 import ScoreGauge from './charts/ScoreGauge';
-import axios from 'axios';
 import Exposures from './panels/Exposures';
 import DashboardReport from './contents/DashboardReport';
 import DashboardReportSection from './contents/DashboardReportSection';
@@ -24,6 +23,9 @@ import VulnerabilitiesInstruction from './contents/VulnerabilitiesInstruction';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 import dayjs from 'dayjs';
+import { getAuth, getScoreInfo, getNotifications, getDashboardDetails, getSummary } from '../../plugins/dashborad-class';
+import { getSSOUrl } from '../../utils/common';
+import { RANCHER_CONST, nvVariables } from '../../types/neuvector';
 
 export default {
   components: {
@@ -58,64 +60,29 @@ export default {
     this.scoreInfo = null;
     this.notificationInfo = null;
     this.detailsInfo = null;
+    this.summaryInfo = null;
     this.currentCluster = this.$store.getters['currentCluster'];
-    axios({
-      url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/auth`,
-      method: 'post',
-      data: {
-        username: '',
-        password: '',
-        isRancherSSOUrl: true
+    nvVariables.currentCluster = this.currentCluster.id;
+    nvVariables.ns = this.ns;
+
+    try {
+      let authRes = await getAuth();
+      this.token =  authRes.data.token.token;
+      nvVariables.authToken = authRes.data.token.token;
+
+      let scoreRes = await getScoreInfo();
+      let notificationsRes = await getNotifications();
+      let dashboardDetailsRes = await getDashboardDetails();
+      let summaryRes = await getSummary();
+      this.scoreInfo = scoreRes.data;
+      this.notificationInfo = notificationsRes.data;
+      this.detailsInfo = dashboardDetailsRes.data;
+      this.summaryInfo = summaryRes.data.summary;
+    } catch(error) {
+      if (error.response.status === 401 || error.response.status === 408) {
+        this.isAuthErr = true;
       }
-    }).then(res => {
-      console.log(res);
-      this.token = res.data.token.token;
-      this.isAuthErr = false;
-      axios({
-        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/scores2`,
-        method: 'get',
-        params: {
-          isGlobalUser: true,
-          domain: 'null'
-        },
-        headers: {
-          token: res.data.token.token
-        }
-      }).then(res => {
-        this.scoreInfo = res.data;
-      });
-      axios({
-        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/notifications2`,
-        method: 'get',
-        headers: {
-          token: res.data.token.token
-        }
-      }).then(res => {
-        this.notificationInfo = res.data;
-      });
-      axios({
-        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/dashboard/details`,
-        method: 'get',
-        headers: {
-          token: res.data.token.token
-        }
-      }).then(res => {
-        this.detailsInfo = res.data;
-      });
-      axios({
-        url: `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/summary`,
-        method: 'get',
-        headers: {
-          token: res.data.token.token
-        }
-      }).then(res => {
-        this.summaryInfo = res.data.summary;
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      this.isAuthErr = true;
-    });
+    }
   },
 
   data() {
@@ -276,12 +243,12 @@ export default {
       const cookieArray = decodedCookie.split(';');
       let rTheme = cookieArray.find(item => item.includes('R_THEME'));
       let rPcs = cookieArray.find(item => item.includes('R_PCS'));
-      return rTheme && rTheme.split('=')[1] !== 'auto' ?
+      return rTheme && rTheme.split('=')[1] !== RANCHER_CONST.THEME.AUTO ?
         rTheme.split('=')[1] : 
-        (rPcs ? rPcs.split('=')[1] : 'dark');
+        (rPcs ? rPcs.split('=')[1] : RANCHER_CONST.THEME.DARK);
     },
     ssoLink: function() {
-      return `/k8s/clusters/${ this.currentCluster.id }/api/v1/namespaces/${this.ns}/services/https:neuvector-service-webui:8443/proxy/#/`;
+      return getSSOUrl('#/');
     }
   },
 

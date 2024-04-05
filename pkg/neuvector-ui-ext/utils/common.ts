@@ -1,3 +1,5 @@
+import { NV_CONST, nvVariables } from '../types/neuvector';
+
 export function arrayToCsv(array: any, title: string = '') {
     let line: string = '';
     let result: string = '';
@@ -30,3 +32,7 @@ export function arrayToCsv(array: any, title: string = '') {
     }
     return result;
   }
+
+export function getSSOUrl(path: string) {
+  return `/k8s/clusters/${ nvVariables.currentCluster }/api/v1/namespaces/${ nvVariables.ns }/services/https:${ NV_CONST.NV_SERVICE }${ NV_CONST.PROXY_VALUE }/${ path }`;
+}
