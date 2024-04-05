@@ -10,7 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // Add custom logic before sending the request
-    console.log('Request Interceptor:', config);
+    // console.log('Request Interceptor:', config);
     if (nvVariables.authToken) {
       config.headers
       .set(NV_CONST.LOCAL_STORAGE_TOKEN, nvVariables.authToken)
@@ -30,7 +30,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     // Add custom logic to handle the response
-    console.log('Response Interceptor:', response);
+    // console.log('Response Interceptor:', response);
     return response;
   },
   (error) => {

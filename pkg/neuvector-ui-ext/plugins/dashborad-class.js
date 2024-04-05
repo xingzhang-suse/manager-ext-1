@@ -21,40 +21,28 @@ export async function getScoreInfo() {
         params: {
           isGlobalUser: true,
           domain: 'null'
-        },
-        // headers: {
-        //   token: token
-        // }
+        }
     });
 }
 
 export async function getNotifications() {
     return axios({
         url: getSSOUrl(PATH.DASHBOARD_NOTIFICATIONS_URL),
-        method: 'get',
-        // headers: {
-        //   token: token
-        // }
+        method: 'get'
     });
 }
 
 export async function getDashboardDetails() {
     return axios({
         url: getSSOUrl(PATH.DASHBOARD_DETAILS_URL),
-        method: 'get',
-        // headers: {
-        //   token: token
-        // }
+        method: 'get'
     });
 }
 
 export async function getSummary() {
     return axios({
         url: getSSOUrl(PATH.DASHBOARD_SUMMARY_URL),
-        method: 'get',
-        // headers: {
-        //   token: token
-        // }
+        method: 'get'
     });
 }
 
@@ -62,9 +50,6 @@ export async function getIpInfo(ipList) {
     return axios({
         url: getSSOUrl(PATH.IP_GEO_URL),
         method: 'patch',
-        // headers: {
-        //     'Content-Type': 'application/json'
-        // },
         data: ipList
     });
 }
@@ -73,9 +58,6 @@ export async function updateAutoScan(autoScan) {
     return axios({
         url: getSSOUrl(PATH.SCAN_CONFIG_URL),
         method: 'post',
-        // headers: {
-        //   token: token
-        // },
         data: {config: {auto_scan: autoScan}}
     });
 }
