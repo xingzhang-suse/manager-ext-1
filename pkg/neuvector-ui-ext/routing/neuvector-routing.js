@@ -11,7 +11,16 @@ const routes = [
       product: NEUVECTOR,
       pkg:     NEUVECTOR
     }
-  }
+  },
+  {
+    name:       `c-cluster-${ NEUVECTOR }-sec-events`,
+    path:       `/c/:cluster/${ NEUVECTOR }/sec-events`,
+    component:  Dashboard,
+    meta:       {
+      product: NEUVECTOR,
+      pkg: NEUVECTOR
+    }
+  },
 ];
 
 export default routes;

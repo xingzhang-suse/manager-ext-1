@@ -23,6 +23,7 @@ export function init($plugin: IPlugin, store: any) {
   });
 
   virtualType({
+    label: store.getters['i18n/t']('neuvector.title'),
     labelKey:   'neuvector.dashboard.label',
     name:       'neuvector-overview',
     namespaced: false,
@@ -32,6 +33,17 @@ export function init($plugin: IPlugin, store: any) {
       meta:   { pkg: 'neuvector-ui-ext', product: NEUVECTOR },
     }
   });
+  virtualType({
+    label: store.getters['i18n/t']('dashboard.SEC_EVENT'),
+    labelKey:   'neuvector.sec-event.label',
+    name:       'neuvector-sec-events',
+    namespaced: false,
+    route:      {
+      name:   `c-cluster-${ NEUVECTOR }-sec-events`,
+      params: { product: NEUVECTOR },
+      meta:   { pkg: 'neuvector-ui-ext', product: NEUVECTOR },
+    }
+  });
 
-  basicType(['neuvector-overview']);
+  basicType(['neuvector-overview', 'neuvector-sec-events']);
 }
