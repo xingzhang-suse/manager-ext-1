@@ -23,11 +23,12 @@ import VulnerabilitiesInstruction from './contents/VulnerabilitiesInstruction';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 import dayjs from 'dayjs';
-import { getAuth, getScoreInfo, getNotifications, getDashboardDetails, getSummary } from '../../plugins/dashborad-class';
+import { getAuth, getScoreInfo, getNotifications, getDashboardDetails, getSummary } from '../../plugins/dashboard-class';
 import { getSSOUrl } from '../../utils/common';
 import { RANCHER_CONST, nvVariables } from '../../types/neuvector';
 
 export default {
+  name: 'Dashboard',
   components: {
     Loading,
     BarChart4TopVulnerableContainers,
@@ -68,7 +69,7 @@ export default {
     try {
       let authRes = await getAuth();
       this.token =  authRes.data.token.token;
-      nvVariables.authToken = authRes.data.token.token;
+      sessionStorage.nv_token = this.token;
 
       let scoreRes = await getScoreInfo();
       let notificationsRes = await getNotifications();
@@ -598,3 +599,4 @@ A {
   }
 }
 </style>
+../../plugins/dashboard-class

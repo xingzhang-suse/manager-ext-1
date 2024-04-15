@@ -5,7 +5,7 @@ import ExposureGrid from '../grids/ExposureGrid';
 import Tabbed from '@shell/components/Tabbed';
 import Tab from '@shell/components/Tabbed/Tab';
 import { v4 as uuidv4 } from 'uuid';
-import { getIpInfo } from '../../../plugins/dashborad-class';
+import { getIpInfo } from '../../../plugins/dashboard-class';
 import { NV_CONST } from '../../../types/neuvector';
 
 export default {
@@ -218,4 +218,4 @@ export default {
         top: 10px;
         right: 10px;
     }
-</style>
+</style>../../../plugins/dashboard-class
