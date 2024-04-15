@@ -1,4 +1,5 @@
 import Dashboard from '../pages/c/_cluster/neuvector/index.vue';
+import SecurityEvents from '../components/SecurityEvents/SecurityEventsView.vue';
 
 const NEUVECTOR = 'neuvector';
 
@@ -15,7 +16,7 @@ const routes = [
   {
     name:       `c-cluster-${ NEUVECTOR }-sec-events`,
     path:       `/c/:cluster/${ NEUVECTOR }/sec-events`,
-    component:  Dashboard,
+    component:  SecurityEvents,
     meta:       {
       product: NEUVECTOR,
       pkg: NEUVECTOR

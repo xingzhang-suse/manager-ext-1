@@ -1,5 +1,8 @@
 import isEmpty from 'lodash/isEmpty';
 import semver from 'semver';
+import axios from '../interceptor/http-interceptor';
+import { getSSOUrl } from '../utils/common';
+import { PATH } from '../types/path';
 
 export function getLatestStableVersion(versions) {
   const allVersions = versions.map(v => v.version);
@@ -24,4 +27,27 @@ export function getLatestStableVersion(versions) {
 
     return 0;
   })[0];
+}
+
+export async function getAuth() {
+  return axios({
+      url: getSSOUrl(PATH.LOGIN_URL),
+      method: 'post',
+      data: {
+          username: '',
+          password: '',
+          isRancherSSOUrl: true
+      }
+  });
+}
+
+export async function refreshAuth(tokenInfo) {
+  return axios({
+    url: getSSOUrl(PATH.SELF_URL),
+    method: 'get',
+    params: {
+      isOnNV: true,
+      isRancherSSOUrl: true
+    }
+});
 }

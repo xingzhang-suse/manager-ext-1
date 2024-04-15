@@ -5,7 +5,8 @@ export const NEUVECTOR_CHARTS = {
 export const nvVariables = {
   currentCluster: '',
   ns: '',
-  authToken: ''
+  authToken: '',
+  user: {} as any
 };
 
 export const RANCHER_CONST = {
@@ -308,7 +309,7 @@ export const NV_CONST = {
     PUBLIC: 'public',
     ROOTLESS_KEYPAIR_ONLY: 'rootless_keypairs_only',
   },
-},
+};
 
 export const NV_MAP = {
   PERMISSION_MAP: {

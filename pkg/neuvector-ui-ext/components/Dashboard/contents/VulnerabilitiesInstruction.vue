@@ -11,7 +11,7 @@
 </template>
 <script>
 import { ToggleSwitch } from '@components/Form/ToggleSwitch';
-import { updateAutoScan } from '../../../plugins/dashborad-class';
+import { updateAutoScan } from '../../../plugins/dashboard-class';
 
 export default {
   fetch() {
@@ -47,4 +47,4 @@ export default {
   display: grid;
   text-align: center;
  }
- </style>
+ </style>../../../plugins/dashboard-class

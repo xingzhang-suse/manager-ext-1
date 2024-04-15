@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { nvVariables, NV_CONST } from '../types/neuvector';
+import { NV_CONST } from '../types/neuvector';
 
 const instance = axios.create({
   baseURL: '',
@@ -11,9 +11,10 @@ instance.interceptors.request.use(
   (config) => {
     // Add custom logic before sending the request
     // console.log('Request Interceptor:', config);
-    if (nvVariables.authToken) {
+    let authToken = sessionStorage.getItem('nv_token');
+    if (authToken) {
       config.headers
-      .set(NV_CONST.LOCAL_STORAGE_TOKEN, nvVariables.authToken)
+      .set(NV_CONST.LOCAL_STORAGE_TOKEN, authToken)
       .set('Cache-Control', 'no-cache')
       .set('Pragma', 'no-cache');
     }
