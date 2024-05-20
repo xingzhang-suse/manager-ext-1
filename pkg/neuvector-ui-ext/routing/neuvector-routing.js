@@ -1,5 +1,6 @@
 import Dashboard from '../pages/c/_cluster/neuvector/index.vue';
 import SecurityEvents from '../components/SecurityEvents/SecurityEventsView.vue';
+import Vulnerabilities from '../components/Vulnerabilities/Vulnerabilities.vue';
 
 const NEUVECTOR = 'neuvector';
 
@@ -22,6 +23,24 @@ const routes = [
       pkg: NEUVECTOR
     }
   },
+  {
+    name: `c-cluster-${ NEUVECTOR }-scan`,
+    path: `/c/:cluster/${ NEUVECTOR }/scan`,
+    component: Vulnerabilities,
+    meta:       {
+      product: NEUVECTOR,
+      pkg: NEUVECTOR
+    }
+  },
+  {
+    name: `c-cluster-${ NEUVECTOR }-bench`,
+    path: `/c/:cluster/${ NEUVECTOR }/bench`,
+    component: Dashboard,
+    meta:       {
+      product: NEUVECTOR,
+      pkg: NEUVECTOR
+    }
+  }
 ];
 
 export default routes;
