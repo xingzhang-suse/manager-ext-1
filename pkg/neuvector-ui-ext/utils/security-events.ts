@@ -1,4 +1,4 @@
-import { NV_MAP } from '../types/neuvector';
+import { NV_MAP, NV_CONST, nvVariables, FilterOptions } from '../types/neuvector';
 import { getIpInfo } from '../plugins/dashboard-class';
 import { getDisplayName, isIpV4, isIpV6, getI18Name } from '../utils/common';
 import { getRowBasedPermission } from '../utils/auth';
@@ -34,6 +34,8 @@ const LABELS = {
     PACKAGE: 'package',
     OTHER: 'other'
 };
+
+type FilterTypes = 'TimeFIlter' | 'QuickFilter' | 'AdvancedFIlter';
 
 
 export async function combineSecurityEvents(securityEventsData: any, store: any, selectedRow: any) {
@@ -180,12 +182,13 @@ export async function combineSecurityEvents(securityEventsData: any, store: any,
         // this.setAdvancedFilter(this.advFilterConf);
         // this.onQuickFilterChange(this.filter.value);
         // this.isDataReady = true;
-        return {
-            cachedSecurityEvents,
-            displayedSecurityEvents,
-            domainList,
-            autoCompleteData,
-        };
+
+        nvVariables. securityEventsServiceData.cachedSecurityEvents = cachedSecurityEvents;
+        nvVariables.securityEventsServiceData.displayedSecurityEvents = displayedSecurityEvents;
+        nvVariables.securityEventsServiceData.domainList = domainList;
+        nvVariables.securityEventsServiceData.autoCompleteData = autoCompleteData;
+
+        return nvVariables.securityEventsServiceData;
 
     } catch(error) {
         console.error(error);
@@ -232,10 +235,10 @@ const editDisplayedThreat = function(threat: any, ipMap: any, store: any) {
     displayedThreat.name4Pdf = threat.name;
     displayedThreat.type.name = EVENT_TYPE.THREAT;
     displayedThreat.type.cssColor = 'fa icon-size-2 fa-bug text-danger';
-    displayedThreat.reportedAt = dayjs(threat.reported_at).format('MMM dd, y HH:mm:ss');
+    displayedThreat.reportedAt = dayjs(threat.reported_at).format('MMM DD, YY HH:mm:ss');
     displayedThreat.relativeDate = dayjs(displayedThreat.reportedAt).fromNow();
-    displayedThreat.orgReportedAt = dayjs(threat.reported_at).format('yyyy-MM-ddTHH:mm:ss');
-    displayedThreat.reportedOn = dayjs(threat.reported_at).format('yyyyMMdd');
+    displayedThreat.orgReportedAt = dayjs(threat.reported_at).format('YYYY-MM-DDTHH:mm:ss');
+    displayedThreat.reportedOn = dayjs(threat.reported_at).format('YYYYMMDD');
     displayedThreat.reportedTimestamp = threat.reported_timestamp;
     displayedThreat.endpoint.source = _getEndpointInfo(
       source,
@@ -323,10 +326,10 @@ const editDisplayedViolation = function(
     displayedViolation.ruleId = violation.policy_id;
     displayedViolation.type.name = EVENT_TYPE.VIOLATION;
     displayedViolation.type.cssColor = 'fa icon-size-2 fa-ban text-warning';
-    displayedViolation.reportedAt = dayjs(violation.reported_at).format('MMM dd, y HH:mm:ss');
+    displayedViolation.reportedAt = dayjs(violation.reported_at).format('MMM DD, YY HH:mm:ss');
     displayedViolation.relativeDate = dayjs(displayedViolation.reportedAt).fromNow();
-    displayedViolation.orgReportedAt = dayjs(violation.reported_at).format('yyyy-MM-ddTHH:mm:ss');
-    displayedViolation.reportedOn = dayjs(violation.reported_at).format('yyyyMMdd');
+    displayedViolation.orgReportedAt = dayjs(violation.reported_at).format('YYYY-MM-DDTHH:mm:ss');
+    displayedViolation.reportedOn = dayjs(violation.reported_at).format('YYYYMMDD');
     displayedViolation.reportedTimestamp = violation.reported_timestamp;
     displayedViolation.endpoint.source = _getEndpointInfo(
       source,
@@ -467,10 +470,10 @@ const editDisplayedIncident = function(incident: any, ipMap: any, store: any) {
     displayedIncident.type.name = EVENT_TYPE.INCIDENT;
     displayedIncident.type.cssColor =
       'fa icon-size-2 fa-exclamation-triangle text-muted';
-    displayedIncident.reportedAt = dayjs(incident.reported_at).format('MMM dd, y HH:mm:ss');
+    displayedIncident.reportedAt = dayjs(incident.reported_at).format('MMM DD, YY HH:mm:ss');
     displayedIncident.relativeDate = dayjs(displayedIncident.reportedAt).fromNow();
-    displayedIncident.orgReportedAt = dayjs(incident.reported_at).format('yyyy-MM-ddTHH:mm:ss');
-    displayedIncident.reportedOn = dayjs(incident.reported_at).format('yyyyMMdd');
+    displayedIncident.orgReportedAt = dayjs(incident.reported_at).format('YYYY-MM-DDTHH:mm:ss');
+    displayedIncident.reportedOn = dayjs(incident.reported_at).format('YYYYMMDD');
     displayedIncident.reportedTimestamp = incident.reported_timestamp;
     displayedIncident.endpoint.source = _getEndpointInfo(
       source,
@@ -1024,7 +1027,7 @@ const _getDomainList = function(allSecurityEvents: any[]): any[] {
 };
 
 const _prepareAutoCompleteData = function(cachedSecurityEvents: any[], domainList: string[]) {
-    let autoComplete = {
+    return {
       domain: domainList,
       host: getAutoCompleteData(e => e.hostName, cachedSecurityEvents),
       source: getAutoCompleteData(
@@ -1057,4 +1060,363 @@ const getReviewRulePermission = function(sourceDomain: string, destinationDomain
     } else {
       return 'r';
     }
+};
+
+export const prepareContext4TwoWayInfinityScroll = function(context: any = null) {
+  console.log('securityEventsService.displayedSecurityEvents',  nvVariables.securityEventsServiceData.displayedSecurityEvents);
+  nvVariables.dateSliderCtx.page = context?.page || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.page;
+  nvVariables.dateSliderCtx.begin = context?.begin || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.begin;
+  nvVariables.dateSliderCtx.openedIndex = context?.openedIndex || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.openedIndex;
+  nvVariables.dateSliderCtx.openedPage = context?.openedPage || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.openedPage;
+  nvVariables.dateSliderCtx.limit = context?.limit || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.limit;
+  nvVariables.dateSliderCtx.array = nvVariables.securityEventsServiceData.displayedSecurityEvents;
+};
+
+export const filterSecEvents = function(): void {
+
+  console.log('Filter', nvVariables.securityEventsServiceData.filterItems);
+
+  nvVariables.securityEventsServiceData.displayedSecurityEvents = nvVariables.securityEventsServiceData.cachedSecurityEvents.filter(event => {
+    return (
+      _dateFilter(nvVariables.securityEventsServiceData.filterItems.dateFrom, nvVariables.securityEventsServiceData.filterItems.dateTo, event.reportedTimestamp) && 
+      _severityFilter(event.details.level.name, nvVariables.securityEventsServiceData.filterItems.severity) &&
+      _locationFilter(event.details.labels, nvVariables.securityEventsServiceData.filterItems.location) &&
+      _categoryFilter(event.details.labels, nvVariables.securityEventsServiceData.filterItems.category) &&
+      _otherFilter(event.details.labels, nvVariables.securityEventsServiceData.filterItems.other) &&
+      _sourceFilter(
+        event.endpoint.source.displayName,
+        nvVariables.securityEventsServiceData.filterItems.source
+      ) &&
+      _destinationFilter(
+        event.endpoint.destination.displayName,
+        nvVariables.securityEventsServiceData.filterItems.destination
+      ) &&
+      _nodeFilter(event.host_name, nvVariables.securityEventsServiceData.filterItems.host) &&
+      _domainFilter(
+        event.endpoint.source.domain,
+        event.endpoint.destination.domain,
+        nvVariables.securityEventsServiceData.filterItems.selectedDomains
+      ) &&
+      _includeFilter(event, nvVariables.securityEventsServiceData.filterItems.includedKeyword) &&
+      _excludeFilter(event, nvVariables.securityEventsServiceData.filterItems.excludedKeyword)
+    );
+  });
+};
+
+const _dateFilter = function(dateFrom: number, dataTo: number, reportedTimestamp: number) {
+  return dateFrom === 0 && dataTo === 0 || reportedTimestamp * 1000 >= dateFrom && reportedTimestamp * 1000 <= dataTo;
+};
+
+const _severityFilter = function(severity: string, selectedSeverities: string[]) {
+  return selectedSeverities.length > 0
+    ? selectedSeverities.includes(severity)
+    : true;
+};
+
+const _locationFilter = function(location: string[], selectedLocations: string[]) {
+  let res = false;
+  for (let selectedLocation of selectedLocations) {
+    if (selectedLocation) {
+      if (location.includes(selectedLocation.toLowerCase())) {
+        res = true;
+        break;
+      }
+    }
+  }
+  return selectedLocations.length > 0 ? res : true;
+};
+
+const _categoryFilter = function(category: string[], selectedCategories: string[]) {
+  let res = false;
+  for (let selectedCategory of selectedCategories) {
+    if (selectedCategory) {
+      if (category.includes(selectedCategory)) {
+        res = true;
+        break;
+      }
+    }
+  }
+  return selectedCategories.length > 0 ? res : true;
+};
+
+const _otherFilter = function(other: string[], selectedOther: string[]) {
+  return selectedOther[0] ? other.length === 0 : true;
+};
+
+const _sourceFilter = function(source: string, selectedSource: string) {
+  return selectedSource ? source === selectedSource : true;
+};
+
+const _destinationFilter = function(destination: string, selectedDestination: string) {
+  return selectedDestination ? destination === selectedDestination : true;
+};
+
+const _nodeFilter = function(host: string, selectedHost: string) {
+  return selectedHost ? host === selectedHost : true;
+};
+
+const _domainFilter = function(
+  sourceDomain: string,
+  destinationDomain: string,
+  selectedDomains: string[]
+) {
+  return selectedDomains.length > 0
+    ? selectedDomains.includes(sourceDomain) ||
+        selectedDomains.includes(destinationDomain)
+    : true;
+};
+
+const _includeFilter = function(event: any, keyword: string) {
+  if (!keyword) return true;
+  const _event = Object.assign({}, event);
+  _event.reported_at = dayjs(event.reported_at).format('MMM DD, YY HH:mm:ss') as string;
+  return getValueString(_event).includes(keyword.toLowerCase());
+};
+
+const _excludeFilter = function(event: any, keyword: string) {
+  if (!keyword) return true;
+  const _event = Object.assign({}, event);
+  _event.reported_at = dayjs(event.reported_at).format('MMM DD, YY HH:mm:ss') as string;
+  return !getValueString(_event).includes(keyword.toLowerCase());
+};
+
+const getValueString = function(event: any): any {
+  return Object.values(event)
+    .map((value: any) => {
+      if (typeof value === 'object' && !!value) {
+        return getValueString(value);
+      } else if (typeof value === 'string' || typeof value === 'number') {
+        return value.toString().toLowerCase();
+      } else {
+        return value;
+      }
+    })
+    .join(',');
+};
+
+export function getCsvData(secEvents: any[], metadata: any) {
+  return secEvents.map((secEvent, $index) => {
+    return _organizeSecEventTblRow(secEvent, $index, metadata, 'csv');
+  });
+};
+
+const _organizeSecEventTblRow = function(
+  secEvent: any,
+  index: number,
+  metadata: any,
+  format: string
+) {
+  let resPrototype = {
+    ID: '',
+    Title: '',
+    Severity: '',
+    Location: '',
+    Details: '',
+    Action: '',
+    Datetime: '',
+  };
+  const lineBreak = format === 'csv' ? '\n' : '<br/>';
+  resPrototype.ID = (index + 1).toString();
+  resPrototype.Title = `${secEvent.name.replace(/\"/g, "'")}`;
+  resPrototype.Severity = secEvent.details.level
+    ? secEvent.details.level.name
+    : '';
+  resPrototype.Location = `${_organizeLocation(
+    secEvent,
+    metadata
+  ).stack[0].ul.join(lineBreak)}`;
+  resPrototype.Details = `${_organizeSecEventDetails(secEvent, metadata)!
+    .stack.map(function (elem) {
+      return typeof elem === 'string' ? elem : elem.ul.join(lineBreak);
+    })
+    .join(lineBreak)
+    .replace(/\"/g, "'")}`;
+  resPrototype.Action = secEvent.details.action
+    ? secEvent.details.action.name
+    : '';
+  resPrototype.Datetime = `${secEvent.reportedAt}`;
+  return resPrototype;
+};
+
+const _organizeLocation = function(secEvent: any, metadata: any) {
+  if (secEvent.endpoint.source && secEvent.endpoint.destination) {
+    return {
+      stack: [
+        {
+          ul: [
+            `${metadata.items.source}: ${
+              secEvent.endpoint.source.domain
+                ? `${secEvent.endpoint.source.domain}: `
+                : ''
+            }${secEvent.endpoint.source.displayName}`,
+            `${metadata.items.destination}: ${
+              secEvent.endpoint.destination.domain
+                ? `${secEvent.endpoint.destination.domain}: `
+                : ''
+            }${secEvent.endpoint.destination.displayName} (${secEvent.endpoint.destination.ip})`,
+          ],
+        },
+      ],
+    };
+  } else if (
+    secEvent.endpoint.source &&
+    !secEvent.details.labels.includes('host')
+  ) {
+    return {
+      stack: [
+        {
+          ul: [
+            `${metadata.items.host}: ${secEvent.host_name}`,
+            `${metadata.items.container}: ${
+              secEvent.endpoint.source.domain
+                ? `${secEvent.endpoint.source.domain}: `
+                : ''
+            }${secEvent.endpoint.source.displayName}`,
+          ],
+        },
+      ],
+    };
+  } else if (
+    secEvent.endpoint.destination &&
+    !secEvent.details.labels.includes('host')
+  ) {
+    return {
+      stack: [
+        {
+          ul: [
+            `${metadata.items.host}: ${secEvent.host_name}`,
+            `${metadata.items.container}: ${
+              secEvent.endpoint.destination.domain
+                ? `${secEvent.endpoint.destination.domain}: `
+                : ''
+            }${secEvent.endpoint.destination.displayName}`,
+          ],
+        },
+      ],
+    };
+  } else {
+    return {
+      stack: [
+        {
+          ul: [`${metadata.items.host}: ${secEvent.host_name}`],
+        },
+      ],
+    };
+  }
+};
+
+const _organizeSecEventDetails = function(secEvent: any, metadata: any) {
+  let ul: any[] = [];
+
+  switch (secEvent.type.name) {
+    case 'threat':
+      if (secEvent.details.clusterName)
+        ul.push(
+          `${metadata.items.clusterName}: ${secEvent.details.clusterName}`
+        );
+      if (secEvent.applications)
+        ul.push(
+          `${metadata.items.applications}: ${secEvent.applications}`
+        );
+      if (secEvent.details.count)
+        ul.push(`${metadata.items.count}: ${secEvent.details.count}`);
+      if (secEvent.details.message.content)
+        ul.push(
+          `${metadata.items.description}: ${secEvent.details.message.content}`
+        );
+      return { stack: [{ ul: ul }] };
+    case 'violation':
+      if (secEvent.details.clusterName)
+        ul.push(
+          `${metadata.items.clusterName}: ${secEvent.details.clusterName}`
+        );
+      if (secEvent.applications)
+        ul.push(
+          `${metadata.items.applications}: ${secEvent.applications}`
+        );
+      if (secEvent.details.serverPort)
+        ul.push(
+          `${
+            secEvent.details.port > 0
+              ? metadata.items.serverPort
+              : metadata.items.protocol
+          }: ${secEvent.details.serverPort}`
+        );
+      if (secEvent.details.serverImage)
+        ul.push(
+          `${metadata.items.serverImage}: ${secEvent.details.serverImage}`
+        );
+      return { stack: [{ ul: ul }] };
+    case 'incident':
+      if (secEvent.details.clusterName)
+        ul.push(
+          `${metadata.items.clusterName}: ${secEvent.details.clusterName}`
+        );
+      if (secEvent.details.message.group)
+        ul.push(
+          `${metadata.items.group}: ${secEvent.details.message.group}`
+        );
+      if (secEvent.details.message.procName)
+        ul.push(
+          `${metadata.items.procName}: ${secEvent.details.message.procName}`
+        );
+      if (secEvent.details.message.procPath)
+        ul.push(
+          `${metadata.items.procPath}: ${secEvent.details.message.procPath}`
+        );
+      if (secEvent.details.message.procCmd)
+        ul.push(
+          `${metadata.items.procCmd}: ${secEvent.details.message.procCmd}`
+        );
+      if (
+        secEvent.details.message.procCmd &&
+        secEvent.name.toLowerCase().indexOf('process') < 0 &&
+        secEvent.name.toLowerCase().indexOf('escalation') < 0 &&
+        secEvent.name.toLowerCase().indexOf('detected') < 0
+      )
+        ul.push(
+          `${metadata.items.cmd}: ${secEvent.details.message.procCmd}`
+        );
+      if (secEvent.details.message.procEffectiveUid)
+        ul.push(
+          `${metadata.items.procEffectedUid}: ${secEvent.details.message.procEffectiveUid}`
+        );
+      if (secEvent.details.message.procEffectiveUser)
+        ul.push(
+          `${metadata.items.procEffectedUser}: ${secEvent.details.message.procEffectiveUser}`
+        );
+      if (secEvent.details.message.localIP)
+        ul.push(
+          `${metadata.items.localIp}: ${secEvent.details.message.localIP}`
+        );
+      if (secEvent.details.message.remoteIP)
+        ul.push(
+          `${metadata.items.remoteIp}: ${secEvent.details.message.remoteIP}`
+        );
+      if (secEvent.details.message.localPort)
+        ul.push(
+          `${metadata.items.localPort}: ${secEvent.details.message.localPort}`
+        );
+      if (secEvent.details.message.localPort)
+        ul.push(
+          `${metadata.items.remotePort}: ${secEvent.details.message.localPort}`
+        );
+      if (secEvent.details.message.ipProto)
+        ul.push(
+          `${metadata.items.ipProto}: ${secEvent.details.message.ipProto}`
+        );
+      if (secEvent.details.message.filePath)
+        ul.push(
+          `${metadata.items.filePath}: ${secEvent.details.message.filePath}`
+        );
+      if (secEvent.details.message.fileNames)
+        ul.push(
+          `${metadata.items.fileNames}: ${secEvent.details.message.fileNames}`
+        );
+      return {
+        stack: [secEvent.details.message.content, { ul: ul }],
+      };
+    default:
+      return null;
+  }
 };
