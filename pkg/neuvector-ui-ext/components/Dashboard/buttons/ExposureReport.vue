@@ -36,6 +36,8 @@ export default {
                 Direction: direction,
                 Service: exposure.service,
                 Pod: exposure.pod_name,
+                'High Vuls': exposure.high,
+                'Medium Vuls': exposure.medium,
                 'Policy Mode': exposure.policy_mode,
                 'External Location': entry.country_name !== '-' ? entry.country_name : '',
                 'External IP': entry.ip,
