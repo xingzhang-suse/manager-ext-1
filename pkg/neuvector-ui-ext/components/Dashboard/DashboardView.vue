@@ -25,7 +25,7 @@ import Tab from '@shell/components/Tabbed/Tab';
 import dayjs from 'dayjs';
 import { getAuth, getScoreInfo, getNotifications, getDashboardDetails, getSummary } from '../../plugins/dashboard-class';
 import { getSSOUrl } from '../../utils/common';
-import { RANCHER_CONST, nvVariables } from '../../types/neuvector';
+import { nvVariables } from '../../types/neuvector';
 
 export default {
   name: 'Dashboard',
@@ -100,7 +100,8 @@ export default {
   },
 
   props: {
-    ns: String
+    ns: String,
+    rancherTheme: String
   },
 
   computed: {
@@ -238,15 +239,6 @@ export default {
           this.t('dashboard.help.policy_mode_pod.txt2')
         ]
       };
-    },
-    rancherTheme: function() {
-      const decodedCookie = decodeURIComponent(document.cookie);
-      const cookieArray = decodedCookie.split(';');
-      let rTheme = cookieArray.find(item => item.includes('R_THEME'));
-      let rPcs = cookieArray.find(item => item.includes('R_PCS'));
-      return rTheme && rTheme.split('=')[1] !== RANCHER_CONST.THEME.AUTO ?
-        rTheme.split('=')[1] : 
-        (rPcs ? rPcs.split('=')[1] : RANCHER_CONST.THEME.DARK);
     },
     ssoLink: function() {
       return getSSOUrl('#/');

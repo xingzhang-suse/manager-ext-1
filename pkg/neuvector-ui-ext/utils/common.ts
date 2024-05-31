@@ -1,4 +1,8 @@
 import { NV_CONST, nvVariables } from '../types/neuvector';
+import dayjs from 'dayjs';
+
+const _keyStr: string =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 
 export function arrayToCsv(array: any, title: string = '') {
     let line: string = '';
@@ -64,6 +68,119 @@ export function getI18Name(name: any, store: any) {
   return store.getters['i18n/t']('enum.' + name.toUpperCase());
 }
 
+export function parseLocalDate(datetime: string) {
+  return datetime.split('T')[0].replace(/-/g, '');
+}
+
+export function parseDatetimeStr(datetimeObj: any, pattern?: string) {
+  return dayjs(datetimeObj).format(pattern ? pattern : 'YYYYMMDDHHmmss');
+}
+
+export function getDateByInterval(base: string, interval: number, intervalUnit: string, pattern = 'YYYYMMDDHHmmss') {
+  //base format: "YYYYMMDDHHmmss"
+  return dayjs(base).add(interval, intervalUnit as dayjs.OpUnitType).format(pattern);
+}
+
+export function getDuration(date1: string, date2: string) {
+  //date format: "YYYYMMDD"
+  let a = dayjs(`${date1.substring(0, 4)}-${date1.substring(4, 6)}-${date1.substring(6, 8)}`);
+  let b = dayjs(`${date2.substring(0, 4)}-${date2.substring(4, 6)}-${date2.substring(6, 8)}`);
+  return a.diff(b, 'day');
+}
+
+export function groupBy(array: any, key: any) {
+  return array.reduce(function (res: any, elem: any) {
+    (res[elem[key]] = res[elem[key]] || []).push(elem);
+    return res;
+  }, {});
+}
+
 export function getSSOUrl(path: string) {
   return `/k8s/clusters/${ nvVariables.currentCluster }/api/v1/namespaces/${ nvVariables.ns }/services/https:${ NV_CONST.NV_SERVICE }${ NV_CONST.PROXY_VALUE }/${ path }`;
+}
+
+export const debounced = (function(delay, fn) {
+  let timerId: any;
+  return function(delay: number, fn: Function, ...args: any[]) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    timerId = setTimeout(() => {
+      fn(...args);
+      timerId = null;
+    }, delay);
+  };
+})();
+
+export function toHex(number: number, length: number) {
+  let s = number.toString(16).toUpperCase();
+  while (s.length < length) {
+    s = "0" + s;
+  }
+  return s;
+};
+
+export function toChar(number: number) {
+  return number <= 32 ? " " : String.fromCharCode(number);
+};
+
+export function decode(input: string, arrayBuffer: ArrayBuffer | null = null) {
+  //get last chars to see if are valid
+  input = removePaddingChars(input);
+  input = removePaddingChars(input);
+
+  let bytes = (input.length / 4) * 3;
+
+  let uarray;
+  let chr1, chr2, chr3;
+  let enc1, enc2, enc3, enc4;
+  let i = 0;
+  let j = 0;
+
+  if (arrayBuffer) uarray = new Uint8Array(arrayBuffer);
+  else uarray = new Uint8Array(bytes);
+
+  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
+
+  for (i = 0; i < bytes; i += 3) {
+    //get the 3 octets in 4 ascii chars
+    enc1 = _keyStr.indexOf(input.charAt(j++));
+    enc2 = _keyStr.indexOf(input.charAt(j++));
+    enc3 = _keyStr.indexOf(input.charAt(j++));
+    enc4 = _keyStr.indexOf(input.charAt(j++));
+
+    chr1 = (enc1 << 2) | (enc2 >> 4);
+    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+    chr3 = ((enc3 & 3) << 6) | enc4;
+
+    uarray[i] = chr1;
+    if (enc3 !== 64) uarray[i + 1] = chr2;
+    if (enc4 !== 64) uarray[i + 2] = chr3;
+  }
+
+  return uarray;
+}
+
+const removePaddingChars = (input: string) => {
+  let lkey = _keyStr.indexOf(input.charAt(input.length - 1));
+  if (lkey === 64) {
+    return input.substring(0, input.length - 1);
+  }
+  return input;
+}
+
+export function capitalize(word: string | undefined) {
+  return !!word
+  ? `${word.charAt(0).toUpperCase()}${word.substring(1).toLowerCase()}`
+  : '';
+}
+
+export function shortenString(str: string, limit: number) {
+  if (str.length > limit) {
+    return `${str.substring(0, limit - 3)}...${str.substring(
+      str.length - 3,
+      str.length
+    )}`;
+  }
+  return str;
 }

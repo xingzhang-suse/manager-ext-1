@@ -1,3 +1,18 @@
+export interface FilterOptions {
+  dateFrom?: number;
+  dateTo?: number;
+  severity?: string[];
+  location?: string[];
+  category?: string[];
+  other?: string[]; 
+  host?: string;
+  source?: string;
+  destination?: string;
+  selectedDomains?: string[];
+  includedKeyword?: string;
+  excludedKeyword?: string;
+};
+
 export const NEUVECTOR_CHARTS = {
   CONTROLLER: "neuvector",
 };
@@ -6,7 +21,60 @@ export const nvVariables = {
   currentCluster: '',
   ns: '',
   authToken: '',
-  user: {} as any
+  user: {} as any,
+  dateSliderCtx: {
+    page: 0,
+    begin: 0,
+    openedIndex: 0,
+    openedPage: 0,
+    limit: 0,
+    array: [] as any[]
+  },
+  securityEventsServiceData: {
+    cachedSecurityEvents: [] as any[],
+    displayedSecurityEvents: [] as any[],
+    domainList: [] as any[],
+    autoCompleteData: {} as any,
+    filterItems: {
+      dateFrom:  0,
+      dateTo:  0,
+      severity:  [] as any[],
+      location:  [] as any[],
+      category:  [] as any[],
+      other: [] as any[],
+      host: '',
+      source: '',
+      destination: '',
+      selectedDomains: [] as any[],
+      includedKeyword: '',
+      excludedKeyword: ''
+    }
+  },
+  isLightTheme: false,
+  showPacketModal: {
+    value: false
+  },
+  packet: {
+    value: ''
+  },
+  showHostInfoModal: {
+    value: false
+  },
+  host: {
+    value: {} as any
+  },
+  showWorkloadInfoModal: {
+    value: false
+  },
+  workload: {
+    value: {} as any
+  },
+  showEnforcerInfoModal: {
+    value: false
+  },
+  enforcer: {
+    value: {} as any
+  }
 };
 
 export const RANCHER_CONST = {
@@ -14,7 +82,8 @@ export const RANCHER_CONST = {
     AUTO: 'auto',
     LIGHT: 'light',
     DARK: 'dark'
-  }
+  },
+  R_THEME: 'rancher_theme'
 };
 
 export const NV_CONST = {
@@ -309,6 +378,14 @@ export const NV_CONST = {
     PUBLIC: 'public',
     ROOTLESS_KEYPAIR_ONLY: 'rootless_keypairs_only',
   },
+
+  TWO_WAY_INFINITE_SCROLL_ARG: {
+    page: 1,
+    begin: 0,
+    openedIndex: -1,
+    openedPage: -1,
+    limit: 30
+  }
 };
 
 export const NV_MAP = {

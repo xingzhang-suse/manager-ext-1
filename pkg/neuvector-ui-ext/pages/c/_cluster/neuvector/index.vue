@@ -2,7 +2,7 @@
 import DashboardView from '../../../../components/Dashboard/DashboardView';
 import InstallView from '../../../../components/Dashboard/InstallView';
 import { SERVICE } from '@shell/config/types';
-import { NV_CONST } from '../../../../types/neuvector';
+import { RANCHER_CONST, NV_CONST } from '../../../../types/neuvector';
 
 export default {
   name: 'Dashboard',
@@ -29,12 +29,27 @@ export default {
       }
 
       return null;
-    }
+    },
+    rancherTheme: function() {
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(';');
+      let rTheme = cookieArray.find(item => item.includes('R_THEME'));
+      let rPcs = cookieArray.find(item => item.includes('R_PCS'));
+      let res = rTheme && rTheme.split('=')[1] !== RANCHER_CONST.THEME.AUTO ?
+        rTheme.split('=')[1] : 
+        (rPcs ? rPcs.split('=')[1] : RANCHER_CONST.THEME.DARK);
+      sessionStorage.setItem(RANCHER_CONST.R_THEME, res);
+      console.log(
+        'Rancher theme',
+        res
+      );
+      return res;
+    },
   }
 };
 </script>
 
 <template>
   <InstallView v-if="!uiService" :ui-service="uiService" />
-  <DashboardView v-else :ns="uiService.metadata.namespace"/>
+  <DashboardView v-else :ns="uiService.metadata.namespace" :rancherTheme="rancherTheme"/>
 </template>

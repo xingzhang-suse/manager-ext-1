@@ -1,0 +1,175 @@
+@import './common/color.scss';
+@import './bootstrap/scss/bootstrap.scss';
+.auto-hide {
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+}
+
+.label-primary {
+    background-color: $neuvector-mid-green-700;
+}
+
+.label-muted {
+    background-color: $neuvector-grey-700;
+}
+
+.label-pink {
+    background-color: #e91e63;
+}
+
+.label-danger {
+    background-color: $mdc-red-400;
+}
+  
+.label-warning {
+    background-color: $mdc-orange-700;
+}
+
+.type-label {
+    @media print {
+      height: 15px;
+      line-height: 15px;
+      font-size: 10px;
+      color: #111;
+    }
+    @media screen {
+      height: 20px;
+      line-height: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #fff;
+    }
+    min-width: 75px;
+    border-radius: 4px;
+    text-align: center;
+    display: inline-block;
+    &.customer-rule {
+      border: 1px solid #e6e600;
+      background-color: #ffffe6;
+      color: #45505c;
+    }
+  
+    &.local-rule {
+      border: 1px solid #ebe3e4;
+      background-image: linear-gradient(to right, #ffffe6, #e6d9f1);
+      color: #45505c;
+    }
+  
+    &.learn-rule {
+      border: 1px solid #d2aff1;
+      background-color: #e6d9f1;
+      color: #45505c;
+    }
+  
+    &.ground-rule {
+      border: 1px solid #ff8a65;
+      background-color: #fdb69f;
+      color: #45505c;
+    }
+  
+    &.fed-rule {
+      border: 1px solid #000;
+      background-color: $neuvector-grey-900;
+      color: #fff;
+    }
+  
+    &.modify-permission {
+      border: 1px solid $mdc-green-400;
+      background-color: $mdc-green-50;
+      color: $mdc-green-400;
+    }
+  
+    &.view-permission {
+      border: 1px solid $mdc-orange-400;
+      background-color: $mdc-orange-50;
+      color: $mdc-orange-400;
+    }
+  
+    &.predefined {
+      border: 1px solid $mdc-green-400;
+      background-color: $mdc-green-50;
+      color: $mdc-green-400;
+    }
+  
+    &.type-label-lg {
+      min-width: 90px;
+    }
+    &.threat {
+      background-color: $mdc-red-400;
+      color: #fff;
+    }
+    &.violation {
+      background-color: $mdc-orange-500;
+      color: #fff;
+    }
+    &.incident {
+      background-color: $neuvector-grey-500;
+      color: #fff;
+    }
+    &.event {
+      background-color: $mdc-light-blue-400;
+      color: #fff;
+    }
+    &.cve-report {
+      background-color: $mdc-yellow-500;
+      color: #000;
+    }
+    &.admission-control {
+      background-color: $mdc-blue-900;
+      color: #fff;
+    }
+    &.benchmark {
+      background-color: $neuvector-mid-green-500;
+      color: #fff;
+    }
+    &.info {
+      background-color: $mdc-light-blue-400;
+      color: #fff;
+    }
+    &.warning {
+      background-color: $mdc-orange-500;
+      color: #fff;
+    }
+    &.danger {
+      background-color: $mdc-red-400;
+      color: #fff;
+    }
+    &.success {
+      background-color: $mdc-light-green-500;
+      color: #fff;
+    }
+    &.deny {
+      background-color: $mdc-red-400;
+      color: #fff;
+    }
+  }
+
+  .pull-left {
+    display: block;
+    float: left;
+  }
+
+  .pull-right {
+    display: block;
+    float: right;
+  }
+
+
+.badge-danger {
+  background-color: $mdc-red-400;
+  color: #fff;
+}
+.badge-warning {
+  background-color: $mdc-orange-400;
+  color: #fff;
+}
+.badge-success {
+  background-color: $mdc-green-400;
+  color: #fff;
+}
+
+.hand,
+.link {
+  cursor: pointer;
+}
