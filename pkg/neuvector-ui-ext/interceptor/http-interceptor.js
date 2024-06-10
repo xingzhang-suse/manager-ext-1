@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NV_CONST } from '../types/neuvector';
+import { getAuth } from '../plugins/neuvector-class';
 
 const instance = axios.create({
   baseURL: '',
@@ -34,10 +35,25 @@ instance.interceptors.response.use(
     // console.log('Response Interceptor:', response);
     return response;
   },
-  (error) => {
+  async (error) => {
     // Handle response errors
     console.error('Response Error Interceptor:', error);
-    return Promise.reject(error);
+    if (
+      error.response.status === NV_CONST.STATUS_AUTH_TIMEOUT ||
+      error.response.status ===  NV_CONST.STATUS_UNAUTH
+    ) {
+      return getAuth().then(
+        response => {
+          return response;
+        } 
+      ).catch(
+        error => {
+          return Promise.reject(error);
+        }
+      )
+    } else {
+      return Promise.reject(error);
+    }
   }
 );
 

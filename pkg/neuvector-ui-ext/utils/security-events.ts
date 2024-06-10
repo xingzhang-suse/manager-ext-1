@@ -183,7 +183,7 @@ export async function combineSecurityEvents(securityEventsData: any, store: any,
         // this.onQuickFilterChange(this.filter.value);
         // this.isDataReady = true;
 
-        nvVariables. securityEventsServiceData.cachedSecurityEvents = cachedSecurityEvents;
+        nvVariables.securityEventsServiceData.cachedSecurityEvents = cachedSecurityEvents;
         nvVariables.securityEventsServiceData.displayedSecurityEvents = displayedSecurityEvents;
         nvVariables.securityEventsServiceData.domainList = domainList;
         nvVariables.securityEventsServiceData.autoCompleteData = autoCompleteData;
@@ -1103,6 +1103,48 @@ export const filterSecEvents = function(): void {
   });
 };
 
+export const parseAdvFilterParam = function(filters: any) {
+  let category = parseBooleanObject2TrueKeys(filters.category);
+  let location = parseBooleanObject2TrueKeys(filters.location);
+  let severity = parseBooleanObject2TrueKeys(filters.severity);
+  let other = filters.other ? ['other'] : [];
+  let selectedDomains = filters.domains;
+  return {
+    dateFrom: filters.dateFrom,
+    dateTo: filters.dateTo,
+    severity: severity,
+    location: location,
+    category: category,
+    other: other,
+    host: filters.host,
+    source: filters.source,
+    destination: filters.destination,
+    selectedDomains: selectedDomains,
+    includedKeyword: filters.includedKeyword,
+    excludedKeyword: filters.excludedKeyword
+  }
+};
+
+export const loadFilters = function(filters: any) {
+  nvVariables.securityEventsServiceData.filterItems.dateFrom = filters.dateFrom;
+  nvVariables.securityEventsServiceData.filterItems.dateTo = filters.dateTo;
+  nvVariables.securityEventsServiceData.filterItems.severity = filters.severity;
+  nvVariables.securityEventsServiceData.filterItems.location = filters.location;
+  nvVariables.securityEventsServiceData.filterItems.category = filters.category;
+  nvVariables.securityEventsServiceData.filterItems.other = filters.other;
+  nvVariables.securityEventsServiceData.filterItems.host = filters.host;
+  nvVariables.securityEventsServiceData.filterItems.source = filters.source;
+  nvVariables.securityEventsServiceData.filterItems.destination = filters.destination;
+  nvVariables.securityEventsServiceData.filterItems.selectedDomains = filters.selectedDomains;
+  nvVariables.securityEventsServiceData.filterItems.includedKeyword = filters.includedKeyword;
+  nvVariables.securityEventsServiceData.filterItems.excludedKeyword = filters.excludedKeyword;
+  console.log('nvVariables.securityEventsServiceData.filterItems', nvVariables.securityEventsServiceData.filterItems)
+}
+
+const parseBooleanObject2TrueKeys = function(obj: any) {
+  return Object.entries(obj).filter(([k, v]) => v).map(([k, v]) => k);
+};
+
 const _dateFilter = function(dateFrom: number, dataTo: number, reportedTimestamp: number) {
   return dateFrom === 0 && dataTo === 0 || reportedTimestamp * 1000 >= dateFrom && reportedTimestamp * 1000 <= dataTo;
 };
@@ -1127,6 +1169,7 @@ const _locationFilter = function(location: string[], selectedLocations: string[]
 };
 
 const _categoryFilter = function(category: string[], selectedCategories: string[]) {
+  console.log(category, selectedCategories)
   let res = false;
   for (let selectedCategory of selectedCategories) {
     if (selectedCategory) {

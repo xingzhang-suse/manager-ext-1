@@ -1,11 +1,13 @@
 <script>
     import AdvancedFilterModal from '../dialogs/AdvancedFilterModal';
+    import { nvVariables } from '../../../types/neuvector';
     export default {
         components: {
             AdvancedFilterModal
         },
         props: {
-            isLightTheme: Boolean
+            isLightTheme: Boolean,
+            autoCompleteData: Object,
         },
         data() {
             return {
@@ -14,6 +16,7 @@
         },
         methods: {
             openAdvancedFilterDialog: function() {
+                nvVariables.showAdvFilterModal.value = true;
                 this.showModal = true;
             },
             closeModal: function() {
@@ -31,6 +34,6 @@
         >
             {{ t('general.ADV_FILTER') }}
         </a>
-        <AdvancedFilterModal v-if="showModal" :isLightTheme="isLightTheme" @close="closeModal"></AdvancedFilterModal>
+        <AdvancedFilterModal v-if="showModal" :isLightTheme="isLightTheme" :autoCompleteData="autoCompleteData" @close="closeModal"></AdvancedFilterModal>
     </div>
 </template>

@@ -74,6 +74,9 @@ export const nvVariables = {
   },
   enforcer: {
     value: {} as any
+  },
+  showAdvFilterModal: {
+    value: false
   }
 };
 
