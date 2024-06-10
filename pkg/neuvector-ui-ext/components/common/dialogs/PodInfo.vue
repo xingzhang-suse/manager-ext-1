@@ -8,7 +8,19 @@
             Card
         },
         props: {
-            workload: Object
+            workload: Object,
+            hasApps: {
+                type: Boolean,
+                default: () => {
+                    return false;
+                }
+            },
+            hasInterfaces: {
+                type: Boolean,
+                default: () => {
+                    return false;
+                }
+            }
         },
         data() {
             return {
@@ -16,6 +28,11 @@
                 dayjs: dayjs,
                 shortenString: shortenString
             };
+        },
+        computed: {
+            isScanStarted4Pod: function() {
+                return false;
+            }
         },
         methods: {
           close() {

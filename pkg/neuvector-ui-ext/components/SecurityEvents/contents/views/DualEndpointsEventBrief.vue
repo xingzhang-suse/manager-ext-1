@@ -2,9 +2,11 @@
     import Packet from '../../dialogs/Packet';
     import { getPackets, getHost, getWorkload } from '../../../../plugins/security-events-class';
     import { nvVariables, NV_MAP } from '../../../../types/neuvector';
+    import FlagIpFqdn from '../../../common/contents/FlagIpFqdn';
     export default {
         components: {
-            Packet
+            Packet,
+            FlagIpFqdn
         },
         props: {
             index: Number,
@@ -83,34 +85,34 @@
                             <span>
                                 {{ secEvent.endpoint.source.displayName }}
                             </span>
-                            <span v-if="secEvent.endpoint.source.ip">(
-                                <!-- <app-flag-ip-fqdn
-                                    [ip]="secEvent.endpoint.source.ip"
-                                    [countryCode]="secEvent.endpoint.source.countryCode"
-                                    [countryName]="secEvent.endpoint.source.countryName"
-                                    [fqdn]="secEvent.fqdn || ''"
+                            <span v-if="secEvent.endpoint.source.ip">
+                                (<FlagIpFqdn
+                                    :ip="secEvent.endpoint.source.ip"
+                                    :countryCode="secEvent.endpoint.source.countryCode"
+                                    :countryName="secEvent.endpoint.source.countryName"
+                                    :fqdn="secEvent.fqdn || ''"
                                 >
-                                </app-flag-ip-fqdn> -->
-                            )</span>
+                                </FlagIpFqdn>)
+                            </span>
                         </a>
                     </span>
                 </span>
                 <span v-if="secEvent.endpoint.source.id !== 'external'">
                     <span v-if="secEvent.endpoint.source.domain">
-                        <em class="eos-icons icon-18 text-primary">domain</em>
+                        <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
                         <span>
-                            {{ secEvent.endpoint.source.domain }}
+                            {{ secEvent.endpoint.source.domain }} |
                         </span>
                     </span>
                     <span v-if="secEvent.endpoint.source.service">
-                        <em class="eos-icons icon-18 text-primary">system_group</em>
+                        <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
                         <span>
-                            {{ secEvent.endpoint.source.service }}
+                            {{ secEvent.endpoint.source.service }} |
                         </span>
                     </span>
-                    <em class="eos-icons icon-18 text-primary">{{
+                    <!-- <em class="eos-icons icon-18 text-primary">{{
                         secEvent.endpoint.source.icon
-                    }}</em>
+                    }}</em> -->
                     <span
                         class="link"
                         v-if="
@@ -171,13 +173,13 @@
                             {{ secEvent.endpoint.destination.displayName }}
                         </span>
                         <span v-if="secEvent.endpoint.destination.ip">(
-                            <!-- <app-flag-ip-fqdn
-                                [ip]="secEvent.endpoint.destination.ip"
-                                [countryCode]="secEvent.endpoint.destination.countryCode"
-                                [countryName]="secEvent.endpoint.destination.countryName"
-                                [fqdn]="secEvent.fqdn || ''"
+                            <FlagIpFqdn
+                                :ip="secEvent.endpoint.destination.ip"
+                                :countryCode="secEvent.endpoint.destination.countryCode"
+                                :countryName="secEvent.endpoint.destination.countryName"
+                                :fqdn="secEvent.fqdn || ''"
                             >
-                            </app-flag-ip-fqdn> -->
+                            </FlagIpFqdn>
                         )</span>
                         </a>
                     </span>
@@ -186,20 +188,20 @@
                             secEvent.endpoint.destination.id !== 'external'
                         ">
                         <span v-if="secEvent.endpoint.destination.domain">
-                            <em class="eos-icons icon-18 text-primary">domain</em>
+                            <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
                             <span>{{
                                 secEvent.endpoint.destination.domain
-                            }}</span>
+                            }}</span> |
                         </span>
                         <span v-if="secEvent.endpoint.destination.service">
-                            <em class="eos-icons icon-18 text-primary">system_group</em>
+                            <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
                             <span>
                                 {{ secEvent.endpoint.destination.service }}
-                            </span>
+                            </span> |
                         </span>
-                        <em class="eos-icons icon-18 text-primary">{{
+                        <!-- <em class="eos-icons icon-18 text-primary">{{
                             secEvent.endpoint.destination.icon
-                        }}</em>
+                        }}</em> -->
                         <span
                             class="link"
                             v-if="

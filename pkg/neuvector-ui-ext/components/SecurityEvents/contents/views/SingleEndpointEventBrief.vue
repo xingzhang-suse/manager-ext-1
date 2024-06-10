@@ -107,19 +107,19 @@
                     <strong>{{ t('securityEvent.CONTAINER') }}:</strong>
                     <span>
                         <span>
-                        <em class="eos-icons icon-18 text-primary">domain</em>
+                        <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
                         <span>
-                            {{ secEvent.container.domain }}
+                            {{ secEvent.container.domain }} |
                         </span>
                         </span>
                         <span v-if="secEvent.container.id !== ''">
                         <span v-if="secEvent.container.service">
-                            <em class="eos-icons icon-18 text-primary">system_group</em>
+                            <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
                             <span>
-                                {{ secEvent.container.service }}
+                                {{ secEvent.container.service }} |
                             </span>
                         </span>
-                        <em class="eos-icons icon-18 text-primary">workload</em>
+                        <!-- <em class="eos-icons icon-18 text-primary">workload</em> -->
                         <span
                             class="link"
                             v-if="secEvent.container.isHyperlinkEnabled"

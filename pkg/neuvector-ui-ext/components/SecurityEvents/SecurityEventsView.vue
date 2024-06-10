@@ -17,10 +17,11 @@
     import BriefInfo from './contents/BriefInfo';
     import Details from './contents/Details';
     import Packet from './dialogs/Packet';
-    import NodeInfo from '../common/dialog/NodeInfo';
-    import PodInfo from '../common/dialog/PodInfo';
-    import EnforcerInfo from '../common/dialog/EnforcerInfo';
+    import NodeInfo from '../common/dialogs/NodeInfo';
+    import PodInfo from '../common/dialogs/PodInfo';
+    import EnforcerInfo from '../common/dialogs/EnforcerInfo';
     import DownloadCsv from  './buttons/DownloadCsv';
+    import Refresh from '../common/buttons/Refresh';
 
     // library.add(faSomeIcon);
 
@@ -38,7 +39,8 @@
             NodeInfo,
             PodInfo,
             EnforcerInfo,
-            DownloadCsv
+            DownloadCsv,
+            Refresh
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -49,26 +51,7 @@
             }
             this.currentCluster = this.$store.getters['currentCluster'];
             nvVariables.currentCluster = this.currentCluster.id;
-            try {
-                console.log('Security Events');
-                this.authRes = await refreshAuth();
-                nvVariables.user = this.authRes.data.token;
-                this.secEvents = await getSecEvents();
-                this.processedSecEvents = await combineSecurityEvents(this.secEvents, this.$store);
-                console.log('processedSecEvents:', this.processedSecEvents);
-                this.securityEventsDataCtx = nvVariables.dateSliderCtx;
-                this.onQuickFilterChange();
-                this.showPacketModal = nvVariables.showPacketModal;
-                this.packet = nvVariables.packet;
-                this.showHostInfoModal = nvVariables.showHostInfoModal;
-                this.host = nvVariables.host;
-                this.showWorkloadInfoModal = nvVariables.showWorkloadInfoModal;
-                this.workload = nvVariables.workload;
-                this.showEnforcerInfoModal = nvVariables.showEnforcerInfoModal;
-                this.enforcer = nvVariables.enforcer;
-            } catch(error) {
-                console.error(error);
-            }
+            await this.loadData();
         },
         data() {
             return {
@@ -87,13 +70,37 @@
                 showWorkloadInfoModal: null,
                 workload: null,
                 showEnforcerInfoModal: null,
-                enforcer: null
+                enforcer: null,
+                showAdvFilterModal: null
             };
         },
         props: {
-
+            mode: { type: String, default: 'edit' }
         },
         methods: {
+            loadData: async function() {
+                try {
+                    console.log('Security Events');
+                    this.authRes = await refreshAuth();
+                    nvVariables.user = this.authRes.data.token;
+                    this.secEvents = await getSecEvents();
+                    this.processedSecEvents = await combineSecurityEvents(this.secEvents, this.$store);
+                    console.log('processedSecEvents:', this.processedSecEvents);
+                    this.securityEventsDataCtx = nvVariables.dateSliderCtx;
+                    this.onQuickFilterChange();
+                    this.showPacketModal = nvVariables.showPacketModal;
+                    this.packet = nvVariables.packet;
+                    this.showHostInfoModal = nvVariables.showHostInfoModal;
+                    this.host = nvVariables.host;
+                    this.showWorkloadInfoModal = nvVariables.showWorkloadInfoModal;
+                    this.workload = nvVariables.workload;
+                    this.showEnforcerInfoModal = nvVariables.showEnforcerInfoModal;
+                    this.enforcer = nvVariables.enforcer;
+                    this.showAdvFilterModal = nvVariables.showAdvFilterModal;
+                } catch(error) {
+                    console.error(error);
+                }
+            },
             onQuickFilterChange: function() {
                 prepareContext4TwoWayInfinityScroll();
                 console.log('this.securityEventsDataCtx', this.securityEventsDataCtx)
@@ -128,6 +135,9 @@
             },
             closeEnforcerInfoModal: function() {
                 this.showEnforcerInfoModal.value = false;
+            },
+            closeAdvFilterModal: function() {
+                this.showAdvFilterModal.value = false;
             }
         },
         computed: {
@@ -198,12 +208,18 @@
                     <h1 class="m-0">{{ t('sidebar.nav.SECURITY_EVENT') }}</h1>
                 </div>
                 <div class="actions-container">
+                    <div class="pull-right">
+                        <Refresh :reloadData="loadData"/>
+                    </div>
                     <div class="pull-right"
                         v-if="processedSecEvents.cachedSecurityEvents && processedSecEvents.cachedSecurityEvents.length > 0">
                         <DownloadCsv />
                     </div>
                     <div v-if="processedSecEvents.cachedSecurityEvents && processedSecEvents.cachedSecurityEvents.length > 0" class="pull-right" style="margin-right: 10px;">
-                        <AdvancedFilter :isLightTheme="isLightTheme"/>
+                        <AdvancedFilter 
+                            :isLightTheme="isLightTheme"
+                            :autoCompleteData="processedSecEvents.autoCompleteData" 
+                        />
                     </div>
                     <div class="pull-right"  style="margin-right: 20px;">
                         <QuickFilter />
