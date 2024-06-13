@@ -1101,6 +1101,7 @@ export const filterSecEvents = function(): void {
       _excludeFilter(event, nvVariables.securityEventsServiceData.filterItems.excludedKeyword)
     );
   });
+  prepareContext4TwoWayInfinityScroll(nvVariables.dateSliderCtx);
 };
 
 export const parseAdvFilterParam = function(filters: any) {
@@ -1151,7 +1152,7 @@ const _dateFilter = function(dateFrom: number, dataTo: number, reportedTimestamp
 
 const _severityFilter = function(severity: string, selectedSeverities: string[]) {
   return selectedSeverities.length > 0
-    ? selectedSeverities.includes(severity)
+    ? selectedSeverities.includes(severity.toLowerCase())
     : true;
 };
 
@@ -1169,11 +1170,10 @@ const _locationFilter = function(location: string[], selectedLocations: string[]
 };
 
 const _categoryFilter = function(category: string[], selectedCategories: string[]) {
-  console.log(category, selectedCategories)
   let res = false;
   for (let selectedCategory of selectedCategories) {
     if (selectedCategory) {
-      if (category.includes(selectedCategory)) {
+      if (category.includes(selectedCategory.toLowerCase())) {
         res = true;
         break;
       }

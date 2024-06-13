@@ -8,8 +8,7 @@
     import { refreshAuth } from '../../plugins/neuvector-class'; 
     import TimeSparklingChart from './timeSlider/TimeSparklingChart';
     import TimeSlider from './timeSlider/TimeSlider';
-    import { prepareContext4TwoWayInfinityScroll } from '../../utils/security-events';
-    import { NumberFilter } from 'ag-grid-community';
+    import { prepareContext4TwoWayInfinityScroll, filterSecEvents } from '../../utils/security-events';
     import { VTooltip, VPopover, VClosePopover } from 'v-tooltip';
     // import { library } from '@fortawesome/fontawesome';
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -87,7 +86,8 @@
                     this.processedSecEvents = await combineSecurityEvents(this.secEvents, this.$store);
                     console.log('processedSecEvents:', this.processedSecEvents);
                     this.securityEventsDataCtx = nvVariables.dateSliderCtx;
-                    this.onQuickFilterChange();
+                    prepareContext4TwoWayInfinityScroll(this.securityEventsDataCtx);
+                    console.log('this.securityEventsDataCtx', this.securityEventsDataCtx)
                     this.showPacketModal = nvVariables.showPacketModal;
                     this.packet = nvVariables.packet;
                     this.showHostInfoModal = nvVariables.showHostInfoModal;
@@ -97,13 +97,10 @@
                     this.showEnforcerInfoModal = nvVariables.showEnforcerInfoModal;
                     this.enforcer = nvVariables.enforcer;
                     this.showAdvFilterModal = nvVariables.showAdvFilterModal;
+                    filterSecEvents();
                 } catch(error) {
                     console.error(error);
                 }
-            },
-            onQuickFilterChange: function() {
-                prepareContext4TwoWayInfinityScroll();
-                console.log('this.securityEventsDataCtx', this.securityEventsDataCtx)
             },
             getOpenedRec: function(evt, index, page) {
                 if (evt.target.checked) {

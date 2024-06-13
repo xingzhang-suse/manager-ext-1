@@ -98,7 +98,7 @@
         <div class="row mr-0">
             <div class="col-sm-10 pl-0">
                 <div
-                    v-if="secEvent.container.domain !== ''"
+                    v-if="secEvent.container.id !== ''"
                     class="auto-hide"
                     v-tooltip.top="{
                         content: secEvent.container.name
@@ -106,36 +106,36 @@
                     ref="#ttSecEventContainerName">
                     <strong>{{ t('securityEvent.CONTAINER') }}:</strong>
                     <span>
-                        <span>
-                        <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
-                        <span>
-                            {{ secEvent.container.domain }} |
-                        </span>
-                        </span>
-                        <span v-if="secEvent.container.id !== ''">
-                        <span v-if="secEvent.container.service">
-                            <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
+                        <span v-if="secEvent.container.domain !== ''">
+                            <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
                             <span>
-                                {{ secEvent.container.service }} |
+                                {{ secEvent.container.domain }} |
                             </span>
                         </span>
-                        <!-- <em class="eos-icons icon-18 text-primary">workload</em> -->
-                        <span
-                            class="link"
-                            v-if="secEvent.container.isHyperlinkEnabled"
-                            @click="
-                                showContainerDetails(
-                                    $event,
-                                    secEvent.container,
-                                    secEvent.host_name
-                                )
-                            ">
-                            {{ secEvent.container.name }}
-                        </span>
-                        <span
-                            v-if="!secEvent.container.isHyperlinkEnabled">
-                            {{ secEvent.container.name }}
-                        </span>
+                        <span>
+                            <span v-if="secEvent.container.service">
+                                <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
+                                <span>
+                                    {{ secEvent.container.service }} |
+                                </span>
+                            </span>
+                            <!-- <em class="eos-icons icon-18 text-primary">workload</em> -->
+                            <span
+                                class="link"
+                                v-if="secEvent.container.isHyperlinkEnabled"
+                                @click="
+                                    showContainerDetails(
+                                        $event,
+                                        secEvent.container,
+                                        secEvent.host_name
+                                    )
+                                ">
+                                {{ secEvent.container.name }}
+                            </span>
+                            <span
+                                v-if="!secEvent.container.isHyperlinkEnabled">
+                                {{ secEvent.container.name }}
+                            </span>
                         </span>
                     </span>
                 </div>
@@ -153,7 +153,7 @@
                     {{ t('threat.VIEW_PACKET') }}
                 </button>
             </div>
-            <div
+            <!-- <div
                 class="mt-1 col-sm-2 p-0"
                 v-if="
                     secEvent.type.name === 'violation' &&
@@ -193,7 +193,7 @@
                     <em class="fa fa-edit fa-lg mr-sm"></em>
                     {{ t('securityEvent.REVIEW_RULE') }}
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
