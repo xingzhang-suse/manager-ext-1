@@ -228,7 +228,7 @@
                 </span>
             </div>
             <div
-                class="mt-1 col-sm-2 padding-0"
+                class="mt-1 col-sm-2 p-0"
                 v-if="secEvent.type.name === 'threat'">
                 <button
                     v-if="secEvent.details.message.cap_len"
@@ -238,7 +238,7 @@
                     {{ t('threat.VIEW_PACKET') }}
                 </button>
             </div>
-            <div
+            <!-- <div
                 class="mt-1 col-sm-2 padding-0"
                 v-if="
                     secEvent.type.name === 'violation' &&
@@ -275,7 +275,7 @@
                     <em class="fa fa-edit fa-lg mr-sm"></em>
                     {{ t('securityEvent.REVIEW_RULE') }}
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

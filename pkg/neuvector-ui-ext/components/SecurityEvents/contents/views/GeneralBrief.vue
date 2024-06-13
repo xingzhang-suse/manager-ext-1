@@ -19,7 +19,7 @@
                     content: secEvent.name,
                 }"
                 ref="ttSecEventName">
-                <FontAwesomeIcon icon="faInfo"/>
+                <!-- <FontAwesomeIcon icon="faInfo"/> -->
                 <span
                     :class="'pull-left mt-1 '+ secEvent.type.cssColor"
                     aria-hidden="true">

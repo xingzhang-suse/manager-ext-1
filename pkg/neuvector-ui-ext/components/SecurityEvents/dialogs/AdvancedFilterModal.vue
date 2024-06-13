@@ -56,7 +56,7 @@
               includedKeyword: '',
               excludedKeyword: ''
             };
-            
+            document.getElementById('quick-filter').value = '';
             let filterParam = parseAdvFilterParam(this.filters);
             loadFilters(filterParam);
             filterSecEvents();
@@ -77,30 +77,30 @@
               dateFrom: 0,
               dateTo: 0,
               severity: {
-                error: false,
-                critical: false,
-                warning: false,
-                info: false
+                error: nvVariables.securityEventsServiceData.filterItems.severity.includes('error'),
+                critical: nvVariables.securityEventsServiceData.filterItems.severity.includes('critical'),
+                warning: nvVariables.securityEventsServiceData.filterItems.severity.includes('warning'),
+                info: nvVariables.securityEventsServiceData.filterItems.severity.includes('info'),
               },
               location: {
-                host: false,
-                container: false
+                host: nvVariables.securityEventsServiceData.filterItems.location.includes('host'),
+                container: nvVariables.securityEventsServiceData.filterItems.location.includes('container'),
               },
               category: {
-                network: false,
-                package: false,
-                file: false,
-                tunnel: false,
-                process: false,
-                priviledge: false,
+                network: nvVariables.securityEventsServiceData.filterItems.category.includes('network'),
+                package: nvVariables.securityEventsServiceData.filterItems.category.includes('package'),
+                file: nvVariables.securityEventsServiceData.filterItems.category.includes('file'),
+                tunnel: nvVariables.securityEventsServiceData.filterItems.category.includes('tunnel'),
+                process: nvVariables.securityEventsServiceData.filterItems.category.includes('process'),
+                priviledge: nvVariables.securityEventsServiceData.filterItems.category.includes('priviledge'),
               },
-              other: false,
-              host: '',
-              source: '',
-              destination: '',
-              domains: [],
+              other: nvVariables.securityEventsServiceData.filterItems.other.length > 0,
+              host: nvVariables.securityEventsServiceData.filterItems.host,
+              source: nvVariables.securityEventsServiceData.filterItems.source,
+              destination: nvVariables.securityEventsServiceData.filterItems.destination,
+              domains: nvVariables.securityEventsServiceData.filterItems.selectedDomains,
               includedKeyword: nvVariables.securityEventsServiceData.filterItems.includedKeyword,
-              excludedKeyword: ''
+              excludedKeyword: nvVariables.securityEventsServiceData.filterItems.excludedKeyword
             }
           }
         }
