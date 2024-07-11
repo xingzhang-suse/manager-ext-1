@@ -163,7 +163,7 @@
                         <div class="grid-area">
                             <VulnerabilityItemsTable :isLightTheme="isLightTheme" :vulQueryData="vulQueryData" :vulQuery="vulQuery" @refresh="triggerRefresh" @togglePieChart="togglePieChart" @selectedVul="setSelectedVul"></VulnerabilityItemsTable>
                             <div v-if="selectedVul">
-                                <VulnerabilityItemsChart v-if="pieChartActive"></VulnerabilityItemsChart>
+                                <VulnerabilityItemsChart :countDistribution="vulQueryData.summary.count_distribution" v-if="pieChartActive"></VulnerabilityItemsChart>
                                 <VulnerabilityItemsDetail :selectedVul="selectedVul" :isLightTheme="isLightTheme" v-else></VulnerabilityItemsDetail>
                             </div>
                         </div>

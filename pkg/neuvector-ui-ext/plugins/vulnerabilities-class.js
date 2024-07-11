@@ -25,3 +25,23 @@ export async function postCVEProfile(config) {
         data: config
     });
 }
+
+export async function getNodeBriefById(id) {
+    return axios({
+        url: getSSOUrl(PATH.NODES_URL),
+        method: 'get',
+        params: {
+            id,
+        }
+    });
+}
+
+export async function getContainerBriefById(id) {
+    return axios({
+        url: getSSOUrl(PATH.PLAIN_CONTAINER_URL),
+        method: 'get',
+        params: {
+            id,
+        }
+    });
+}
