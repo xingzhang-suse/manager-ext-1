@@ -3,6 +3,7 @@
     import Loading from '@shell/components/Loading';
     import ButtonDropdown from '@shell/components/ButtonDropdown';
     import SimpleBox from '@shell/components/SimpleBox';
+    import LabeledSelect from '@shell/components/form/LabeledSelect';
     import TopVulnerableNodesBarChart from './charts/TopVulnerableNodesBarChart.vue';
     import TopVulnerableImagesBarChart from './charts/TopVulnerableImagesBarChart.vue';
     import VulnerabilityItemsTable from './contents/VulnerabilityItemsTable.vue';
@@ -12,6 +13,7 @@
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
     import { refreshAuth } from '../../plugins/neuvector-class'; 
+    import { initVulQuery } from '../../utils/vulnerabilities';
 
     export default {
         components: {
@@ -19,6 +21,7 @@
             Loading,
             ButtonDropdown,
             SimpleBox,
+            LabeledSelect,
             TopVulnerableNodesBarChart,
             TopVulnerableImagesBarChart,
             VulnerabilityItemsTable,
@@ -61,28 +64,7 @@
                     this.t('scan.report.view.REGISTRY')
                 ],
                 selectedView: this.t('scan.report.view.ALL'),
-                vulQuery: {
-                    last_modified_timestamp: undefined,
-                    last_modified_timestamp_option: 'custom',
-                    publishedType: 'before',
-                    publishedTime: undefined,
-                    packageType: 'all',
-                    severityType: 'all',
-                    scoreType: 'v3',
-                    scoreV3: [0, 10],
-                    scoreV2: [0, 10],
-                    matchTypeService: 'equals',
-                    serviceName: '',
-                    matchTypeNs: 'equals',
-                    selectedDomains: [],
-                    matchTypeImage: 'equals',
-                    imageName: '',
-                    matchTypeNode: 'equals',
-                    nodeName: '',
-                    matchTypeContainer: 'equals',
-                    containerName: '',
-                    viewType: 'all',
-                },
+                vulQuery: initVulQuery(),
                 pieChartActive: false,
                 selectedVul: null,
                 vulQueryData: Object
@@ -122,21 +104,19 @@
         <div class="screen-area">
             <div id="scan" class="padding-top-0">
                 <div class="clearfix">
-                    <h1 class="font-weight-light" id="vulnerabilities-title">
-                        {{ t('sidebar.nav.SCAN') }}
-                    </h1>
-                    <div class="fixed-header-actions pt-20">
-                        <div class="bulk bulk">
-                            <label for="viewMenu" class="font-weight-normal mb-0">
-                                {{ t('scan.report.view.TITLE') }}:
-                            </label>
-                            <ButtonDropdown 
-                                class="ml-20 mr-20"
-                                :buttonLabel="selectedView"
-                                :value="selectedView"
-                                :dropdownOptions="vulnerabilityViewsOptions" 
-                                size="sm"
-                                @click-action="changeView" 
+                    <div class="fixed-header-actions">
+                        <div class="bulk bulk d-flex align-items-center">
+                            <h1 class="font-weight-light" id="vulnerabilities-title">
+                                {{ t('sidebar.nav.SCAN') }}
+                            </h1>
+                            <LabeledSelect
+                                class="view-select ml-15"
+                                v-model="selectedView"
+                                :close-on-select="true"
+                                :multiple="false"
+                                :label="t('scan.report.view.TITLE')"
+                                :options="vulnerabilityViewsOptions"
+                                @input="changeView"
                             />
                         </div>
                         <div class="search row">
@@ -239,6 +219,9 @@
             display: grid;
             grid-template-columns: 60% 40%;
             grid-gap: 20px;
+        }
+        .view-select {
+            max-width: 160px;
         }
     }
 </style>

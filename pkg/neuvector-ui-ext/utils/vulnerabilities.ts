@@ -264,3 +264,7 @@ export function prepareEntryData(cve: any, reportType: string) {
   }
   return cve;
 }
+
+export function initVulQuery() {
+  return JSON.parse(JSON.stringify(NV_MAP.INIT_VUL_ADV_FILTER));
+}

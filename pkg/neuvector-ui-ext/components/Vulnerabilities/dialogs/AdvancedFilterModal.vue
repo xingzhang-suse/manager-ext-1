@@ -3,106 +3,48 @@
     import Checkbox from '@components/Form/Checkbox/Checkbox';
     import LabeledSelect from '@shell/components/form/LabeledSelect';
     import { LabeledInput } from '@components/Form/LabeledInput';
-    import { parseAdvFilterParam, filterSecEvents, loadFilters } from '../../../utils/security-events';
-    import { nvVariables } from '../../../types/neuvector';
+    import { RadioGroup } from '@components/Form/Radio';
 
     export default {
         components: {
           Card,
           Checkbox,
           LabeledSelect,
-          LabeledInput
+          LabeledInput,
+          RadioGroup
         },
         props: {
             isLightTheme: Boolean,
-            autoCompleteData: Object,
-            mode: { type: String, default: 'edit' }
+            advFilter: Object
         },
-        fetch(){
-          console.log("autoCompleteData", this.autoCompleteData)
+        fetch() {
+          console.log(this.advFilter);
         },
         methods: {
           close() {
             this.$emit('close');
           },
-          update() {},
           reset() {
-            this.filters = {
-              dateFrom: nvVariables.securityEventsServiceData.filterItems.dateFrom,
-              dateTo: nvVariables.securityEventsServiceData.filterItems.dateTo,
-              severity: {
-                error: false,
-                critical: false,
-                warning: false,
-                info: false
-              },
-              location: {
-                host: false,
-                container: false
-              },
-              category: {
-                network: false,
-                package: false,
-                file: false,
-                tunnel: false,
-                process: false,
-                priviledge: false,
-              },
-              other: false,
-              host: '',
-              source: '',
-              destination: '',
-              domains: [],
-              includedKeyword: '',
-              excludedKeyword: ''
-            };
-            document.getElementById('quick-filter').value = '';
-            let filterParam = parseAdvFilterParam(this.filters);
-            loadFilters(filterParam);
-            filterSecEvents();
-            this.$emit('close');
+            this.$emit('close', { reset: true });
           },
           apply() {
-            this.filters.dateFrom = nvVariables.securityEventsServiceData.filterItems.dateFrom;
-            this.filters.dateTo = nvVariables.securityEventsServiceData.filterItems.dateTo;
-            let filterParam = parseAdvFilterParam(this.filters);
-            loadFilters(filterParam);
-            filterSecEvents();
-            this.$emit('close');
+            this.$emit('close', this.advFilter);
           }
         },
         data() {
           return {
-            filters: {
-              dateFrom: 0,
-              dateTo: 0,
-              severity: {
-                error: nvVariables.securityEventsServiceData.filterItems.severity.includes('error'),
-                critical: nvVariables.securityEventsServiceData.filterItems.severity.includes('critical'),
-                warning: nvVariables.securityEventsServiceData.filterItems.severity.includes('warning'),
-                info: nvVariables.securityEventsServiceData.filterItems.severity.includes('info'),
-              },
-              location: {
-                host: nvVariables.securityEventsServiceData.filterItems.location.includes('host'),
-                container: nvVariables.securityEventsServiceData.filterItems.location.includes('container'),
-              },
-              category: {
-                network: nvVariables.securityEventsServiceData.filterItems.category.includes('network'),
-                package: nvVariables.securityEventsServiceData.filterItems.category.includes('package'),
-                file: nvVariables.securityEventsServiceData.filterItems.category.includes('file'),
-                tunnel: nvVariables.securityEventsServiceData.filterItems.category.includes('tunnel'),
-                process: nvVariables.securityEventsServiceData.filterItems.category.includes('process'),
-                priviledge: nvVariables.securityEventsServiceData.filterItems.category.includes('priviledge'),
-              },
-              other: nvVariables.securityEventsServiceData.filterItems.other.length > 0,
-              host: nvVariables.securityEventsServiceData.filterItems.host,
-              source: nvVariables.securityEventsServiceData.filterItems.source,
-              destination: nvVariables.securityEventsServiceData.filterItems.destination,
-              domains: nvVariables.securityEventsServiceData.filterItems.selectedDomains,
-              includedKeyword: nvVariables.securityEventsServiceData.filterItems.includedKeyword,
-              excludedKeyword: nvVariables.securityEventsServiceData.filterItems.excludedKeyword
-            }
-          }
+            scoredOptions: [
+              { label: this.t('setting.ALL'), value: 'all' },
+              { label: this.t('scan.WITH_FIX'), value: 'withFix' },
+              { label: this.t('scan.WITHOUT_FIX'), value: 'withoutFix' },
+            ],
+            severityOptions: [
+              { label: this.t('setting.ALL'), value: 'all' },
+              { label: this.t('enum.HIGH'), value: 'high' },
+              { label: this.t('enum.MEDIUM'), value: 'medium' },
+              { label: this.t('enum.LOW'), value: 'low' },
+            ]
+          };
         }
     };
 </script>
@@ -118,19 +60,15 @@
         </template>
         <template v-slot:body>
           <div class="row mt-2">
-            <div class="col span-3">{{ t('securityEvent.SEVERITY') }}</div>
+            <div class="col span-3">{{ t('cis.report.gridHeader.SCORED') }}</div>
             <div class="col span-9">
-              <Checkbox v-model="filters.severity.error" :label="t('enum.ERROR')" @input="update"/>
-              <Checkbox v-model="filters.severity.critical" :label="t('enum.CRITICAL')" @input="update"/>
-              <Checkbox v-model="filters.severity.warning" :label="t('enum.WARNING')" @input="update"/>
-              <Checkbox v-model="filters.severity.info" :label="t('enum.INFO')" @input="update"/>
+              <RadioGroup name="score_filter" :options="scoredOptions" :row="true" />
             </div>
           </div>
           <div class="row mt-2">
-            <div class="col span-3">{{ t('securityEvent.LOCATION') }}</div>
+            <div class="col span-3">{{ t('profile.TITLE') }}</div>
             <div class="col span-9">
-              <Checkbox v-model="filters.location.host" :label="t('securityEvent.label.HOST')" @input="update"/>
-              <Checkbox v-model="filters.location.container" :label="t('securityEvent.label.CONTAINER')" @input="update"/>
+              <RadioGroup name="severity_filter" :options="severityOptions" :row="true" />
             </div>
           </div>
           <div class="row mt-2">
