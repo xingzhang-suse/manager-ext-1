@@ -9,7 +9,8 @@
     import VulnerabilityItemsTable from './contents/VulnerabilityItemsTable.vue';
     import VulnerabilityItemsChart from './contents/VulnerabilityItemsChart.vue';
     import VulnerabilityItemsDetail from './contents/VulnerabilityItemsDetail.vue';
-    import { postVulnerabilityQuery } from '../../plugins/vulnerabilities-class';
+    import AdvancedFilterModal from './dialogs/AdvancedFilterModal.vue';
+    import { getDomains, postVulnerabilityQuery } from '../../plugins/vulnerabilities-class';
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
     import { refreshAuth } from '../../plugins/neuvector-class'; 
@@ -27,6 +28,7 @@
             VulnerabilityItemsTable,
             VulnerabilityItemsChart,
             VulnerabilityItemsDetail,
+            AdvancedFilterModal,
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -41,8 +43,11 @@
                 console.log('Vulnerabilities');
                 this.authRes = await refreshAuth();
                 nvVariables.user = this.authRes.data.token;
+                this.domains = (await getDomains()).data.domains
+                    .map(domain => domain.name)
+                    .filter(domain => domain.charAt(0) !== '_');
                 this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
-                console.log(this.vulQueryData);
+                console.log(this.domains, this.vulQueryData);
             } catch(error) {
 
             }
@@ -67,7 +72,9 @@
                 vulQuery: initVulQuery(),
                 pieChartActive: false,
                 selectedVul: null,
-                vulQueryData: Object
+                vulQueryData: Object,
+                domains: Array,
+                showAdvFilter: false,
             };
         },
         methods: {
@@ -79,6 +86,29 @@
             },
             setSelectedVul(selectedVul) {
                 this.selectedVul = selectedVul;
+            },
+            async setAdvFilter(filter) {
+                if (filter) {
+                    this.vulQuery = {...this.vulQuery, ...filter};
+                } else {
+                    this.vulQuery = {...initVulQuery(), viewType: this.vulQuery.viewType };
+                }
+                this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
+            },
+            openAdvFilter() {
+                nvVariables.showAdvFilterModal.value = true;
+                this.showAdvFilter = true;
+            },
+            closeAdvFilter(filter) {
+                if (filter) {
+                    if (filter.reset) {
+                        this.setAdvFilter();
+                    } else {
+                        this.setAdvFilter(filter);
+                    }
+                }
+                nvVariables.showAdvFilterModal.value = false;
+                this.showAdvFilter = false;
             },
             async changeView(value) {
                 this.selectedView = value;
@@ -141,7 +171,7 @@
                     </div>
                     <SimpleBox class="mt-10">
                         <div class="grid-area">
-                            <VulnerabilityItemsTable :isLightTheme="isLightTheme" :vulQueryData="vulQueryData" :vulQuery="vulQuery" @refresh="triggerRefresh" @togglePieChart="togglePieChart" @selectedVul="setSelectedVul"></VulnerabilityItemsTable>
+                            <VulnerabilityItemsTable :isLightTheme="isLightTheme" :vulQueryData="vulQueryData" :vulQuery="vulQuery" @refresh="triggerRefresh" @togglePieChart="togglePieChart" @selectedVul="setSelectedVul" @openAdvFilter="openAdvFilter"></VulnerabilityItemsTable>
                             <div v-if="selectedVul">
                                 <VulnerabilityItemsChart :countDistribution="vulQueryData.summary.count_distribution" v-if="pieChartActive"></VulnerabilityItemsChart>
                                 <VulnerabilityItemsDetail :selectedVul="selectedVul" :isLightTheme="isLightTheme" v-else></VulnerabilityItemsDetail>
@@ -151,10 +181,12 @@
                 </div>
             </div>
         </div>
+        <AdvancedFilterModal v-if="showAdvFilter" :isLightTheme="isLightTheme" :vulQuery="vulQuery" :domains="domains" @close="closeAdvFilter"></AdvancedFilterModal>
     </div>
 </template>
 
 <style lang="scss" scoped>
+    @import '../../styles/vulnerabilities.scss';
 
     @media print {
         @page {
@@ -204,24 +236,6 @@
             height: 0;
             overflow: hidden;
             width: 1000px;
-        }
-        .vul-charts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            grid-gap: 20px;
-
-            .chart-title {
-                display: flex;
-                justify-content: center;
-            }
-        }
-        .grid-area {
-            display: grid;
-            grid-template-columns: 60% 40%;
-            grid-gap: 20px;
-        }
-        .view-select {
-            max-width: 160px;
         }
     }
 </style>

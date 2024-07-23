@@ -45,3 +45,10 @@ export async function getContainerBriefById(id) {
         }
     });
 }
+
+export async function getDomains() {
+    return axios({
+        url: getSSOUrl(PATH.DOMAIN_URL),
+        method: 'get'
+    })
+}
