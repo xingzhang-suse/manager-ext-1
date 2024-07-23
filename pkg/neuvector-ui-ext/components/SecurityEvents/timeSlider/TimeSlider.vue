@@ -75,6 +75,14 @@
         width: auto;
     }
     .multi-range-slider .bar-inner {
-        background-color: #257532
+        background-color: rgb(61, 152, 211);
+        color: rgb(61, 152, 211);
+        border: none;
+        box-shadow: none;
+    }
+    .multi-range-slider .thumb::before {
+        box-shadow: none;
+        border-color: rgb(61, 152, 211);
+        background-color: rgb(61, 152, 211);
     }
 </style>

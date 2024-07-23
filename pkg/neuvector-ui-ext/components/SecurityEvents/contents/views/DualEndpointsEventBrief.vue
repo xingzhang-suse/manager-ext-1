@@ -3,10 +3,16 @@
     import { getPackets, getHost, getWorkload } from '../../../../plugins/security-events-class';
     import { nvVariables, NV_MAP } from '../../../../types/neuvector';
     import FlagIpFqdn from '../../../common/contents/FlagIpFqdn';
+    import { EOS_CLOUD_FILLED, EOS_DOMAIN_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_CLUSTER_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
     export default {
         components: {
             Packet,
-            FlagIpFqdn
+            FlagIpFqdn,
+            EOS_CLOUD_FILLED,
+            EOS_DOMAIN_FILLED,
+            EOS_SYSTEM_GROUP_FILLED,
+            EOS_CLUSTER_FILLED,
+            EOS_POD_FILLED
         },
         props: {
             index: Number,
@@ -65,7 +71,7 @@
 
 <template>
     <div>
-        <div class="row mr-0">
+        <div class="row ml-0">
             <div
                 class="col-sm-10 pl-0 auto-hide"
                 v-tooltip.top="{
@@ -79,9 +85,7 @@
                         <a
                             :href="secEvent.endpoint.source.externalURL"
                             target="_blank">
-                            <em class="eos-icons icon-18 text-primary">{{
-                                secEvent.endpoint.source.icon
-                            }}</em>
+                            <EOS_CLOUD_FILLED  size="base" color="#3d98d3"/>
                             <span>
                                 {{ secEvent.endpoint.source.displayName }}
                             </span>
@@ -99,20 +103,21 @@
                 </span>
                 <span v-if="secEvent.endpoint.source.id !== 'external'">
                     <span v-if="secEvent.endpoint.source.domain">
-                        <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
+                        <EOS_DOMAIN_FILLED size="base" />
                         <span>
                             {{ secEvent.endpoint.source.domain }} |
                         </span>
                     </span>
                     <span v-if="secEvent.endpoint.source.service">
-                        <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
+                        <EOS_SYSTEM_GROUP_FILLED size="base" />
                         <span>
                             {{ secEvent.endpoint.source.service }} |
                         </span>
                     </span>
-                    <!-- <em class="eos-icons icon-18 text-primary">{{
-                        secEvent.endpoint.source.icon
-                    }}</em> -->
+                    <EOS_CLOUD_FILLED v-if="secEvent.endpoint.source.icon === 'cloud'" size="base"/>
+                    <EOS_CLUSTER_FILLED v-if="secEvent.endpoint.source.icon === 'cluster'" size="base"/>
+                    <EOS_POD_FILLED v-if="secEvent.endpoint.source.icon === 'workload'" size="base"/>
+                    <EOS_SYSTEM_GROUP_FILLED v-if="secEvent.endpoint.source.icon === 'system_group'" size="base"/>
                     <span
                         class="link"
                         v-if="
@@ -150,7 +155,7 @@
                     </span>
             </div>
         </div>
-        <div class="row mr-0">
+        <div class="row ml-0">
             <div
                 class="col-sm-10 pl-0 auto-hide"
                 v-tooltip.top="{
@@ -188,20 +193,21 @@
                             secEvent.endpoint.destination.id !== 'external'
                         ">
                         <span v-if="secEvent.endpoint.destination.domain">
-                            <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
+                            <EOS_DOMAIN_FILLED size="base" />
                             <span>{{
                                 secEvent.endpoint.destination.domain
                             }}</span> |
                         </span>
                         <span v-if="secEvent.endpoint.destination.service">
-                            <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
+                            <EOS_SYSTEM_GROUP_FILLED size="base" />
                             <span>
                                 {{ secEvent.endpoint.destination.service }}
                             </span> |
                         </span>
-                        <!-- <em class="eos-icons icon-18 text-primary">{{
-                            secEvent.endpoint.destination.icon
-                        }}</em> -->
+                        <EOS_CLOUD_FILLED v-if="secEvent.endpoint.destination.icon === 'cloud'" size="base"/>
+                        <EOS_CLUSTER_FILLED v-if="secEvent.endpoint.destination.icon === 'cluster'" size="base"/>
+                        <EOS_POD_FILLED v-if="secEvent.endpoint.destination.icon === 'workload'" size="base"/>
+                        <EOS_SYSTEM_GROUP_FILLED v-if="secEvent.endpoint.destination.icon === 'system_group'" size="base"/>
                         <span
                             class="link"
                             v-if="
@@ -232,7 +238,7 @@
                 v-if="secEvent.type.name === 'threat'">
                 <button
                     v-if="secEvent.details.message.cap_len"
-                    class="mat-button btn-sec-event pull-left"
+                    class="mat-button btn-sec-event role-primary pull-left"
                     @click="showPacket(secEvent.details.id, $event)">
                     <em class="icon-envelope-letter mr-sm"></em>
                     {{ t('threat.VIEW_PACKET') }}

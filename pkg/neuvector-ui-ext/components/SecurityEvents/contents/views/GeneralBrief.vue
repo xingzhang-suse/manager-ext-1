@@ -1,11 +1,19 @@
 <script>
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import { EOS_BUG_REPORT_FILLED, EOS_DO_NOT_DISTURB_FILLED, EOS_WARNING_FILLED } from "eos-icons-vue2";
+    import { NV_CONST } from '../../../../types/neuvector';
     export default {
         components: {
-            FontAwesomeIcon
+            EOS_BUG_REPORT_FILLED,
+            EOS_DO_NOT_DISTURB_FILLED,
+            EOS_WARNING_FILLED
         },
         props: {
             secEvent: Object
+        },
+        data() {
+            return {
+                NV_CONST: NV_CONST
+            };
         }
     };
 </script>
@@ -19,7 +27,9 @@
                     content: secEvent.name,
                 }"
                 ref="ttSecEventName">
-                <!-- <FontAwesomeIcon icon="faInfo"/> -->
+                <EOS_BUG_REPORT_FILLED v-if="secEvent.type.name === NV_CONST.SEC_EVENT.TYPE.THREAT" size="base"/>
+                <EOS_DO_NOT_DISTURB_FILLED v-if="secEvent.type.name === NV_CONST.SEC_EVENT.TYPE.VIOLATION" size="base"/>
+                <EOS_WARNING_FILLED v-if="secEvent.type.name === NV_CONST.SEC_EVENT.TYPE.INCIDENT" size="base"/>
                 <span
                     :class="'pull-left mt-1 '+ secEvent.type.cssColor"
                     aria-hidden="true">
