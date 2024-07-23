@@ -5137,16 +5137,6 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
 
-bootstrap4@^0.0.1-security:
-  version "0.0.1-security"
-  resolved "https://registry.yarnpkg.com/bootstrap4/-/bootstrap4-0.0.1-security.tgz#598920d54afcb2ae3ad7351acabc57e3942d9c49"
-  integrity sha512-ZahLXPrm/csSTx4Wk6k7ytPnMCW+9pLv7KskCQwYQFIDo292v8Zh9QVLXwFm4zFOAxryVKumuvPVECTbZdPLYw==
-
-bootstrap@^5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.3.tgz#de35e1a765c897ac940021900fcbb831602bac38"
-  integrity sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==
-
 bowser@^2.11.0:
   version "2.11.0"
   resolved "https://registry.npmjs.org/bowser/-/bowser-2.11.0.tgz#5ca3c35757a7aa5771500c70a73a9f91ef420a8f"
@@ -7806,6 +7796,11 @@ entities@~2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/entities/-/entities-2.1.0.tgz#992d3129cf7df6870b96c57858c249a120f8b8b5"
   integrity sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==
+
+eos-icons-vue2@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eos-icons-vue2/-/eos-icons-vue2-1.1.0.tgz#fc3357350a636c220ec4a3d5bddc8a0fd0ac2f3a"
+  integrity sha512-WA3um3RsKnyqRSGvBClPF2eneH7XW6/6sd3lE+TWYv7QmnpJN6roYZbrkPRgtTUnr888UkJdGZwR9HqZeXhv6g==
 
 errno@^0.1.3, errno@~0.1.7:
   version "0.1.8"

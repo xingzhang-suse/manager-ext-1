@@ -281,7 +281,7 @@
                             id="detail-close"
                             class="btn-link pull-right sec-fixed-close"
                             @click="closeDetails('sec-' + index)">
-                            <em class="icon-close text-primary"></em>
+                            <em class="icon-close"></em>
                         </button>
                         <Details :secEvent="secEvent"/>
                     </div>

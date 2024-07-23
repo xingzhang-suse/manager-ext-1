@@ -19,9 +19,7 @@
         <hr style="margin: 5px auto;"/>
         <div class="row message-box-wrap">
             <div class="full-width-panel">
-                <div class="full-width-summary">
-                    <span :class="'label ' + secEvent.details.message.cssColor">{{ t('nodes.gridHeader.MESSAGE') }}</span><br/>
-                </div>
+                <div :class="'label text-bold ' + secEvent.details.message.cssColor">{{ t('nodes.gridHeader.MESSAGE') }}</div>
                 <div class="full-width-center message-box">
                     <ThreatDetails v-if="secEvent.type.name.toLowerCase() === 'threat'" :secEvent="secEvent" />
                     <IncidentDetails v-if="secEvent.type.name.toLowerCase() === 'incident'" :secEvent="secEvent" />

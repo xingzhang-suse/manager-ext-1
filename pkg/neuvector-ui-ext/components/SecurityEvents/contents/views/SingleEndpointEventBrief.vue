@@ -3,9 +3,14 @@
     import Packet from '../../dialogs/Packet';
     import { getPackets, getHost, getWorkload } from '../../../../plugins/security-events-class';
     import { nvVariables } from '../../../../types/neuvector';
+    import { EOS_CLOUD_FILLED, EOS_DOMAIN_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
     export default {
         components: {
-            Packet
+            Packet,
+            EOS_CLOUD_FILLED,
+            EOS_DOMAIN_FILLED,
+            EOS_SYSTEM_GROUP_FILLED,
+            EOS_POD_FILLED
         },
         props: {
             index: Number,
@@ -61,9 +66,9 @@
 
 <template>
     <div>
-        <div class="row mr-0">
+        <div class="row ml-0">
         <div
-            class="col-sm-2 pl-0 auto-hide"
+            class="col-sm-10 pl-0 auto-hide"
             v-tooltip.top="{
                 content: secEvent.host_name
             }"
@@ -83,7 +88,7 @@
         </div>
         <div
             v-if="secEvent.details.action"
-            class="col-sm-offset-8 col-sm-2 pl-0 sec-ellipsis-item"
+            class="col-sm-2 pl-0 auto-hide"
             v-tooltip.top="{
                 content: secEvent.details.action.name
             }">
@@ -95,7 +100,7 @@
             </span>
         </div>
         </div>
-        <div class="row mr-0">
+        <div class="row ml-0">
             <div class="col-sm-10 pl-0">
                 <div
                     v-if="secEvent.container.id !== ''"
@@ -107,19 +112,19 @@
                     <strong>{{ t('securityEvent.CONTAINER') }}:</strong>
                     <span>
                         <span v-if="secEvent.container.domain !== ''">
-                            <!-- <em class="eos-icons icon-18 text-primary">domain</em> -->
+                            <EOS_DOMAIN_FILLED size="base" />
                             <span>
                                 {{ secEvent.container.domain }} |
                             </span>
                         </span>
                         <span>
                             <span v-if="secEvent.container.service">
-                                <!-- <em class="eos-icons icon-18 text-primary">system_group</em> -->
+                                <EOS_SYSTEM_GROUP_FILLED size="base" />
                                 <span>
                                     {{ secEvent.container.service }} |
                                 </span>
                             </span>
-                            <!-- <em class="eos-icons icon-18 text-primary">workload</em> -->
+                            <EOS_POD_FILLED size="base" />
                             <span
                                 class="link"
                                 v-if="secEvent.container.isHyperlinkEnabled"
@@ -146,7 +151,7 @@
             >
                 <button
                     v-if="secEvent.details.message.cap_len"
-                    class="mat-button btn-sec-event pull-left"
+                    class="mat-button btn-sec-event role-primary pull-left"
                     style="color: #fff"
                     @click="showPacket(secEvent.details.id, $event)">
                     <em class="icon-envelope-letter mr-sm"></em>
