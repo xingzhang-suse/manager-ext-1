@@ -1,0 +1,50 @@
+@import './common/color.scss';
+
+.vul-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-gap: 20px;
+
+  .chart-title {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.grid-area {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-gap: 20px;
+}
+
+.view-select {
+  max-width: 160px;
+}
+
+.remove-button, .remove-button:hover, .remove-button:focus, .remove-button:active {
+  border-color: transparent;
+}
+
+.remove-button, .remove-button:active, .remove-button.active, .remove-button[disabled], fieldset[disabled] .remove-button {
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.badge {
+  border-radius: 4px;
+  font-weight: normal;
+  color: black;
+}
+
+.badge-secondary {
+  background-color: #e0dfdf;
+}
+
+.mx-input {
+  height: 40px;
+}
+
+.mx-btn {
+  font-size: 12px;
+}

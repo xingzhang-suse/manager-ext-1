@@ -77,7 +77,8 @@ export const nvVariables = {
   },
   showAdvFilterModal: {
     value: false
-  }
+  },
+  vulnerabilityAdvFilter: null,
 };
 
 export const RANCHER_CONST = {
