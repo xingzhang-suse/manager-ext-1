@@ -28,6 +28,7 @@ general:
   REQUIRED_SHORT: Required
   ENABLE: Enable
   REFRESH: Refresh
+  REFRESHING: Refreshing...
   NAME: Name
   NAMESPACES: Namespaces
   CSV_DOWNLOAD: Download CSV
@@ -904,11 +905,11 @@ network:
     SEVERITY: Severity
     VIOLATION: Violation
     THREAT: Threat
-    SESSIONS: 'Session Count: '
+    SESSIONS: "Session Count: "
     ACTION: Action
     VOLUME: Volume
     TIME: Time
-    TOTAL_VOLUME: 'Total Volume: '
+    TOTAL_VOLUME: "Total Volume: "
     CLEAR: Clear
     OVERRIDE_RULE: Review Rule
     RULE_ID: Rule
@@ -944,7 +945,7 @@ network:
     ADD_ENDPOINT: Add endpoint
     ENDPOINTS: Endpoints
   protocolFilter:
-    TITLE: 'ALL FILTERS '
+    TITLE: "ALL FILTERS "
     RISK: Connections
     RISKY_ONLY: Violations & Threats Only
     VULNERABILITY: Vulnerabilities
@@ -986,20 +987,24 @@ topbar:
     ENFORCE: Protect
     MODE: " mode"
     SWITCH_CONFIRM: Do you want to apply policy mode changes?
-    SWITCH: 'Switch to '
-    MODE_SERVICE: 'Switch service '
+    SWITCH: "Switch to "
+    MODE_SERVICE: "Switch service "
     SERVICE_TO: " to "
-    LEARN_EVALUATE: We’ve automatically created rules for your application(s). No
+    LEARN_EVALUATE:
+      We’ve automatically created rules for your application(s). No
       new rules will be automatically created while in Monitor mode. New rules can
       be added manually in Policy/Rules.
-    LEARN_ENFORCE: We’ve automatically created rules for your application(s). No new
+    LEARN_ENFORCE:
+      We’ve automatically created rules for your application(s). No new
       rules will be automatically created while in Protect mode. New rules can be
       added manually in Policy/Rules. In Protect mode conversations which are detected
       as violations of your security policy will be denied (blocked).
-    EVALUATE_ENFORCE: In Protect mode conversations which are detected as violations
+    EVALUATE_ENFORCE:
+      In Protect mode conversations which are detected as violations
       of your security policy will be denied (blocked).
   tip:
-    LEARNING: Discover behavior of applications and services and automatically build
+    LEARNING:
+      Discover behavior of applications and services and automatically build
       policy rules
     EVALUATING: Monitor real-time behavior, log activities and detect potential violations
     ENFORCING: Prevent violations and attacks during run-time
@@ -1052,7 +1057,8 @@ sidebar:
     CONFIGURATION: Configuration
     OPENID: OpenID Connect Settings
     REQ_POLICY_PULLING: Inform Policy Deployment
-    DEPLOY_FED_POLICY_ERR: Error happens when informing clusters to pull federated
+    DEPLOY_FED_POLICY_ERR:
+      Error happens when informing clusters to pull federated
       policy!
     DEPLOY_FED_POLICY_OK: Informed clusters to pull federated policy successfully!
     resource: {}
@@ -1265,7 +1271,8 @@ cveProfile:
   gridHeader:
     VULNERABILITY: Vulnerability Name
     REPORTED_DAYS: Vulnerabilities reported within %{days} day(s)
-    REPORTED_DAYS_WITHOUT_FIX: Vulnerabilities reported within %{days} day(s) without
+    REPORTED_DAYS_WITHOUT_FIX:
+      Vulnerabilities reported within %{days} day(s) without
       fix
     DAYS_PREFIX: Reported within
     DAYS_PREFIX_WITHOUT_FIX: Reported within
@@ -1276,15 +1283,16 @@ cveProfile:
     DOMAINS: Namespaces
     COMMENT: Comment
   hint:
-    NAME: 'Sample: CVE-2021-4534, CVE-2021-* or *.'
-    IMAGE: 'Sample: nginx:1.23, *node*:latest'
-    NAMESPACE: 'Sample: default, *kafka*'
+    NAME: "Sample: CVE-2021-4534, CVE-2021-* or *."
+    IMAGE: "Sample: nginx:1.23, *node*:latest"
+    NAMESPACE: "Sample: default, *kafka*"
 scan:
   COUNT_POSTFIX: CVEs found
   AUTO: Auto Scan
   SCAN: Scan
   TRY_ME: Add Vulnerability module
-  AUTO_TIP: Enabling auto scan will scan all running nodes & containers including
+  AUTO_TIP:
+    Enabling auto scan will scan all running nodes & containers including
     newly started nodes or containers. Rescan is triggered by CVE DB updates or any
     package/library updates.
   START_SCAN: Starting scan...
@@ -1307,15 +1315,19 @@ scan:
   WITHOUT_FIX: Without Fix
   INVALID_DATE: Please input valid date.
   INVALID_DATE_RANGE: Please input valid date range.
-  CONDITION_HINT: 'Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo
-    or nv.nvlab:node service, same for the other criteria.'
-  APPENDIX_LIMIT_HINT: Report does not print appendix as the number of rows is over
+  CONDITION_HINT:
+    "Sample: on Service use redis-pod.demo,nv.nvlab:node to matchredis-pod.demo
+    or nv.nvlab:node service, same for the other criteria."
+  APPENDIX_LIMIT_HINT:
+    Report does not print appendix as the number of rows is over
     200
   MAX_REPORT_ROW_HINT: Report prints the first 500 records
   MAX_REPORT_ROW_HINT_2: according to last modified datetime
-  MAX_REPORT_ROW_HINT_3: Report prints the first %{ noAppendixMaxRow } records for
+  MAX_REPORT_ROW_HINT_3:
+    Report prints the first %{ noAppendixMaxRow } records for
     each type of assets
-  APPENDIX_LIMIT_HINT_4: In appendix，report prints only for first %{ noAppendixMaxRow
+  APPENDIX_LIMIT_HINT_4:
+    In appendix，report prints only for first %{ noAppendixMaxRow
     } vulnerability records
   report:
     TITLE: Vulnerability reports (Vulnerability View)
@@ -1366,20 +1378,23 @@ scan:
       TOP_VULNERABLE_HOSTS: Top Vulnerable Nodes
       SEVERITY_DIS: Vulnerabilities Severity Distribution
       TARGET_DIS: Vulnerabilities Target Distribution
-      CONTAINER_INS: 'Containers (Vulnerable Workloads (No Vulnerabilities): %{ safeRate4Containers
-        } (%{ containerCnt } Workload(s)))'
-      HOST_INS: 'Hosts (Vulnerable Hosts (NoVulnerabilities): %{ safeRate4Hosts }
-        (%{ hostCnt } host(s)))'
+      CONTAINER_INS:
+        "Containers (Vulnerable Workloads (No Vulnerabilities): %{ safeRate4Containers
+        } (%{ containerCnt } Workload(s)))"
+      HOST_INS:
+        "Hosts (Vulnerable Hosts (NoVulnerabilities): %{ safeRate4Hosts }
+        (%{ hostCnt } host(s)))"
       PLATFORM_INS: Platforms
-      IMAGE_INS: 'Images (Vulnerable Images (No Vulnerabilities): %{ safeRate4Images
-        } (%{ imageCnt } image(s)))'
+      IMAGE_INS:
+        "Images (Vulnerable Images (No Vulnerabilities): %{ safeRate4Images
+        } (%{ imageCnt } image(s)))"
   status:
-    SCANNED: 'Scanned: '
-    FAILED: 'Failed: '
-    SCANNING: 'Scanning: '
-    SCHEDULED: 'Scheduled: '
+    SCANNED: "Scanned: "
+    FAILED: "Failed: "
+    SCANNING: "Scanning: "
+    SCHEDULED: "Scheduled: "
     VERSION: Vulnerability Database Version
-    NUM_SCANNERS: 'Number of scanners: '
+    NUM_SCANNERS: "Number of scanners: "
   gridHeader:
     NAME: Name
     VERSION: Version
@@ -1419,20 +1434,23 @@ registry:
   TEST_REPO: Test Setting
   DELETE_REPO: Delete registry
   REGISTRY_TYPE: Registry type
-  FILTER_HINT: 'Sample: gliderlabs/dockerbox:latest, gliderlabs/*, gliderlabs/*:*,
-    gliderlabs/n*:3*'
-  AMAZON_URL_HINT: 'Sample: https://<aws_account_id>.dkr.ecr.<region>.amazonaws.com'
-  AZURE_URL_HINT: 'Sample: https://<companyname>.azurecr.io/'
-  JFROG_URL_HINT: 'Sample: https://docker-virtual.<10.1.7.122:8081> for subdomain,
-    https://<10.1.7.122:8081> for repository or port'
-  SONATYPE_URL_HINT: 'Sample: http://<10.1.7.121:8082>'
-  DOCKER_URL_HINT: 'Sample: https://registry.hub.docker.com/'
-  REDHAT_URL_HINT: 'Sample: https://registry.connect.redhat.com/'
-  OPENSHIFT_URL_HINT: 'Sample: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000'
-  GOOGLE_URL_HINT: 'Sample: https://gcr.io'
-  REPO_HINT: 'Sample: https://registry.hub.docker.com/ https://registry.connect.redhat.com/
-    https://registry.access.redhat.com/'
-  GITLAB_URL_HINT: 'Sample: https://registry.example.com'
+  FILTER_HINT:
+    "Sample: gliderlabs/dockerbox:latest, gliderlabs/*, gliderlabs/*:*,
+    gliderlabs/n*:3*"
+  AMAZON_URL_HINT: "Sample: https://<aws_account_id>.dkr.ecr.<region>.amazonaws.com"
+  AZURE_URL_HINT: "Sample: https://<companyname>.azurecr.io/"
+  JFROG_URL_HINT:
+    "Sample: https://docker-virtual.<10.1.7.122:8081> for subdomain,
+    https://<10.1.7.122:8081> for repository or port"
+  SONATYPE_URL_HINT: "Sample: http://<10.1.7.121:8082>"
+  DOCKER_URL_HINT: "Sample: https://registry.hub.docker.com/"
+  REDHAT_URL_HINT: "Sample: https://registry.connect.redhat.com/"
+  OPENSHIFT_URL_HINT: "Sample: OpenShift 4.x - https://image-registry.openshift-image-registry.svc:5000"
+  GOOGLE_URL_HINT: "Sample: https://gcr.io"
+  REPO_HINT:
+    "Sample: https://registry.hub.docker.com/ https://registry.connect.redhat.com/
+    https://registry.access.redhat.com/"
+  GITLAB_URL_HINT: "Sample: https://registry.example.com"
   RESCAN_SCANNED: Rescan Scanned Image
   SCHEDULE: Auto Scan
   SCHEDULE2: Periodic Scan
@@ -1455,9 +1473,10 @@ registry:
   IBM:
     ACCOUNT: IBM Cloud Account
     DEFAULT_NAME: iamapikey
-    URL_HINT: 'Sample: https://us.icr.io/'
+    URL_HINT: "Sample: https://us.icr.io/"
     GET_ACCOUNT_HINT: To get a IBM Cloud Account, run `ibmcloud cr info`
-    GET_PASSWORD_HINT: To get IBM Cloud API key, go to Manage > Access (IAM) > IBM
+    GET_PASSWORD_HINT:
+      To get IBM Cloud API key, go to Manage > Access (IAM) > IBM
       Cloud API keys
   JFROG_AQL: Query registry with Artifactory Query Language (AQL)
   REGISTRY_DELETE_CONFIRMATION: Please confirm that you want to delete this registry.
@@ -1540,7 +1559,8 @@ registry:
     GET_LICENSE_ERR: Error happened when getting license
     GET_CVE_ERR: Failed to get CVE report
     GET_LAYERS_ERR: Failed to get layers
-    NO_IMG: No scanned images found. Please start scan and click refresh to get latest
+    NO_IMG:
+      No scanned images found. Please start scan and click refresh to get latest
       scan status.
     NO_VULS: No vulnerabilities found
     NO_IMAGE_FINISHED: No images finished yet
@@ -1550,7 +1570,8 @@ cis:
   REMEDIATION: Remediation
   DOCKER_STATUS: Docker Benchmark Status
   KUBERNETES_STATUS: Kubernetes benchmark status
-  LEVEL1: "Level 1: Practical security measures, \nLevel 2: Security for defense in
+  LEVEL1:
+    "Level 1: Practical security measures, \nLevel 2: Security for defense in
     depth"
   SCORED: Used to calculate the final benchmark score
   COMPLIANCE_PROFILE: Compliance Profile
@@ -1559,23 +1580,24 @@ cis:
     KUBERNETES: Kubernetes Benchmark
     COMPLIANCE: Compliance
   profile:
-    DESCRIPTION: Customize which assets have compliance templates reported for them.
+    DESCRIPTION:
+      Customize which assets have compliance templates reported for them.
       The default is all templates are applied to all relevant images, nodes, containers
       and namespaces. If namespace is customized, it will apply to all images, nodes,
       and containers.
     HIDE_SYSTEM: Hide Compliance Checks for System Containers
     RESET: Reset template
     RESET_CONFIRM: All the regulations will be set to default!
-    COMPLIANCE_TEMPLATE: 'Compliance Filter:'
+    COMPLIANCE_TEMPLATE: "Compliance Filter:"
     TEMPLATES: Templates
     ENABLE_DOMAIN_TAGGING: Enable Namespaces Compliance Tagging
     ADD_TEMPLATE: Add Templates
     CUSTOMIZE_TEMPLATE: Customize Templates for
-    PENDING: 'Pending '
+    PENDING: "Pending "
     CHANGES: " change(s)"
     REGULATIONS: Regulations
     DEPLOY_OK: Template saved.
-    DEPLOY_FAILED: 'Failed to save template: '
+    DEPLOY_FAILED: "Failed to save template: "
     DISABLE_CHECK: Disable check
     APPLY_TEMPLATES: Apply Templates
     CURR_TEMPLATES: Current Templates
@@ -1622,13 +1644,16 @@ cis:
       TOP_COMP_CONTAINER: Top Impactful Compliance on Containers
       TARGET_DIS: Compliance Target Distribution
       SEVERITY_DIS: Compliance Severity Distribution
-      CONTAINER_INS: 'Containers (Compliant Workloads (No Compliance Violations):
-        %{ safeRate4Containers } (%{ containerCnt } Workload(s)))'
-      HOST_INS: 'Hosts (Compliant Hosts (No Compliance Violations): %{ safeRate4Hosts
-        } (%{ hostCnt } host(s)))'
+      CONTAINER_INS:
+        "Containers (Compliant Workloads (No Compliance Violations):
+        %{ safeRate4Containers } (%{ containerCnt } Workload(s)))"
+      HOST_INS:
+        "Hosts (Compliant Hosts (No Compliance Violations): %{ safeRate4Hosts
+        } (%{ hostCnt } host(s)))"
       PLATFORM_INS: Platforms
-      IMAGE_INS: 'Images (Compliant Images (No Compliance Violations): %{ safeRate4Images
-        } (%{ imageCnt } image(s)))'
+      IMAGE_INS:
+        "Images (Compliant Images (No Compliance Violations): %{ safeRate4Images
+        } (%{ imageCnt } image(s)))"
   tooltips:
     EDIT_REGULATION: Edit Regulation
     EDIT_TEMPLATE: Edit Template
@@ -1660,10 +1685,12 @@ securityEvent:
   ADM_RULE: Admission Rule
   RESPONSE_RULE: Response Rule
   REPORTED_BY: Reported by
-  NEW_RULE_WARNING: The proposed rule is created based on the event. Please review
+  NEW_RULE_WARNING:
+    The proposed rule is created based on the event. Please review
     all attributes before deploying the rule.
   VIOLATED_RULE: Violated Rule
-  IMPLICIT_RULE_BRIEF: Under "Monitor" or "Protect" mode, There is an implicit rule
+  IMPLICIT_RULE_BRIEF:
+    Under "Monitor" or "Protect" mode, There is an implicit rule
     to deny the access from "%{from}" to "%{to}"
   VIOLATED_RULE_BRIEF_1: Rule %{id}
   DENY: denied
@@ -1675,51 +1702,71 @@ securityEvent:
   VIOLATED_RULE_BRIEF_2: from "%{from}" to "%{to}"
   HOST_FILE_MODIFIED: The files under "%{file_path}" on host "%{host_name}" was
     modified
-  CONTAINER_FILE_MODIFIED: The files under "%{file_path}" in container "%{container}"
+  CONTAINER_FILE_MODIFIED:
+    The files under "%{file_path}" in container "%{container}"
     was modified
   HOST_PACKAGE_UPDATED: The package under "%{file_path}" on host "%{host_name}"
     was updated
-  CONTAINER_PACKAGE_UPDATED: The package under "%{file_path}" in container "%{container}"
+  CONTAINER_PACKAGE_UPDATED:
+    The package under "%{file_path}" in container "%{container}"
     was updated
-  HOST_PRIVILEGE_ESCALATION: The privilege by command "%{proc_cmd}" on host "%{host_name}"
+  HOST_PRIVILEGE_ESCALATION:
+    The privilege by command "%{proc_cmd}" on host "%{host_name}"
     was escalated
-  CONTAINER_PRIVILEGE_ESCALATION: The privilege by command "%{proc_cmd}" in container
+  CONTAINER_PRIVILEGE_ESCALATION:
+    The privilege by command "%{proc_cmd}" in container
     "%{container}" was escalated
-  HOST_SUSPICIOUS_PROCESS: Suspicious process "%{proc_name}" on host "%{host_name}"
+  HOST_SUSPICIOUS_PROCESS:
+    Suspicious process "%{proc_name}" on host "%{host_name}"
     was found
-  CONTAINER_SUSPICIOUS_PROCESS: Suspicious process "%{proc_name}" in container "%{container}"
+  CONTAINER_SUSPICIOUS_PROCESS:
+    Suspicious process "%{proc_name}" in container "%{container}"
     was found
   HOST_TUNNEL_DETECTED: Tunnel by command "%{proc_name}" on host "%{host_name}"
     was detected
-  CONTAINER_TUNNEL_DETECTED: Tunnel by command "%{proc_name}" in container "%{container}"
+  CONTAINER_TUNNEL_DETECTED:
+    Tunnel by command "%{proc_name}" in container "%{container}"
     was detected
-  PROCESS_PROFILE_VIOLATION: Process profile rule violation by command "%{proc_name}"
+  PROCESS_PROFILE_VIOLATION:
+    Process profile rule violation by command "%{proc_name}"
     on container "%{container}" was detected
-  HOST_PROCESS_VIOLATION: Process profile rule violation by command "%{proc_name}"
+  HOST_PROCESS_VIOLATION:
+    Process profile rule violation by command "%{proc_name}"
     on host "%{host_name}" was detected
-  CONTAINER_FILEACCESS_VIOLATION: The file "%{file_path}" in container "%{container}"
+  CONTAINER_FILEACCESS_VIOLATION:
+    The file "%{file_path}" in container "%{container}"
     was accessed by command "%{proc_name}"
   HOST_FILEACCESS_VIOLATION: The file "%{file_path}" on host "%{host_name}" was
     accessed by command "%{proc_name}"
-  HOST_PRIVILEGE_ESCALATION_NO_PROC_CMD: The privilege by some commands on host "%{host_name}"
+  HOST_PRIVILEGE_ESCALATION_NO_PROC_CMD:
+    The privilege by some commands on host "%{host_name}"
     was escalated
-  CONTAINER_PRIVILEGE_ESCALATION_NO_PROC_CMD: The privilege by some commands in container
+  CONTAINER_PRIVILEGE_ESCALATION_NO_PROC_CMD:
+    The privilege by some commands in container
     "%{container}" was escalated
-  HOST_SUSPICIOUS_PROCESS_NO_PROC_NAME: Suspicious process on host "%{host_name}"
+  HOST_SUSPICIOUS_PROCESS_NO_PROC_NAME:
+    Suspicious process on host "%{host_name}"
     was found
-  CONTAINER_SUSPICIOUS_PROCESS_NO_PROC_NAME: Suspicious process in container "%{container}"
+  CONTAINER_SUSPICIOUS_PROCESS_NO_PROC_NAME:
+    Suspicious process in container "%{container}"
     was found
-  HOST_TUNNEL_DETECTED_NO_PROC_NAME: Tunnel by some commands on host "%{host_name}"
+  HOST_TUNNEL_DETECTED_NO_PROC_NAME:
+    Tunnel by some commands on host "%{host_name}"
     was detected
-  CONTAINER_TUNNEL_DETECTED_NO_PROC_NAME: Tunnel by some command in container "%{container}"
+  CONTAINER_TUNNEL_DETECTED_NO_PROC_NAME:
+    Tunnel by some command in container "%{container}"
     was detected
-  PROCESS_PROFILE_VIOLATION_NO_PROC_NAME: Process profile rule violation by some commands
+  PROCESS_PROFILE_VIOLATION_NO_PROC_NAME:
+    Process profile rule violation by some commands
     on container "%{container}" was detected
-  HOST_PROCESS_VIOLATION_NO_PROC_NAME: Process profile rule violation by some commands
+  HOST_PROCESS_VIOLATION_NO_PROC_NAME:
+    Process profile rule violation by some commands
     on host "%{host_name}" was detected
-  CONTAINER_FILEACCESS_VIOLATION_NO_PROC_NAME: The file "%{file_path}" in container
+  CONTAINER_FILEACCESS_VIOLATION_NO_PROC_NAME:
+    The file "%{file_path}" in container
     "%{container}" was created/removed
-  HOST_FILEACCESS_VIOLATION_NO_PROC_NAME: The file "%{file_path}" on host "%{host_name}"
+  HOST_FILEACCESS_VIOLATION_NO_PROC_NAME:
+    The file "%{file_path}" on host "%{host_name}"
     was was created/removed
   HOST_ERR: Error happened when getting host details
   CONTAINER_ERR: Error happened when getting container details
@@ -1904,7 +1951,8 @@ profile:
   TIMEOUT: Session Timeout(seconds)
   TIMEOUT_HINT: Read-only for remote authenticated user
   LOCALE: Language
-  PASSWORD_HINT: To change your password, please enter your current password, your
+  PASSWORD_HINT:
+    To change your password, please enter your current password, your
     new password and confirmation of new password.
   OLD_PASSWORD: Current Password
   PASSWORD: New Password
@@ -2020,7 +2068,8 @@ apikey:
     ONEMONTH: A month from now
     ONEYEAR: A year from now
     HOURS: Custom
-    WARNING: NeuVector strongly recommends that you set an expiration date for your
+    WARNING:
+      NeuVector strongly recommends that you set an expiration date for your
       token to help keep your information secure.
     time:
       YEARS: Years
@@ -2029,10 +2078,12 @@ apikey:
       HOURS: Hours
   msg:
     CREATED: A new API Key has been created
-    AUTH_INSTRUCTION: 'Use this token directly against the API:'
-    AUTH_CODE: '> curl -k -H "Content-Type: application/json" -H "X-Auth-Apikey: %{apikey}"
+    AUTH_INSTRUCTION: "Use this token directly against the API:"
+    AUTH_CODE:
+      '> curl -k -H "Content-Type: application/json" -H "X-Auth-Apikey: %{apikey}"
       https://...'
-    SAVE_WARNING: Save the info above! This is the only time you'll be able to see
+    SAVE_WARNING:
+      Save the info above! This is the only time you'll be able to see
       it. If you lose it, you'll need to create a new API Key.
     ADD_OK: Adding API Key is successful.
     ADD_NG: Failed to add API Key
@@ -2041,7 +2092,8 @@ apikey:
     REMOVE_ERR: Failed to remove API Key
   addApikey:
     TITLE: Add API Key
-    NAME_ERROR: Access Key can contain up to 32 alphanumeric characters, including
+    NAME_ERROR:
+      Access Key can contain up to 32 alphanumeric characters, including
       '_' and '-'.
     SECRET: Secret Key
     TOKEN: X-Auth-Apikey
@@ -2101,7 +2153,8 @@ role:
       AUDIT_EVENTS: Access risk and compliance event logs.
       EVENTS: Access system activity event logs.
       REG_SCAN: Configure registry image scan and view scan results.
-      RT_POLICY: Manage Policy menus for Policy Mode (Discover, Monitor, Protect),
+      RT_POLICY:
+        Manage Policy menus for Policy Mode (Discover, Monitor, Protect),
         Network Rules, Process Rules, File Access Rules, DLP, WAF, Packet capture,
         Response Rules.
       RT_SCAN: Trigger and view vulnerability scan of running workloads.
@@ -2110,7 +2163,8 @@ role:
       AUTHENTICATION: Manage authentication server configuration and role mappings.
       AUTHORIZATION: Manage users and custom roles.
       CI_SCAN: Trigger build-phase vulnerability scan.
-      COMPLIANCE: Review Compliance check results, manage compliance profile and configure
+      COMPLIANCE:
+        Review Compliance check results, manage compliance profile and configure
         custom compliance scripts.
       CONFIG: Manage system configurations.
       VULNERABILITY: Review and configure vulnerability management profile.
@@ -2143,7 +2197,8 @@ passwordProfile:
     SESSION_TIMEOUT: Default Session Timeout
   msg:
     GET_PROFILE_ERR: Error happens when getting password profiles
-    NUM_ERR: Minimum total length is less than summary of 4 types of character's minimum
+    NUM_ERR:
+      Minimum total length is less than summary of 4 types of character's minimum
       length.
     UPDATE_PROFILE_OK: Password profile is updated successfully!
     UPDATE_PROFILE_NG: Error happens when updating password profile!
@@ -2156,7 +2211,8 @@ service:
   SUBMIT_FAILED: Failed to update service policy mode
   ALL_SUBMIT_OK: Policy mode updated.
   ALL_SUBMIT_FAILED: Failed to update policy mode
-  BASELINE_PROFILE_WARNING: Your selection is including nodes group whose baseline
+  BASELINE_PROFILE_WARNING:
+    Your selection is including nodes group whose baseline
     profile cannot be configured.
   BASELINE_PROFILE_SUBMIT_OK: Service baseline profile is updated.
   BASELINE_PROFILE_SUBMIT_FAILED: Failed to update service baseline profile.
@@ -2200,20 +2256,23 @@ group:
   USER_CREATED: User Created
   FEDERAL: Federated
   RESERVED: Reserved
-  RESERVED_PREFIX: 'System reserved prefix: '
-  NAME_INVALID: 'Group name can''t start with: '
-  NAME_VALID: 'Group name must start with: '
-  K8S_NAME_WARNING: When a group is exported, the value of metadata.name in the yaml
+  RESERVED_PREFIX: "System reserved prefix: "
+  NAME_INVALID: "Group name can't start with: "
+  NAME_VALID: "Group name must start with: "
+  K8S_NAME_WARNING:
+    When a group is exported, the value of metadata.name in the yaml
     file is the lowercase by default.
   COUNT_POSTFIX: groups found
   NO_MEMBERS: No group members
   HIDE_SYS_GROUPS: Hide System Groups
   SHOW_SYS_GROUPS: Show System Groups
-  SELECT_ALL_ALERT: 'The selection contains ''nodes'' group. Please confirm if you
-    want to switch this group to '
-  SWITCH_MODE_DISABLED: Policy mode in following %{noModeGroupCount} group(s) cannot
+  SELECT_ALL_ALERT: "The selection contains 'nodes' group. Please confirm if you
+    want to switch this group to "
+  SWITCH_MODE_DISABLED:
+    Policy mode in following %{noModeGroupCount} group(s) cannot
     be switched.
-  SCORED_DISABLED: Cannot turn on/off scorable attribute for one or more currently
+  SCORED_DISABLED:
+    Cannot turn on/off scorable attribute for one or more currently
     selected groups.
   MODE_NODES: " mode or unselect it."
   SWITCH_SCORABLE: Scorable
@@ -2222,16 +2281,20 @@ group:
   SINGLE_CRITERION_HINT: Edit criterion here
   IMPORT_GROUP_POLICY: Import Group Policy
   IMPORT_OK: Import is successful
-  IMPORT_NOTICE: Importing a Group Policy will overwrite all existing rules for the
+  IMPORT_NOTICE:
+    Importing a Group Policy will overwrite all existing rules for the
     group. Imported rules using this feature can be edited through the console, unlike
     CRD rules.
-  ZERODRIFT_COMMENT: Enable/disable automated protection that prevents processes and
+  ZERODRIFT_COMMENT:
+    Enable/disable automated protection that prevents processes and
     file system drift for selected groups.
-  ZERO_DRIFT_HINT: Switching mode to Discover to start learning processes in Basic
+  ZERO_DRIFT_HINT:
+    Switching mode to Discover to start learning processes in Basic
     mode
   BASELINE_PROFILE: Baseline Profile
   ZERO_DRIFT: Zero Drift
-  MULTI_MODE_SELECTION: Multiple groups are selected along with different policy mode
+  MULTI_MODE_SELECTION:
+    Multiple groups are selected along with different policy mode
     or baseline profile.
   GET_RULE_ERR: Error happened when getting rule
   CONFIG: Configure
@@ -2256,11 +2319,13 @@ group:
   EDIT_CRITERIA: Edit Criteria
   DELETE_ITEM_TITLE: REMOVE GROUP
   DELETE_UNIT: item(s)
-  HAS_RULES_WARNING: Network rules or/and Response rules that use the group will be
+  HAS_RULES_WARNING:
+    Network rules or/and Response rules that use the group will be
     deleted too.
   ADD_ITEM_TITLE: ADD GROUP
   ADD_PROFILE_RULE_WARNING: Please add a group before create a rule!
-  CRITERIA_HINT: 'Sample: container=myServer, namespace!=default, node=ubuntu*, image=*nginx*,
+  CRITERIA_HINT:
+    'Sample: container=myServer, namespace!=default, node=ubuntu*, image=*nginx*,
     address=216.58.194.0/24, address=0.0.0.0/0, address=0.0.0.0-255.255.255.255, address=*.neuvector.com,
     container~k8s_zoo[12] or key=value for label ("=" exactly match, "!" not, "? and
     *" wildcards, "~" regex)'
@@ -2280,7 +2345,7 @@ group:
     CONDITION: Criteria
     CONDITION_HINT: Type and Press Enter
     ADD_CRITERIA: Add Criteria
-    CRITERIA_RELATIONSHIP: ''
+    CRITERIA_RELATIONSHIP: ""
     MEMBERS: Members
     UPDATE: Update
     CANCEL: Cancel
@@ -2296,9 +2361,10 @@ group:
     EDIT_NG: Error happened when editing process profile rule!
   file:
     COUNT_POSTFIX: file access rules found
-    RULE_SAMPLE: 'Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [],
-      () and regexp)'
-    REMOVE_CONFIRM: 'Will you remove file access rule? - Filter:'
+    RULE_SAMPLE:
+      "Sample: /dir/xxx, /dir/xxx.*, /dir/*.xxx, /dir/*/abc/* (不支持: [],
+      () and regexp)"
+    REMOVE_CONFIRM: "Will you remove file access rule? - Filter:"
     REMOVE_OK: Your file access rule has been removed.
     REMOVE_NG: Error happened when removing file acess rule!
     ADD_OK: Your file access rule has been added.
@@ -2354,7 +2420,8 @@ group:
     SUBMIT: Submit
     NAME: Name
     SCRIPT: Script
-    CUSTOM_CHECK_CONFIG_HINT: Custom scripts are disabled. Please confirm if the environment
+    CUSTOM_CHECK_CONFIG_HINT:
+      Custom scripts are disabled. Please confirm if the environment
       variable "CUSTOM_CHECK_CONTROL" is set properly.
     msg:
       SCRIPT_OK: Script list has been updated successfully!
@@ -2423,7 +2490,8 @@ dlp:
     MISMATCH: Not matched
     ADD_PATTERN_NG: Maximum amount of patterns is 16
     EXISTING_PATTERN_NG: This pattern is existing!
-    RECIPROCAL_PATTERN_NG: There is reciprocal pattern against added pattern in the
+    RECIPROCAL_PATTERN_NG:
+      There is reciprocal pattern against added pattern in the
       same context.
     SENSOR_NAME_REQUIRED: Sensor name is required!
   TIP:
@@ -2498,7 +2566,8 @@ waf:
     MISMATCH: Not matched
     ADD_PATTERN_NG: Maximum amount of patterns is 16
     EXISTING_PATTERN_NG: This pattern is existing.
-    RECIPROCAL_PATTERN_NG: There is reciprocal pattern against added pattern in the
+    RECIPROCAL_PATTERN_NG:
+      There is reciprocal pattern against added pattern in the
       same context.
     SENSOR_NAME_REQUIRED: Sensor name is required!
   TIP:
@@ -2514,14 +2583,16 @@ policy:
   ACTIONS: Actions
   RULE_DETAILS: Rule
   NEW_RULE: New Rule
-  UNSAVEDCHANGES: You have made changes to your Policy which have not been deployed.
+  UNSAVEDCHANGES:
+    You have made changes to your Policy which have not been deployed.
     Click OK to leave this page without deploying your changes (all changes will be
     lost). Click Cancel to stay on this page and then Deploy to save your changes.
   POLICY_DEPLOY_CONFIRM: Please confirm that you want to deploy this updated policy.
   RULE_DEPLOY_CONFIRM: Please confirm that you want to deploy this rule.
   QUARANTINE_CONFIRM: Please confirm that you want to quarantine this container.
   UNQUARANTINE_CONFIRM: Please confirm that you want to un-quarantine this container.
-  DEFAULT_RULE: Deny network connections that don't match any of above allowed rules
+  DEFAULT_RULE:
+    Deny network connections that don't match any of above allowed rules
     for any applications/ports.
   COUNT_POSTFIX: rules found
   ALL_PORTS: All Ports
@@ -2575,7 +2646,7 @@ policy:
     FROM_GROUP_REQUIRED: You must choose a from group.
     TO_GROUP_REQUIRED: You must choose a to group.
     ADD_APP: Add Applications
-    PORT_SAMPLE: 'Sample: 80, tcp/8080, udp/6142-6150, tcp/any, udp/any, icmp, any'
+    PORT_SAMPLE: "Sample: 80, tcp/8080, udp/6142-6150, tcp/any, udp/any, icmp, any"
     QUARANTINE_FAILED: Quarantine failed
     PROMOTE_OK: The rules are promoted successfully!
     PROMOTE_NG: Error happened when Promoting rules!
@@ -2590,8 +2661,8 @@ policy:
       SUBMIT_NG: Policy deploy failed!
     reminder:
       MESSAGE: Do you want to leave the page without saving?
-    REMOVE: 'Will you delete Rule ID: '
-    UNREMOVE: 'Will you undelete Rule ID: '
+    REMOVE: "Will you delete Rule ID: "
+    UNREMOVE: "Will you undelete Rule ID: "
   TIP:
     ADD: Add Below
     EDIT: Edit Rule
@@ -2625,10 +2696,10 @@ policy:
     REMOVE: Remove
     MOVE_TO: Move to
     BEFORE_ROWS: Before
-    BEFORE_ROWS_ZH: ''
-    OR: 'OR, '
+    BEFORE_ROWS_ZH: ""
+    OR: "OR, "
     AFTER_ROWS: After
-    AFTER_ROWS_ZH: ''
+    AFTER_ROWS_ZH: ""
     MOVE: MOVE
     SAVE: Save
     UNDO: Undo All
@@ -2678,9 +2749,10 @@ responsePolicy:
       ENABLE_NG: Response rule enabling failed!
       UNQUARANTINE_OK: Response rule is un-quarantined successfully!
       UNQUARANTINE_NG: Response rule un-quarantining failed!
-      HINT: 'Sample: '
-      REMOVE_CONFIRM: 'Will you remove Response Rule? - ID: '
-    UNQUARANTINE_CHECK: Un-quarantine all containers which were quarantined by this
+      HINT: "Sample: "
+      REMOVE_CONFIRM: "Will you remove Response Rule? - ID: "
+    UNQUARANTINE_CHECK:
+      Un-quarantine all containers which were quarantined by this
       rule
 admissionControl:
   INSERT: Add
@@ -2708,27 +2780,31 @@ admissionControl:
   SERVICE: Service
   URL: URL
   TEST_K8S: Test Kubernetes Connection
-  TEST_K8S_INSTRUCTION: To confirm if Kubernetes connection related configuration
+  TEST_K8S_INSTRUCTION:
+    To confirm if Kubernetes connection related configuration
     is correct, and Kubernetes is available.
   TEST: TEST
   RULE_TYPE: Action
   CONTAINER_IMAGE: Container Image
-  PSP_INSTRUCTION: Suggest to add more criteria, such as namespace, to limit the rule's
+  PSP_INSTRUCTION:
+    Suggest to add more criteria, such as namespace, to limit the rule's
     scope.
-  PSP_CRITERIA: 'PSP Best Practice includes:'
+  PSP_CRITERIA: "PSP Best Practice includes:"
   BL_POLICY: PSS Baseline Policy List
   RS_POLICY: PSS Restricted Policy List
   PSS_POLICY_DETAIL_LINK: For Details
-  PSS_RESTRICT_HINT: if the deployment doesn't meet "restricted" level, the action
+  PSS_RESTRICT_HINT:
+    if the deployment doesn't meet "restricted" level, the action
     (block) will be taken.
   CONTAINER_TYPES: Container Types
   INIT_CONTAINERS: Initial
   CONTAINERS: Regular
   EPHEMERAL_CONTAINERS: Ephemeral
   sample:
-    MULTI_VAL: 'Format sample: element1, element2, element3'
-    MULTI_VAL_SIG_VRF: 'Format sample: sigstore_root_of_trust_name/verifier_name1,
-      sigstore_root_of_trust_name/verifier_name2'
+    MULTI_VAL: "Format sample: element1, element2, element3"
+    MULTI_VAL_SIG_VRF:
+      "Format sample: sigstore_root_of_trust_name/verifier_name1,
+      sigstore_root_of_trust_name/verifier_name2"
     IMG_REG_HINT: Image registry should be "localhost" or with "." in name
   msg:
     INSERT_OK: Admission rule is added successfully!
@@ -2755,28 +2831,36 @@ admissionControl:
     CLIENT_MODE_SWITCH_NG: Client mode switching failed!
     ACTION_SWITCH_OK: Global action is switched successfully!
     ACTION_SWITCH_NG: Global action switching failed!
-    REMOVE_CONFIRM: 'Will you remove Admission Rule? - ID: '
-    DISABLE_CONFIRM: 'Disable default whitelist rule? - ID: '
-    ENABLE_CONFIRM: 'Enable default whitelist rule? - ID: '
-    DISABLE_CONFIRM_DEFAULT: Disabling this default rule may prevent deployment in
+    REMOVE_CONFIRM: "Will you remove Admission Rule? - ID: "
+    DISABLE_CONFIRM: "Disable default whitelist rule? - ID: "
+    ENABLE_CONFIRM: "Enable default whitelist rule? - ID: "
+    DISABLE_CONFIRM_DEFAULT:
+      Disabling this default rule may prevent deployment in
       %{namespace} namespace
-    ENABLE_CONFIRM_DEFAULT: Enabling this default rule will allow deployment in %{namespace}
+    ENABLE_CONFIRM_DEFAULT:
+      Enabling this default rule will allow deployment in %{namespace}
       namespace
     PROTECT_CONFIRM: Will you switch to 'Protect Mode'?
     UNSUPPORTED: Unsupported operation because it is not Kubernetes platform.
-    CONFIG_K8S_FAIL: Failed to configure Admission Control on Kubernetes system. Please
+    CONFIG_K8S_FAIL:
+      Failed to configure Admission Control on Kubernetes system. Please
       make sure the "cluster role" and "cluster role binding" for neuvector:default
       are configured correctly.
-    CLUSTER_ROLE_NOT_CONFIG: The neuvector-binding-admission clusterrole/clusterrolebinding
+    CLUSTER_ROLE_NOT_CONFIG:
+      The neuvector-binding-admission clusterrole/clusterrolebinding
       required for Neuvector Admission Control is not configured correctly.
-    WEBHOOK_NOT_CONFIG: The neuvector-svc-admission-webhook service required for Neuvector
+    WEBHOOK_NOT_CONFIG:
+      The neuvector-svc-admission-webhook service required for Neuvector
       Admission Control is not configured correctly.
-    NO_UPD_PROMISSION: NeuVector default service account doesn't have UPDATE permission
+    NO_UPD_PROMISSION:
+      NeuVector default service account doesn't have UPDATE permission
       for service resource.
-    ERR_SRV2WEBHOOK: Failed to receive a request from Kube-apiserver. Please try different
+    ERR_SRV2WEBHOOK:
+      Failed to receive a request from Kube-apiserver. Please try different
       client mode
     TEST_K8S_OK: Kubernetes system connection is normal.
-    SAVE_CLIENT_MODE: Submit the chosen mode to Kubernetes configuration in order
+    SAVE_CLIENT_MODE:
+      Submit the chosen mode to Kubernetes configuration in order
       to test the Kubernetes request connection.
     NOT_NUMBER_ERR: Not a valid number
     ALLOW_NO_MATCH: Allow deployments that don't match any of above rules.
@@ -2874,7 +2958,7 @@ admissionControl:
     "<=": "<="
     ">=": ">="
     CONTAINSALL: contains ALL of
-    CONTAINSANY: 'contains ANY of '
+    CONTAINSANY: "contains ANY of "
     CONTAINSANYEXACT: contains ANY of (exact)
     CONTAINSANYPARTIAL: contains ANY of (partial)
     CONTAINSANYSTARTSWITH: contains ANY of (starts with)
@@ -2894,8 +2978,8 @@ admissionControl:
       "<=": less than
       ">=": more than
   values:
-    'TRUE': 'true'
-    'FALSE': 'false'
+    "TRUE": "true"
+    "FALSE": "false"
     HIGH: high
     MEDIUM: medium
     LOW: low
@@ -2903,7 +2987,8 @@ admissionControl:
     DAYS: days
     CORE: Core(s)
     RISKY_ROLE_VIEW_SECRET: Service Account can listing secrets
-    RISKY_ROLE_ANY_ACTION_WORKLOAD: Service Account can do any action on workload
+    RISKY_ROLE_ANY_ACTION_WORKLOAD:
+      Service Account can do any action on workload
       resources
     RISKY_ROLE_ANY_ACTION_RBAC: Service Account can do any action on RBAC resources
     RISKY_ROLE_CREATE_POD: Service Account can create workload resource
@@ -2913,20 +2998,24 @@ admissionControl:
     ">=": "%{days} day(s) ago"
     CVE_HIGH_COUNT_WITH_REPORT_DAYS: "%{comparison} %{count} high severity CVEs
       that were reported"
-    CVE_HIGH_WITH_FIX_COUNT_WITH_REPORT_DAYS: "%{comparison} %{count} high severity
+    CVE_HIGH_WITH_FIX_COUNT_WITH_REPORT_DAYS:
+      "%{comparison} %{count} high severity
       CVEs with fix that were reported"
-    CVE_MEDIUM_COUNT_WITH_REPORT_DAYS: "%{comparison} %{count} medium severity CVEs
+    CVE_MEDIUM_COUNT_WITH_REPORT_DAYS:
+      "%{comparison} %{count} medium severity CVEs
       that were reported"
-    CVE_SCORE_COUNT_WITH_COUNT: "%{countComparison} %{count} CVEs whose score %{scoreComparison}
+    CVE_SCORE_COUNT_WITH_COUNT:
+      "%{countComparison} %{count} CVEs whose score %{scoreComparison}
       %{score}"
-    RESOURCE_LIMIT: 'RLC: %{details}'
+    RESOURCE_LIMIT: "RLC: %{details}"
     cveScore:
       "<=": is lower than
       ">=": is higher than
   matchingTestGrid:
     TITLE: Test results
     REPORT_TITLE: Admission Control Matching Test Report
-    UNAVAILABLE_PROP: Property %{propsUnavailable} in the resources are not available
+    UNAVAILABLE_PROP:
+      Property %{propsUnavailable} in the resources are not available
       for evaluation.
     INDEX: Resource
     KIND: Kind
@@ -2959,7 +3048,8 @@ multiCluster:
     name: The Current Cluster Name
     server: Primary Cluster Server
     port: Primary Cluster Port
-    hint: The current cluster will be promoted to be the Primary Cluster. You will
+    hint:
+      The current cluster will be promoted to be the Primary Cluster. You will
       be logged out automatically, then required to log back in, and your role will
       be changed to be a Federated Administrator.
     note: "* Note: The system time needs to be synced."
@@ -2972,7 +3062,8 @@ multiCluster:
     server: Controller Server
     port: Port
     token: Token
-    hint: The Federated Administrator will provide you the Primary Cluster Server
+    hint:
+      The Federated Administrator will provide you the Primary Cluster Server
       hostname or IP, port and token.
     note: "* Note: The system time needs to be synced."
     success: The current cluster joined the Primary Cluster successfully.
@@ -3022,13 +3113,13 @@ multiCluster:
 license:
   TITLE: License
   HEAD: End User License Agreement
-  ACCEPT_AGREEMENT: 'I have read and agree to the '
+  ACCEPT_AGREEMENT: "I have read and agree to the "
   METERED: Metered License
   METERED_TRIAL: Metered Trial License
   STANDARD: Standard License
   server:
     ID: License Request ID
-    PRE_DESC: 'To request a license, please contact '
+    PRE_DESC: "To request a license, please contact "
     APPLY_DESC: Enter code received from NeuVector support
     EMAIL: support@neuvector.com
     POST_DESC: ", we will contact you with your License Code."
@@ -3060,52 +3151,56 @@ license:
   COPY_CODE: Copy to Clipboard
   EXPIRED: License expired!
   INVALID: Invalid license
-  PRE_HINT: 'License expires in '
+  PRE_HINT: "License expires in "
   POST_HINT: " days!"
   RENEW: RENEW LICENSE
   LOAD_ERR: Failed to load license
   message:
     GET_EULA_ERR: Error happened when getting EULA information
     GENERATE_CODE_ERR: Error happened when generating code
-    ACCEPT_EULA_ERR: It is required to read and agree to the End User License Agreement
+    ACCEPT_EULA_ERR:
+      It is required to read and agree to the End User License Agreement
       before login
 setting:
   TITLE: System Settings
   DESC: Customize system configuration
   NOTIFICATIONS: Notifications
-  SYSLOG: 'Syslog   '
+  SYSLOG: "Syslog   "
   EVENT_REPORT_LOGGING: Write notifications to controller pod logs
   WEBHOOKS: Webhooks
   CLUSTER: Cluster
   CLUSTER_COMMENT: Used to identify the cluster in notifications
-  ZERODRIFT_COMMENT: Enable/disable automated protection that prevents processes and
+  ZERODRIFT_COMMENT:
+    Enable/disable automated protection that prevents processes and
     file system drift for new groups.
-  CLUSTER_NAME: 'Cluster Name:'
+  CLUSTER_NAME: "Cluster Name:"
   SERVER: Server
   PROTOCOL: Protocol
   URL: URL
   PORT: Port
   LEVEL: Level
-  LOG_IN_JSON: 'In JSON:'
-  LOG_CATEGORIES: 'Categories:'
+  LOG_IN_JSON: "In JSON:"
+  LOG_CATEGORIES: "Categories:"
   SEND_SYSLOG_PER_CVE: Send individual log events per vulnerability
   SEND_SYSLOG_PER_LAYER: Send log events for vulnerabilities in image layers
   SERVER_CERTIFICATE: Server Certificate
   EXPORT: Export
   IMPORT: Import
   CLOUD_BILLING: "%{cloud} Marketplace Support"
-  CLOUD_BILLING_HINT_1: 'If you have subscribed to NeuVector by SUSE support through
+  CLOUD_BILLING_HINT_1:
+    "If you have subscribed to NeuVector by SUSE support through
     the %{cloud} Marketplace (i.e. integrated billing through your %{cloud} account),
     please download this special support file. You will need to upload it to your
-    SUSE SCC account at '
+    SUSE SCC account at "
   CLOUD_SUPPORT_LINK: https://scc.suse.com/cloudsupport
   CLOUD_BILLING_HINT_2: " in order to create a support case."
   DOWNLOAD_SUPPORT_FILE: Download Support File
   CSP_ERR_TITLE: CSP Adapter Error
   NV_ERR_TITLE: NeuVector Error
   EXPIRE_TITLE: Expiration Warning
-  EXPIRE_STATE: 'Billing data expired time: '
-  IMPORT_NOTICE: Importing policy will overwrite groups and rules, importing all will
+  EXPIRE_STATE: "Billing data expired time: "
+  IMPORT_NOTICE:
+    Importing policy will overwrite groups and rules, importing all will
     overwrite policy and all users and passwords and settings such as SYSLOG and other
     configurations.
   UPLOAD_QUEUE: Upload Queue
@@ -3117,7 +3212,7 @@ setting:
   POLICY: Policy Only
   DEBUG_LOG: Debug Log
   SUPPORT: Support
-  QUEUE_LENGTH: 'Queue Length: '
+  QUEUE_LENGTH: "Queue Length: "
   FILE_NAME: Name
   FILE_SIZE: Size
   PROGRESS: Progress
@@ -3135,44 +3230,51 @@ setting:
   EXPORT_FAILED: Failed to export file
   SUBMIT_OK: System config updated.
   SUBMIT_FAILED: Failed to update system config
-  IMPORT_FAILED: 'Import failed '
+  IMPORT_FAILED: "Import failed "
   COLLECT_FAILED: Failed to collect support bundle
   NEW_SERVICE_POLICY_MODE: Default mode for new services
   NEW_SERVICE: New Services Mode
-  NEW_SERVICE_COMMENT: The default policy mode for new groups that have not been previously
+  NEW_SERVICE_COMMENT:
+    The default policy mode for new groups that have not been previously
     detected.
   NET_SERVICE_POLICY_MODE: Network Security Policy Mode
   MODE_AUTO_SWITCH: Service Group Mode Automation
-  MODE_AUTO_SWITCH_HINT: Promote groups' policy mode automatically. This does not
+  MODE_AUTO_SWITCH_HINT:
+    Promote groups' policy mode automatically. This does not
     affect CRD created groups.
   D2M: Discover to Monitor
   M2P: Monitor to Protect
-  D2M_HINT: 'The criterion for moving from Discover to Monitor mode is: elapsed time
+  D2M_HINT:
+    "The criterion for moving from Discover to Monitor mode is: elapsed time
     for learning all network and process activity of at least one live pod in the
     Group. For example, if this is set to 7 days, then 7 days after a running pod
-    for the group is detected, the mode will be automatically promoted to Monitor.'
-  M2P_HINT: 'The criterion for moving from Monitor to Protect mode is: there are no
+    for the group is detected, the mode will be automatically promoted to Monitor."
+  M2P_HINT:
+    "The criterion for moving from Monitor to Protect mode is: there are no
     security events (network, process etc) for the timeframe set for the Group. For
     example, if this is set to 14 days, then if no violations (network, process, file)
     are triggered for 14 days (e.g. the quiet period), then the mode is automatically
     promoted to Protect. If there are no running pods in the group, the promotion
-    will not occur.'
+    will not occur."
   AUTH_BY_OPENSHIFT: Authenticate using OpenShift’s or Rancher’s RBAC
   NEED_SUBMIT: Need submit
   ENABLED: Enabled
   DISABLED: Disabled
   REG_PROXY: Proxy
-  PROXY_HINT: Proxy for accessing external services (such as registry servers). Proxy
+  PROXY_HINT:
+    Proxy for accessing external services (such as registry servers). Proxy
     is also supported for communications among NeuVector clusters in the same federation
     when direct access between clusters is not allowed.
   REG_HTTP_PROXY: Http Proxy
   REG_HTTPS_PROXY: Https Proxy
   XFF_MATCH: X-Forwarded-For based policy match
   TELEMETRY: Report anonymous cluster data
-  TELEMETRY_HINT: The controller will report cluster data anonymously to help SUSE
+  TELEMETRY_HINT:
+    The controller will report cluster data anonymously to help SUSE
     NeuVector teams with usage information.
   DISABLE_NET_POLICY: Network Policy Enforcement
-  DISABLE_NET_POLICY_HINT: To only use WAF/DLP for network protection please disable
+  DISABLE_NET_POLICY_HINT:
+    To only use WAF/DLP for network protection please disable
     network policy enforcement. When it is disabled no network rule can be learned.
   USERNAME: Username
   PASSWORD: Password
@@ -3186,7 +3288,8 @@ setting:
   SETUP_DONE_NO_TIME: Connected
   SETUP_DONE: Connected at %{time}
   UNUSED_GROUP_AGE: Auto-Deletion of Unused Groups
-  UNUSED_GROUP_HINT: Groups with no members (e.g. pods/containers) will be deleted
+  UNUSED_GROUP_HINT:
+    Groups with no members (e.g. pods/containers) will be deleted
     automatically if they remain unused for this amount of time.
   DAYS: " days"
   HOURS: " hours"
@@ -3198,9 +3301,11 @@ setting:
   ENABLED_CPATH_NG: Error happens when enabling controller control path debug!
   DISABLED_CPATH_NG: Error happens when disabling controller control path debug!
   ENFORCERS: Enforcers
-  ENFORCERS_HINT: Select enforcers to include their support information if necessary.
+  ENFORCERS_HINT:
+    Select enforcers to include their support information if necessary.
     Up to %{maxSlectedEnforcer} enforcers can be selected.
-  MAX_SELECTED_ENFORCER_HINT: Please select no more than %{maxSlectedEnforcer} enforcers
+  MAX_SELECTED_ENFORCER_HINT:
+    Please select no more than %{maxSlectedEnforcer} enforcers
     for support information.
   AS_STANDALONE: Import configuration as standalone cluster
   RANCHER_EP: Rancher Endpoint
@@ -3245,7 +3350,7 @@ setting:
       destination_remote: Export to Remote Repository
       name: Remote Repository Name
       file_name: Exported File Name
-      mode_description: 'Enable Remote Repository in '
+      mode_description: "Enable Remote Repository in "
       export_ok: Exported successfully.
       export_failed: Export failed.
     details:
@@ -3254,20 +3359,23 @@ setting:
       name: Name of the remote repository
       name_hint: "'default' is the only supported repository name."
       comment: Comment
-      comment_hint: ''
+      comment_hint: ""
       enabled: Enabled
       owner: Owner User Name
       owner_hint: The repository owner's GitHub user name (e.g. "john_doe" in "https://github.com/john_doe/my_repo").
       repository_name: Repository Name
       repository_name_hint: The repository name (e.g. "my-repo" in "https://github.com/john_doe/my_repo").
       repository_branch: Branch Name
-      repository_branch_hint: The specific branch within the repository that contains
+      repository_branch_hint:
+        The specific branch within the repository that contains
         the CRD files. The default branch is 'main'.
       personal_access_token: Personal Access Token
-      personal_access_token_hint: Obtain it from https://github.com/settings/tokens.
+      personal_access_token_hint:
+        Obtain it from https://github.com/settings/tokens.
         Grant the "repo" scope to the token.
       personal_access_token_committer_name: Committer Name
-      personal_access_token_committer_name_hint: The name of the committer associated
+      personal_access_token_committer_name_hint:
+        The name of the committer associated
         with the personal access token
       personal_access_token_email: Email
       personal_access_token_email_hint: The email address associated with the committer
@@ -3292,57 +3400,72 @@ setting:
     URL_REQUIRED: You must specify url.
     URL_INVALID: That doesn't look like a valid url.
     GET_SYS_LOG_ERR: Error happened when getting system settings
-    UPLOAD_FINISH: File uploaded successfully. Please wait for a moment when system
+    UPLOAD_FINISH:
+      File uploaded successfully. Please wait for a moment when system
       is importing the data. System will logout automatically. please login again
       after it finished.
   description:
     PROFILE: Update information about you.
     USERS: Add, rename and manage users, permissions and password profile.
     CONFIGURATION: Enable Syslog, Webhooks and queue file imports and exports.
-    LDAP: Configure an LDAP directory or Microsoft active directory to enable authentication
+    LDAP:
+      Configure an LDAP directory or Microsoft active directory to enable authentication
       of users.
     SAML: Configure single sign on using SAML.
     LICENSE: View billing and manage licenses.
     OPENID: Configure single sign on using OpenID Connect.
-    ENABLED_NET_POLICY_MODE: The Network Security Policy Mode can be set globally,
+    ENABLED_NET_POLICY_MODE:
+      The Network Security Policy Mode can be set globally,
       independent of the default group policy mode.
-    ENABLED_NET_POLICY_MODE_GROUP: The Network Security Policy will be set globally
+    ENABLED_NET_POLICY_MODE_GROUP:
+      The Network Security Policy will be set globally
       to a single mode %{name} and will enforce Network policies independently from
       the current Group process mode.
-    DISABLED_NET_POLICY_MODE: The Network Security Policy will use the Group Policy
+    DISABLED_NET_POLICY_MODE:
+      The Network Security Policy will use the Group Policy
       Mode for process, network, and file access.
 support:
   title: Options are available for teams of all sizes.
-  subtitle: 'What''s included:'
+  subtitle: "What's included:"
   community:
     title: NeuVector Community Support
-    question_slack: Ask a question in the Rancher Users <a href="https://rancher-users.slack.com/archives/C036F6JDZ8C"
+    question_slack:
+      Ask a question in the Rancher Users <a href="https://rancher-users.slack.com/archives/C036F6JDZ8C"
       target="_blank" rel="noopener noreferrer">NeuVector Channel</a>
-    documentation: Review the open source project's <a href="https://open-docs.neuvector.com/"
+    documentation:
+      Review the open source project's <a href="https://open-docs.neuvector.com/"
       target="_blank" rel="noopener noreferrer">documentation</a>
-    git_repo: Explore NeuVector <a href="https://github.com/neuvector/" target="_blank"
+    git_repo:
+      Explore NeuVector <a href="https://github.com/neuvector/" target="_blank"
       rel="noopener noreferrer">source code and helm chart repositories</a>
-    image_repo: Find the public images on the <a href="https://hub.docker.com/u/neuvector"
+    image_repo:
+      Find the public images on the <a href="https://hub.docker.com/u/neuvector"
       target="_blank" rel="noopener noreferrer">NeuVector docker hub</a>
   subscriptions:
     title: NeuVector Subscriptions - Benefits
     SLA: SLA backend Product Support Services, RCA, troubleshooting
     24-7: 24/7 and priority support options
     cve: Vulnerability (CVE) investigation, triage assistance
-    assistance: Best practices, hardening assistance (e.g. segmentation, network and
+    assistance:
+      Best practices, hardening assistance (e.g. segmentation, network and
       process profiling, admission controls)
-    run-time: Run-time threat rules configuration, optimization. Access to assets
+    run-time:
+      Run-time threat rules configuration, optimization. Access to assets
       and services (e.g. performance tuning, CVE lookups)
-    Rancher: Built-in, supported native integration with Rancher Manager and Rancher
+    Rancher:
+      Built-in, supported native integration with Rancher Manager and Rancher
       Distributions (e.g. UI Extension) - for Rancher Prime customers
-    more: Learn more about <a href="https://links.imagerelay.com/cdn/3404/ql/04c630990dd647f4bab73c61e67f615e/suse_support_flyer.pdf"
+    more:
+      Learn more about <a href="https://links.imagerelay.com/cdn/3404/ql/04c630990dd647f4bab73c61e67f615e/suse_support_flyer.pdf"
       target="_blank" rel="noopener noreferrer">SUSE support subscriptions</a>
-    login: Already a subscriber? <a href="https://scc.suse.com/" target="_blank" rel="noopener
+    login:
+      Already a subscriber? <a href="https://scc.suse.com/" target="_blank" rel="noopener
       noreferrer">Log In</a> to SUSE support
 ldap:
   head:
     TITLE: LDAP/AD Settings
-    GUIDE: The settings below configure an LDAP directory or Microsoft active directory
+    GUIDE:
+      The settings below configure an LDAP directory or Microsoft active directory
       which will be used to authenticate user.
   test:
     TITLE: Check LDAP/AD connection
@@ -3350,7 +3473,7 @@ ldap:
     NOTE: Input user and password to check!
     INFO: Checking, please wait...
     SUCCEEDED: LDAP/AD server connected!
-    SUCCEEDED_GROUP: 'LDAP/AD server connected, your groups:'
+    SUCCEEDED_GROUP: "LDAP/AD server connected, your groups:"
     FAILED: Test failed
   gridHeader:
     GROUP: Group
@@ -3370,7 +3493,8 @@ ldap:
       REMOVE: Remove Group Role Map
   ADD_DOMAIN: Add Namespaces ...
   ROLE_DOMAIN: role in namespace
-  ROLE_DOMAIN_INSTRUCTION: Select access role in the table, then edit namespace list
+  ROLE_DOMAIN_INSTRUCTION:
+    Select access role in the table, then edit namespace list
     under the table
   DM_ROLE_HINT: Add namespaces for which this user has %{role} privileges
   SINGLE_DOMAIN_HINT: Edit namespace here
@@ -3388,19 +3512,21 @@ ldap:
   GROUP_READER: Reader Role Map
   GROUP_CI: CI Integration Role Map
   GROUP_MEMBER_ATTR: Group Member Attribute
-  GROUP_MEMBER_ATTR_PLACEHOLDER: 'Default value: LDAP - ''memberUid'', AD - ''member'''
-  GROUP_MEMBER_ATTR_HINT: The attribute field to use when loading the group members
+  GROUP_MEMBER_ATTR_PLACEHOLDER: "Default value: LDAP - 'memberUid', AD - 'member'"
+  GROUP_MEMBER_ATTR_HINT:
+    The attribute field to use when loading the group members
     from the group.
   GROUP_MEMBER_ATTR_MESSAGE: Please enter a valid group member attribute
   USERNAME_ATTR: Username Attribute
-  USERNAME_ATTR_PLACEHOLDER: 'Default value: LDAP - ''uid'', AD - ''sAMAccountName'''
+  USERNAME_ATTR_PLACEHOLDER: "Default value: LDAP - 'uid', AD - 'sAMAccountName'"
   USERNAME_ATTR_HINT: The attribute field to use when loading the user.
   USERNAME_ATTR_MESSAGE: Please enter a valid username attribute
   ADD_GROUP: Add Group
   ADMIN_HINT: Add LDAP/AD groups which map to NeuVector admin
   READER_HINT: Add LDAP/AD groups which map to NeuVector reader
   CI_HINT: Add LDAP/AD groups which map to NeuVector CI Integration
-  BASE_DN_HINT: Root node in LDAP/AD from which to search users and groups. e.g. dc=neuvector,
+  BASE_DN_HINT:
+    Root node in LDAP/AD from which to search users and groups. e.g. dc=neuvector,
     dc=com
   BASE_DN_MESSAGE: Please enter a valid base DN.
   HOST_REQUIRED: Host is required.
@@ -3434,7 +3560,7 @@ okta:
   READER_HINT: Add SAML groups which map to NeuVector reader
   CI_HINT: Add SAML groups which map to NeuVector CI Integration
   LOAD_ERR: Failed to set up SAML
-  CALLBACK_URL: 'SAML Redirect URI: '
+  CALLBACK_URL: "SAML Redirect URI: "
   message:
     GET_SAML_ERR: Error happened when getting SAML configuration
 openId:
@@ -3452,7 +3578,7 @@ openId:
   READER_HINT: Add OpenID Connect groups which map to NeuVector reader
   CI_HINT: Add OpenID Connect groups which map to NeuVector CI Integration
   LOAD_ERR: Failed to set up OpenID Connect
-  CALLBACK_URL: 'OpenID Connect Redirect URI: '
+  CALLBACK_URL: "OpenID Connect Redirect URI: "
   message:
     GET_SAML_ERR: Error happened when getting OpenID Connect configuration
 signatures:
@@ -3467,7 +3593,7 @@ signatures:
     REKOR_PUBLIC_KEY: Rekor Public Key
     ROOT_CERT: Root Certificate
     SCT_PUBLIC_KEY: SCT Public Key
-    SCT_PUBLIC_KEY_HINT: 'SCT: Signed certificate timestamp'
+    SCT_PUBLIC_KEY_HINT: "SCT: Signed certificate timestamp"
     ATTRIBUTE: Attribute
     TYPE: Type
     V_TYPE: Verifier Type
