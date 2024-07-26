@@ -59,6 +59,7 @@
           field: 'service',
           // cellRenderer: ExposedServicePodGridServicePodCellComponent,
           width: 280,
+          minWidth: 110,
           sortable: false,
         },
         {
@@ -68,11 +69,30 @@
             return params.value.length;
           },
           width: 70,
+          minWidth: 50,
         },
         {
           headerName: 'Parent ID',
           field: 'parent_id',
           hide: true,
+        },
+        {
+        headerName: this.t(
+            'dashboard.body.panel_title.VULNERABILITIES'
+          ),
+          cellRenderer: params => {
+            if (params && params.data) {
+              return (
+                `<span class="badge badge-danger">${params.data.high}</span>
+                <span class="badge badge-warning">${params.data.medium}</span>`
+              );
+            }
+            return '';
+          },
+          width: 110,
+          maxWidth: 110,
+          minWidth: 110,
+          sortable: false,
         },
         {
           headerName: this.t('dashboard.body.panel_title.POLICY_MODE'),
@@ -161,4 +181,23 @@
       }
     }
   };
-  </script>
+</script>
+
+<style lang="scss">
+  .badge {
+    border-radius: 4px;
+    color: #141823;
+    font-size: .8em;
+    line-height: 1.5;
+    margin-left: 8px;
+    padding: 4px 8px;
+  }
+  .badge-danger {
+    background-color: #c5161f;
+    color: #fff;
+  }
+  .badge-warning {
+      color: #212529 !important;
+      background-color: #ff9800;
+  }
+</style>

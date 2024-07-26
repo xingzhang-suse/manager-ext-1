@@ -37,7 +37,7 @@ export default {
       let rPcs = cookieArray.find(item => item.includes('R_PCS'));
       let res = rTheme && rTheme.split('=')[1] !== RANCHER_CONST.THEME.AUTO ?
         rTheme.split('=')[1] : 
-        (rPcs ? rPcs.split('=')[1] : RANCHER_CONST.THEME.DARK);
+        (rPcs ? rPcs.split('=')[1] : RANCHER_CONST.THEME.LIGHT);
       sessionStorage.setItem(RANCHER_CONST.R_THEME, res);
       console.log(
         'Rancher theme',

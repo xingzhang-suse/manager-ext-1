@@ -452,6 +452,7 @@ dashboard:
       VUL_NODE: Vulnerable Nodes
       EXPO_CONV_RPT: Exposure Conversation Report
       SESSIONS: Sessions
+      VULNERABILITIES: Vulnerabilities
     comments:
       SAFE:
         Congrats! All your services are under policy protection perfectly! Please

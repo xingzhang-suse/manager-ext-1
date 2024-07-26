@@ -3,13 +3,13 @@
     import { getPackets, getHost, getWorkload } from '../../../../plugins/security-events-class';
     import { nvVariables, NV_MAP } from '../../../../types/neuvector';
     import FlagIpFqdn from '../../../common/contents/FlagIpFqdn';
-    import { EOS_CLOUD_FILLED, EOS_DOMAIN_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_CLUSTER_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
+    import { EOS_CLOUD_FILLED, EOS_NAMESPACE_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_CLUSTER_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
     export default {
         components: {
             Packet,
             FlagIpFqdn,
             EOS_CLOUD_FILLED,
-            EOS_DOMAIN_FILLED,
+            EOS_NAMESPACE_FILLED,
             EOS_SYSTEM_GROUP_FILLED,
             EOS_CLUSTER_FILLED,
             EOS_POD_FILLED
@@ -103,7 +103,7 @@
                 </span>
                 <span v-if="secEvent.endpoint.source.id !== 'external'">
                     <span v-if="secEvent.endpoint.source.domain">
-                        <EOS_DOMAIN_FILLED size="base" />
+                        <EOS_NAMESPACE_FILLED size="base" />
                         <span>
                             {{ secEvent.endpoint.source.domain }} |
                         </span>
@@ -193,7 +193,7 @@
                             secEvent.endpoint.destination.id !== 'external'
                         ">
                         <span v-if="secEvent.endpoint.destination.domain">
-                            <EOS_DOMAIN_FILLED size="base" />
+                            <EOS_NAMESPACE_FILLED size="base" />
                             <span>{{
                                 secEvent.endpoint.destination.domain
                             }}</span> |

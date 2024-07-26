@@ -1070,6 +1070,7 @@ export const prepareContext4TwoWayInfinityScroll = function(context: any = null)
   nvVariables.dateSliderCtx.openedPage = context?.openedPage || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.openedPage;
   nvVariables.dateSliderCtx.limit = context?.limit || NV_CONST.TWO_WAY_INFINITE_SCROLL_ARG.limit;
   nvVariables.dateSliderCtx.array = nvVariables.securityEventsServiceData.displayedSecurityEvents;
+  console.log("nvVariables.dateSliderCtx", nvVariables.dateSliderCtx);
 };
 
 export const filterSecEvents = function(): void {
@@ -1101,7 +1102,7 @@ export const filterSecEvents = function(): void {
       _excludeFilter(event, nvVariables.securityEventsServiceData.filterItems.excludedKeyword)
     );
   });
-  prepareContext4TwoWayInfinityScroll(nvVariables.dateSliderCtx);
+  prepareContext4TwoWayInfinityScroll();
 };
 
 export const parseAdvFilterParam = function(filters: any) {

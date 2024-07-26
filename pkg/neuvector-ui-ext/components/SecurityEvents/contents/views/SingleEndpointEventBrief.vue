@@ -3,12 +3,12 @@
     import Packet from '../../dialogs/Packet';
     import { getPackets, getHost, getWorkload } from '../../../../plugins/security-events-class';
     import { nvVariables } from '../../../../types/neuvector';
-    import { EOS_CLOUD_FILLED, EOS_DOMAIN_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
+    import { EOS_CLOUD_FILLED, EOS_NAMESPACE_FILLED, EOS_SYSTEM_GROUP_FILLED, EOS_POD_FILLED } from "eos-icons-vue2";
     export default {
         components: {
             Packet,
             EOS_CLOUD_FILLED,
-            EOS_DOMAIN_FILLED,
+            EOS_NAMESPACE_FILLED,
             EOS_SYSTEM_GROUP_FILLED,
             EOS_POD_FILLED
         },
@@ -112,7 +112,7 @@
                     <strong>{{ t('securityEvent.CONTAINER') }}:</strong>
                     <span>
                         <span v-if="secEvent.container.domain !== ''">
-                            <EOS_DOMAIN_FILLED size="base" />
+                            <EOS_NAMESPACE_FILLED size="base" />
                             <span>
                                 {{ secEvent.container.domain }} |
                             </span>

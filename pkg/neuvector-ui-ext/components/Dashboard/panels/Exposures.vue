@@ -76,6 +76,8 @@ export default {
                     peerEndpoint: '',
                     service: k,
                     policy_mode: v[0].policy_mode,
+                    high: v[0].high,
+                    medium: v[0].medium,
                     workload: '',
                     bytes: 0,
                     sessions: 0,

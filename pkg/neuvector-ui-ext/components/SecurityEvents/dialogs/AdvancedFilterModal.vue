@@ -22,8 +22,11 @@
           console.log("autoCompleteData", this.autoCompleteData)
         },
         methods: {
-          close() {
-            this.$emit('close');
+          show() {
+            this.showSlideIn = true;
+          },
+          hide() {
+            this.showSlideIn = false;
           },
           update() {},
           reset() {
@@ -60,7 +63,7 @@
             let filterParam = parseAdvFilterParam(this.filters);
             loadFilters(filterParam);
             filterSecEvents();
-            this.$emit('close');
+            this.showSlideIn = false;
           },
           apply() {
             this.filters.dateFrom = nvVariables.securityEventsServiceData.filterItems.dateFrom;
@@ -68,7 +71,7 @@
             let filterParam = parseAdvFilterParam(this.filters);
             loadFilters(filterParam);
             filterSecEvents();
-            this.$emit('close');
+            this.showSlideIn = false;
           }
         },
         data() {
@@ -101,25 +104,51 @@
               domains: nvVariables.securityEventsServiceData.filterItems.selectedDomains,
               includedKeyword: nvVariables.securityEventsServiceData.filterItems.includedKeyword,
               excludedKeyword: nvVariables.securityEventsServiceData.filterItems.excludedKeyword
-            }
+            },
+            showSlideIn: false
           }
         }
     };
 </script>
 
 <template>
-  <div class="modal-backdrop">
-    <div class="modal nv-modal" :class="isLightTheme ? 'light' : 'dark'">
-      <Card :buttonAction="close" :buttonText="'Close'" :sticky="true">
-        <template v-slot:title>
-          <h5 class="p-10" :style="isLightTheme ? 'color: #888' : 'color: #fff'">
-            {{ t('general.FILTER_MATCH_ALL') }}
-          </h5>
-        </template>
-        <template v-slot:body>
-          <div class="row mt-2">
-            <div class="col span-3">{{ t('securityEvent.SEVERITY') }}</div>
-            <div class="col span-9">
+  <div
+    class="adv-filter-dialog"
+    :style="`--banner-top-offset: 0px`"
+  >
+    <div
+      v-if="showSlideIn"
+      class="glass"
+      @click="hide()"
+    />
+    <div
+      class="slideIn"
+      :class="{'hide': false, 'slideIn__show': showSlideIn}"
+    >
+      <div class="slideIn__header">
+        <div
+          class="adv-filter-content"
+        >
+          <div class="adv-filter-header pb-10">
+            <div class="slideIn__header__buttons">
+              <button class="btn btn-sm role-link" @click="hide">
+                <span>Close</span>
+                <i class="icon icon-chevron-right" />
+              </button>
+            </div>
+          </div>
+
+          <div class="adv-filter-title mt-20">
+            <h5 :style="isLightTheme ? 'color: #888' : 'color: #fff'">
+              {{ t('general.FILTER_MATCH_ALL') }}
+            </h5>
+          </div>
+        </div>
+      </div>
+      <div class="nv-modal">
+        <div class="row mt-2">
+            <div class="text-bold">{{ t('securityEvent.SEVERITY') }}</div>
+            <div class="mt-2">
               <Checkbox v-model="filters.severity.error" :label="t('enum.ERROR')" @input="update"/>
               <Checkbox v-model="filters.severity.critical" :label="t('enum.CRITICAL')" @input="update"/>
               <Checkbox v-model="filters.severity.warning" :label="t('enum.WARNING')" @input="update"/>
@@ -127,26 +156,21 @@
             </div>
           </div>
           <div class="row mt-2">
-            <div class="col span-3">{{ t('securityEvent.LOCATION') }}</div>
-            <div class="col span-9">
+            <div class="text-bold">{{ t('securityEvent.LOCATION') }}</div>
+            <div class="mt-2">
               <Checkbox v-model="filters.location.host" :label="t('securityEvent.label.HOST')" @input="update"/>
               <Checkbox v-model="filters.location.container" :label="t('securityEvent.label.CONTAINER')" @input="update"/>
             </div>
           </div>
           <div class="row mt-2">
-            <div class="col span-3">{{ t('event.gridHeader.CATEGORY') }}</div>
-            <div class="col span-9">
+            <div class="text-bold">{{ t('event.gridHeader.CATEGORY') }}</div>
+            <div class="mt-2">
               <Checkbox v-model="filters.category.network" :label="t('securityEvent.label.NETWORK')" @input="update"/>
               <Checkbox v-model="filters.category.package" :label="t('securityEvent.label.PACKAGE')" @input="update"/>
               <Checkbox v-model="filters.category.file" :label="t('securityEvent.label.FILE')" @input="update"/>
               <Checkbox v-model="filters.category.tunnel" :label="t('securityEvent.label.TUNNEL')" @input="update"/>
               <Checkbox v-model="filters.category.process" :label="t('securityEvent.label.PROCESS')" @input="update"/>
               <Checkbox v-model="filters.category.priviledge" :label="t('securityEvent.label.PRIVILEDGE')" @input="update"/>
-            </div>
-          </div>
-          <div class="row mt-2">
-            <div class="col span-3"></div>
-            <div class="col span-9">
               <Checkbox v-model="filters.other" :label="t('securityEvent.label.OTHER')" @input="update"/>
             </div>
           </div>
@@ -155,6 +179,8 @@
             <LabeledSelect
               v-model="filters.host"
               :taggable="false"
+              :searchable="true"
+              :push-tags="true"
               :close-on-select="false"
               :mode="mode"
               :multiple="false"
@@ -168,6 +194,8 @@
             <LabeledSelect
               v-model="filters.source"
               :taggable="false"
+              :searchable="true"
+              :push-tags="true"
               :close-on-select="false"
               :mode="mode"
               :multiple="false"
@@ -181,6 +209,8 @@
             <LabeledSelect
               v-model="filters.destination"
               :taggable="false"
+              :searchable="true"
+              :push-tags="true"
               :close-on-select="false"
               :mode="mode"
               :multiple="false"
@@ -194,6 +224,8 @@
             <LabeledSelect
               v-model="filters.domains"
               :taggable="true"
+              :searchable="true"
+              :push-tags="true"
               :close-on-select="false"
               :mode="mode"
               :multiple="true"
@@ -221,11 +253,10 @@
               @input="update"
             />
           </div>
-          <!-- {{ selectedRow.children }} -->
-          <div class="mt-3">
+          <div class="mt-3" style="text-align: right">
             <a
               mat-button
-              class="btn role-primary"
+              class="btn role-secondary"
               aria-label="Reset all filters"
               type="button"
               @click="reset()">
@@ -240,8 +271,7 @@
               {{ t('enum.APPLY') }}
             </a>
           </div>
-        </template>
-      </Card>
+      </div>
     </div>
   </div>
 </template>
@@ -258,5 +288,110 @@
     }
     .nv-modal {
       text-align: left;
+    }
+
+    ::v-deep(.btn-sm) {
+      padding: 0 7px 0 0;
+    }
+
+    .adv-filter-dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      overflow-y: auto;
+
+      $slideout-width: 35%;
+      $title-height: 50px;
+      $padding: 5px;
+      $slideout-width: 45%;
+      --banner-top-offset: 0;
+      $header-height: calc(54px + var(--banner-top-offset));
+
+      .glass {
+        position: fixed;
+        top: $header-height;
+        height: calc(100% - $header-height);
+        left: 0;
+        width: 100%;
+        opacity: 0;
+        overflow-y: auto;
+      }
+
+      .slideIn {
+        border-left: var(--header-border-size) solid var(--header-border);
+        position: fixed;
+        top: $header-height;
+        right: -$slideout-width;
+        height: calc(100% - $header-height);
+        background-color: var(--topmenu-bg);
+        width: $slideout-width;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
+
+        padding: 10px;
+
+        transition: right .5s ease;
+
+        &__header {
+          text-transform: capitalize;
+        }
+
+        .adv-filter-content {
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+        }
+
+        h3 {
+          font-size: 14px;
+          margin: 0;
+          opacity: 0.7;
+          text-transform: uppercase;
+        }
+
+        .adv-filter-header {
+          border-bottom: 1px solid var(--border);
+          display: flex;
+          align-items: center;
+
+          .adv-filter-title {
+            flex: 1;
+          }
+        }
+
+        &__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          &__buttons {
+            display: flex;
+            align-items: center;
+          }
+
+          &__button {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            > i {
+              font-size: 20px;
+              opacity: 0.5;
+            }
+
+            &:hover {
+              background-color: var(--wm-closer-hover-bg);
+            }
+          }
+        }
+
+        &__show {
+          right: 0;
+        }
+      }
     }
 </style>
