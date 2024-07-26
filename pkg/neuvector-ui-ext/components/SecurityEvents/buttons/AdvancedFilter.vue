@@ -16,8 +16,7 @@
         },
         methods: {
             openAdvancedFilterDialog: function() {
-                nvVariables.showAdvFilterModal.value = true;
-                this.showModal = true;
+                this.$refs.advFilter.show();
             },
             closeModal: function() {
                 this.showModal = false;
@@ -34,6 +33,6 @@
         >
             {{ t('general.ADV_FILTER') }}
         </a>
-        <AdvancedFilterModal v-if="showModal" :isLightTheme="isLightTheme" :autoCompleteData="autoCompleteData" @close="closeModal"></AdvancedFilterModal>
+        <AdvancedFilterModal ref="advFilter" :isLightTheme="isLightTheme" :autoCompleteData="autoCompleteData" @close="closeModal"></AdvancedFilterModal>
     </div>
 </template>
