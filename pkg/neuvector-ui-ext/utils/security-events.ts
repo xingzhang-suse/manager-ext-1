@@ -40,9 +40,9 @@ type FilterTypes = 'TimeFIlter' | 'QuickFilter' | 'AdvancedFIlter';
 
 export async function combineSecurityEvents(securityEventsData: any, store: any, selectedRow: any) {
     console.log('combineSecurityEvents', store)
-    let threatList = JSON.parse(securityEventsData[0]);
-    let violationList = JSON.parse(securityEventsData[1]);
-    let incidentList = JSON.parse(securityEventsData[2]);
+    let threatList = JSON.parse(securityEventsData.data[0]);
+    let violationList = JSON.parse(securityEventsData.data[1]);
+    let incidentList = JSON.parse(securityEventsData.data[2]);
     let cachedSecurityEvents: any[] = [];
     let displayedSecurityEvents = [];
     let domainList: string[] = [];

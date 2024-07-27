@@ -37,7 +37,7 @@
             showHostDetails: async function(hostId, event) {
                 try {
                     let hostRes = await getHost(hostId);
-                    nvVariables.host.value = hostRes.host;
+                    nvVariables.host.value = hostRes.data.host;
                     nvVariables.showHostInfoModal.value = true;
                 } catch(error) {
                     console.error(error);
@@ -54,7 +54,7 @@
                 event.stopPropagation();
                 try {
                     let workloadRes = await getWorkload(endpoint.id);
-                    nvVariables.workload.value = workloadRes.workload;
+                    nvVariables.workload.value = workloadRes.data.workload;
                     nvVariables.showWorkloadInfoModal.value = true;
                 } catch(error) {
                     console.error(error);

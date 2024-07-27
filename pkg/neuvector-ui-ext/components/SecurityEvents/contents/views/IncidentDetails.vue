@@ -11,7 +11,8 @@
           showEnforcerDetails: async function(event, enforcerId, enforcerName) {
             try {
                 let enforcerRes = await getEnforcer(enforcerId);
-                nvVariables.enforcer.value = enforcerRes.enforcer;
+                console.log(enforcerRes)
+                nvVariables.enforcer.value = enforcerRes.data.enforcer;
                 nvVariables.showEnforcerInfoModal.value = true;
             } catch(error) {
                 console.error(error);

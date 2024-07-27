@@ -147,7 +147,7 @@
                                     <a
                                         v-if="host.scan_summary?.high || host.scan_summary?.medium"
                                         style="display: table-cell; font-size: 11px; line-height: 15px">
-                                        <em class="eos-icons icon-12 ml-2">launch</em>
+                                        <em class="icon-external-link"></em>
                                     </a>
                                     <label
                                         v-if="
@@ -170,7 +170,7 @@
                                     nodes
                                     <a
                                         style="display: table-cell; font-size: 11px; line-height: 15px">
-                                        <em class="eos-icons icon-12 ml-2">launch</em>
+                                        <em class="icon-external-link"></em>
                                     </a>
                                 </span>
                             </div>
