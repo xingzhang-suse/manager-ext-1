@@ -1,27 +1,24 @@
 <script>
-import IconApartment from '../../../common/icons/Apartment.vue';
-import IconCheckboxBlank from '../../../common/icons/CheckboxBlank.vue';
-import IconStorage from '../../../common/icons/Storage.vue';
-import IconSystemImage from '../../../common/icons/SystemImage.vue';
+import { EOS_APARTMENT_FILLED, EOS_CHECK_BOX_BLANK_FILLED, EOS_STORAGE_FILLED, EOS_SYSTEM_IMAGE_FILLED } from 'eos-icons-vue2';
 
 export default {
     props: {
         type: String
     },
     components: {
-        IconApartment,
-        IconCheckboxBlank,
-        IconStorage,
-        IconSystemImage
+        EOS_APARTMENT_FILLED,
+        EOS_CHECK_BOX_BLANK_FILLED,
+        EOS_STORAGE_FILLED,
+        EOS_SYSTEM_IMAGE_FILLED,
     }
 }
 </script>
 
 <template>
     <div>
-        <IconSystemImage v-if="type === 'image'"></IconSystemImage>
-        <IconCheckboxBlank v-else-if="type === 'workload'"></IconCheckboxBlank>
-        <IconStorage v-else-if="type === 'node'"></IconStorage>
-        <IconApartment v-else-if="type === 'platform'"></IconApartment>
+        <EOS_SYSTEM_IMAGE_FILLED v-if="type === 'image'" size="base" color="white"></EOS_SYSTEM_IMAGE_FILLED>
+        <EOS_CHECK_BOX_BLANK_FILLED v-else-if="type === 'workload'" size="base" color="white"></EOS_CHECK_BOX_BLANK_FILLED>
+        <EOS_STORAGE_FILLED v-else-if="type === 'node'" size="base" color="white"></EOS_STORAGE_FILLED>
+        <EOS_APARTMENT_FILLED v-else-if="type === 'platform'" size="base" color="white"></EOS_APARTMENT_FILLED>
     </div>
 </template>

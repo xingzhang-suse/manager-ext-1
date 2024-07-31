@@ -28,7 +28,10 @@
             domains: Array,
         },
         fetch() {
-          this.advFilter = JSON.parse(JSON.stringify(this.vulQuery));
+          const advFilter = JSON.parse(JSON.stringify(this.vulQuery));
+          if (advFilter.last_modified_timestamp) advFilter.last_modified_timestamp *= 1000;
+          if (advFilter.publishedTime) advFilter.publishedTime *= 1000;
+          this.advFilter = advFilter;
         },
         methods: {
           close() {
@@ -38,6 +41,8 @@
             this.$emit('close', { reset: true });
           },
           apply() {
+            if (this.advFilter.last_modified_timestamp) this.advFilter.last_modified_timestamp /= 1000;
+            if (this.advFilter.publishedTime) this.advFilter.publishedTime /= 1000;
             console.log(this.advFilter);
             this.$emit('close', this.advFilter);
           },

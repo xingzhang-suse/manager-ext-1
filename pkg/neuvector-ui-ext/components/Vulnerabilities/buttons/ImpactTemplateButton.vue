@@ -27,21 +27,23 @@
         v-if="!content.policy_mode"
         @click="openBrief(type, content)"
         class="border-0 badge ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
-        style="background-color: black">
+        style="background-color: black; color: white">
         <ImpactIconTemplate :type="type"></ImpactIconTemplate>
         {{ content.display_name }}
     </button>
     <button
         v-else-if="content.policy_mode.toLowerCase() === 'discover'"
         @click="openBrief(type, content)"
-        class="border-0 badge badge-danger ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-danger ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
+        style="color: white">
         <ImpactIconTemplate :type="type"></ImpactIconTemplate>
         {{ content.display_name }}
     </button>
     <button
         v-else
         @click="openBrief(type, content)"
-        class="border-0 badge badge-success ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center">
+        class="border-0 badge badge-success ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
+        style="color: white">
         <ImpactIconTemplate :type="type"></ImpactIconTemplate>
         {{ content.display_name }}
     </button>
