@@ -307,15 +307,21 @@ const editDisplayedViolation = function(
     );
     displayedViolation.name =
       violation.policy_id === 0
-        ? store.getters['i18n/t']('securityEvent.VIOLATION_NAME_DEFAULT')
+        ? violation.nbe
+          ? store.getters['i18n/t']('securityEvent.CROSS_NAMESPACE_BOUNDARY')
+          : store.getters['i18n/t']('securityEvent.VIOLATION_NAME_DEFAULT')
         : store.getters['i18n/t']('securityEvent.VIOLATION_NAME', {
             policy_id: violation.policy_id
           });
     displayedViolation.name4Pdf =
       violation.policy_id === 0
-        ? store.getters['i18n/t'](
-            'securityEvent.VIOLATION_NAME_DEFAULT'
-          )
+        ? violation.nbe
+          ? store.getters['i18n/t'](
+              'securityEvent.CROSS_NAMESPACE_BOUNDARY'
+            )
+          : store.getters['i18n/t'](
+              'securityEvent.VIOLATION_NAME_DEFAULT'
+            )
         : store.getters['i18n/t'](
             'securityEvent.VIOLATION_NAME',
             {
