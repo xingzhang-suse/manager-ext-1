@@ -1660,6 +1660,7 @@ cis:
 securityEvent:
   VIOLATION_NAME: Network rule %{policy_id} was violated
   VIOLATION_NAME_DEFAULT: Implicit deny rule was violated
+  CROSS_NAMESPACE_BOUNDARY: Cross namespace boundary violation
   SOURCE: Source
   DESTINATION: Destination
   SOURCE_DOMAIN: Source Namespace
