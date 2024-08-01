@@ -1,8 +1,12 @@
 <script>
+import { EOS_LAUNCH_FILLED } from 'eos-icons-vue2';
 import { shortenString } from '../../../../utils/common';
 import dayjs from 'dayjs';
 
 export default {
+    components: {
+        EOS_LAUNCH_FILLED,
+    },
     props: {
         workload: Object
     },
@@ -108,12 +112,12 @@ export default {
                                 {{ t('network.legend.GROUP') }}:
                             </span>
                             <span class="pod-item-value">
-                                <span v-tooltip.top="{ content: workload.service_group }">
+                                <span v-tooltip.top="{ content: workload.service_group }" ref="ttWorkloadServiceGroup">
                                     {{ shortenString(workload.service_group, 30) }}
                                 </span>
                                 <a @click="goToGroup(workload.service_group)"
                                     style="display: table-cell; font-size: 11px; line-height: 15px">
-                                    <em class="eos-icons icon-12 ml-2">launch</em>
+                                    <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                                 </a>
                             </span>
                         </div>
@@ -291,3 +295,9 @@ export default {
         </ul>
     </div>
 </template>
+
+<style lang="scss">
+.tooltip {
+  z-index: 1080;
+}
+</style>

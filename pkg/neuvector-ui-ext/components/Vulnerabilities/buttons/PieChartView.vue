@@ -1,5 +1,10 @@
 <script>
+    import { EOS_PIE_CHART_FILLED } from 'eos-icons-vue2';
+
     export default {
+        components: {
+            EOS_PIE_CHART_FILLED,
+        },
         data() {
             return {
                 pieChartActive: false
@@ -17,7 +22,7 @@
 <template>
     <div class="mr-10">
         <button @click="togglePieChart()" class="btn role-primary">
-            <i class="icon icon-lg icon-circle-plus"></i>
+            <EOS_PIE_CHART_FILLED size="m" color="white"></EOS_PIE_CHART_FILLED>
         </button>
     </div>
 </template>

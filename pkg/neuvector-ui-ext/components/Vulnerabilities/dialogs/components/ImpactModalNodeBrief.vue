@@ -1,8 +1,12 @@
 <script>
+import { EOS_LAUNCH_FILLED } from 'eos-icons-vue2';
 import { capitalize } from '../../../../utils/common';
 import dayjs from 'dayjs';
 
 export default {
+    components: {
+        EOS_LAUNCH_FILLED,
+    },
     props: {
         host: Object
     },
@@ -137,7 +141,7 @@ export default {
                         <a v-if="host.scan_summary?.high || host.scan_summary?.medium"
                             @click="goToHosts()"
                             style="display: table-cell; font-size: 11px; line-height: 15px">
-                            <em class="eos-icons icon-12 ml-2">launch</em>
+                            <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                         </a>
                         <label v-if="host.scan_summary?.scanned_at &&
                                 host.scan_summary?.high === 0 &&
@@ -158,7 +162,7 @@ export default {
                         <a
                             @click="goToGroup('nodes')"
                             style="display: table-cell; font-size: 11px; line-height: 15px">
-                            <em class="eos-icons icon-12 ml-2">launch</em>
+                            <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                         </a>
                     </span>
                 </div>

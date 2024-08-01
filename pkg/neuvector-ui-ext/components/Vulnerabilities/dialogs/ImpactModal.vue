@@ -1,17 +1,16 @@
 <script>
     import { Card } from '@components/Card';
     import Checkbox from '@components/Form/Checkbox/Checkbox';
-    import IconCheckboxBlank from '../../common/icons/CheckboxBlank.vue';
-    import IconStorage from '../../common/icons/Storage.vue';
     import ImpactModalWorkloadBrief from './components/ImpactModalWorkloadBrief.vue';
     import ImpactModalNodeBrief from './components/ImpactModalNodeBrief.vue';
+    import { EOS_CHECK_BOX_BLANK_FILLED, EOS_STORAGE_FILLED } from 'eos-icons-vue2';
 
     export default {
         components: {
             Card,
             Checkbox,
-            IconCheckboxBlank,
-            IconStorage,
+            EOS_CHECK_BOX_BLANK_FILLED,
+            EOS_STORAGE_FILLED,
             ImpactModalWorkloadBrief,
             ImpactModalNodeBrief,
         },
@@ -47,11 +46,11 @@
                     :style="isLightTheme ? 'color: #888' : 'color: #fff'"
                     >
                         <template v-if="type === 'workload'">
-                            <IconCheckboxBlank></IconCheckboxBlank>
+                            <EOS_CHECK_BOX_BLANK_FILLED size="base"></EOS_CHECK_BOX_BLANK_FILLED>
                             {{ content.display_name }}
                         </template>
                         <template v-else>
-                            <IconStorage></IconStorage>
+                            <EOS_STORAGE_FILLED size="base"></EOS_STORAGE_FILLED>
                             {{ content.name }}
                         </template>
                     </h5>
