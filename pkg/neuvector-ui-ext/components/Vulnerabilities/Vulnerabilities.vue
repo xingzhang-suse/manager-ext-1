@@ -74,7 +74,6 @@
                 selectedVul: null,
                 vulQueryData: Object,
                 domains: Array,
-                showAdvFilter: false,
             };
         },
         methods: {
@@ -96,19 +95,14 @@
                 this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
             },
             openAdvFilter() {
-                nvVariables.showAdvFilterModal.value = true;
-                this.showAdvFilter = true;
+                this.$refs.advFilter.show();
             },
             closeAdvFilter(filter) {
-                if (filter) {
-                    if (filter.reset) {
-                        this.setAdvFilter();
-                    } else {
-                        this.setAdvFilter(filter);
-                    }
+                if (filter.reset) {
+                    this.setAdvFilter();
+                } else {
+                    this.setAdvFilter(filter);
                 }
-                nvVariables.showAdvFilterModal.value = false;
-                this.showAdvFilter = false;
             },
             async changeView(value) {
                 this.selectedView = value;
@@ -181,7 +175,7 @@
                 </div>
             </div>
         </div>
-        <AdvancedFilterModal v-if="showAdvFilter" :isLightTheme="isLightTheme" :vulQuery="vulQuery" :domains="domains" @close="closeAdvFilter"></AdvancedFilterModal>
+        <AdvancedFilterModal ref="advFilter" :isLightTheme="isLightTheme" :vulQuery="vulQuery" :domains="domains" @close="closeAdvFilter"></AdvancedFilterModal>
     </div>
 </template>
 

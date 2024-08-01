@@ -34,17 +34,22 @@
           this.advFilter = advFilter;
         },
         methods: {
-          close() {
-            this.$emit('close');
+          show() {
+            this.showSlideIn = true;
+          },
+          hide() {
+            this.showSlideIn = false;
           },
           reset() {
             this.$emit('close', { reset: true });
+            this.hide();
           },
           apply() {
             if (this.advFilter.last_modified_timestamp) this.advFilter.last_modified_timestamp /= 1000;
             if (this.advFilter.publishedTime) this.advFilter.publishedTime /= 1000;
             console.log(this.advFilter);
             this.$emit('close', this.advFilter);
+            this.hide();
           },
           changeImpact(selectedImpact) {
             this.selectedImpact = selectedImpact;
@@ -140,7 +145,8 @@
                 },
               },
             ],
-            selectedImp: null
+            selectedImp: null,
+            showSlideIn: false,
           };
         },
         computed: {
@@ -165,23 +171,49 @@
 </script>
 
 <template>
-  <div class="modal-backdrop">
-    <div class="modal nv-modal" :class="isLightTheme ? 'light' : 'dark'">
-      <Card :buttonAction="close" :buttonText="'Close'" :sticky="true">
-        <template v-slot:title>
-          <h5 class="p-10" :style="isLightTheme ? 'color: #888' : 'color: #fff'">
-            {{ t('general.FILTER_MATCH_ALL') }}
-          </h5>
-        </template>
-        <template v-slot:body>
+  <div
+    class="adv-filter-panel"
+    :style="`--banner-top-offset: 0px`"
+  >
+    <div
+      v-if="showSlideIn"
+      class="glass"
+      @click="hide()"
+    />
+    <div
+      class="slideIn"
+      :class="{'hide': false, 'slideIn__show': showSlideIn}"
+    >
+      <div class="slideIn__header">
+        <div
+          class="adv-filter-content"
+        >
+          <div class="adv-filter-header pb-10">
+            <div class="slideIn__header__buttons">
+              <button class="btn btn-sm role-link" @click="hide">
+                <span>Close</span>
+                <i class="icon icon-chevron-right" />
+              </button>
+            </div>
+          </div>
+
+          <div class="adv-filter-title mt-20">
+            <h5 :style="isLightTheme ? 'color: #888' : 'color: #fff'">
+              {{ t('general.FILTER_MATCH_ALL') }}
+            </h5>
+          </div>
+        </div>
+      </div>
+      <div class="adv-filter-modal">
+        <div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('scan.LAST_MODIFIED') }}</div>
+            <div class="col-3 text-bold">{{ t('scan.LAST_MODIFIED') }}</div>
             <div class="col-9">
               <date-picker v-model="advFilter.last_modified_timestamp" :shortcuts="lastModifiedDateShortcuts" valueType="timestamp"></date-picker>
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('scan.PUBLISHED') }}</div>
+            <div class="col-3 text-bold">{{ t('scan.PUBLISHED') }}</div>
             <div class="col-3">
               <Select
                 v-model="advFilter.publishedType"
@@ -193,19 +225,19 @@
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('cis.report.gridHeader.SCORED') }}</div>
+            <div class="col-3 text-bold">{{ t('cis.report.gridHeader.SCORED') }}</div>
             <div class="col-9">
-              <RadioGroup v-model="advFilter.packageType" name="score_filter" :options="scoredOptions" :row="true" />
+              <RadioGroup v-model="advFilter.packageType" name="score_filter" :options="scoredOptions" :row="true" class="vul-radio-group" />
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('profile.TITLE') }}</div>
+            <div class="col-3 text-bold">{{ t('profile.TITLE') }}</div>
             <div class="col-9">
-              <RadioGroup v-model="advFilter.severityType" name="severity_filter" :options="severityOptions" :row="true" />
+              <RadioGroup v-model="advFilter.severityType" name="severity_filter" :options="severityOptions" :row="true" class="vul-radio-group" />
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('scan.report.gridHeader.SCORE') }}</div>
+            <div class="col-3 text-bold">{{ t('scan.report.gridHeader.SCORE') }}</div>
             <div class="col-3">
               <Select
                 v-model="advFilter.scoreType"
@@ -240,7 +272,7 @@
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3">{{ t('ldap.gridHeader.DOMAINS') }}</div>
+            <div class="col-3 text-bold">{{ t('ldap.gridHeader.DOMAINS') }}</div>
             <div class="col-3">
               <Select
                 v-model="advFilter.matchTypeNs"
@@ -360,35 +392,151 @@
               </button>
             </span>
           </div>
-          <div class="mt-3">
-            <a
-              mat-button
-              class="btn role-primary"
-              aria-label="Reset all filters"
-              type="button"
-              @click="reset()">
-              {{ t('enum.RESET') }}
-            </a>
-            <a
-              mat-button
-              class="btn role-primary"
-              aria-label="Apply filters"
-              type="button"
-              @click="apply()">
-              {{ t('enum.APPLY') }}
-            </a>
-          </div>
-        </template>
-      </Card>
+        </div>
+        <div class="mt-3" style="text-align: right;">
+          <a
+            mat-button
+            class="btn role-secondary"
+            aria-label="Reset all filters"
+            type="button"
+            @click="reset()">
+            {{ t('enum.RESET') }}
+          </a>
+          <a
+            mat-button
+            class="btn role-primary"
+            aria-label="Apply filters"
+            type="button"
+            @click="apply()">
+            {{ t('enum.APPLY') }}
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../../styles/vulnerabilities.scss';
 
   .vs__dropdown-menu {
       z-index: 1000 !important;
+  }
+
+  .vul-radio-group ::v-deep(.row > *) {
+    width: auto;
+  }
+
+  ::v-deep(.btn-sm) {
+    padding: 0 7px 0 0;
+  }
+
+  .adv-filter-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    overflow-y: auto;
+
+    $slideout-width: 35%;
+    $title-height: 50px;
+    $padding: 5px;
+    $slideout-width: 45%;
+    --banner-top-offset: 0;
+    $header-height: calc(54px + var(--banner-top-offset));
+
+    .glass {
+      position: fixed;
+      top: $header-height;
+      height: calc(100% - $header-height);
+      left: 0;
+      width: 100%;
+      opacity: 0;
+      overflow-y: auto;
+    }
+
+    .slideIn {
+      border-left: var(--header-border-size) solid var(--header-border);
+      position: fixed;
+      top: $header-height;
+      right: -$slideout-width;
+      height: calc(100% - $header-height);
+      background-color: var(--topmenu-bg);
+      width: $slideout-width;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
+
+      padding: 10px;
+
+      transition: right .5s ease;
+
+      &__header {
+        text-transform: capitalize;
+      }
+
+      .adv-filter-content {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      h3 {
+        font-size: 14px;
+        margin: 0;
+        opacity: 0.7;
+        text-transform: uppercase;
+      }
+
+      .adv-filter-header {
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+
+        .adv-filter-title {
+          flex: 1;
+        }
+      }
+
+      &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &__buttons {
+          display: flex;
+          align-items: center;
+        }
+
+        &__button {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          > i {
+            font-size: 20px;
+            opacity: 0.5;
+          }
+
+          &:hover {
+            background-color: var(--wm-closer-hover-bg);
+          }
+        }
+      }
+
+      .adv-filter-modal {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      
+      &__show {
+        right: 0;
+      }
+    }
   }
 </style>
