@@ -74,7 +74,7 @@
                 );
                 let csv = arrayToCsv(JSON.parse(JSON.stringify(csvData)));
                 let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-                saveAs(blob, `Security_events_${dayjs(new Date()).format('yyyyMMddHHmmss')}}.csv`);
+                saveAs(blob, `Security_events_${dayjs(new Date()).format('YYYYMMDDHHmmss')}.csv`);
             }
         }
     };
