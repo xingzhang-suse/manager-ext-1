@@ -1,5 +1,5 @@
 import { importTypes } from '@rancher/auto-import';
-import { IPlugin } from '@shell/core/types';
+import { IPlugin, TableColumnLocation } from '@shell/core/types';
 import neuvectorRouting from './routing/neuvector-routing';
 
 // Init the package
@@ -16,4 +16,18 @@ export default function(plugin: IPlugin) {
 
   // Add Vue Routes
   plugin.addRoutes(neuvectorRouting);
+
+  plugin.addTableColumn(
+    TableColumnLocation.RESOURCE,
+    { path: [{ urlPath: 'explorer/node', endsWith: true }] },
+    {
+      name:     'some-prop-col',
+      labelKey: 'dashboard.VULNERBILITIES',
+      getValue: (row: any) => row,
+      width: 100,
+      formatter: 'NodeVulnerabilitySummary',
+      sort: ['stateSort', 'nameSort'],
+      search: ['stateSort', 'nameSort'],
+    }
+  );
 }
