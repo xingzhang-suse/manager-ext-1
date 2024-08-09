@@ -19,8 +19,7 @@ export function init($plugin: IPlugin, store: any) {
   });
 
   virtualType({
-    label: store.getters["i18n/t"]("neuvector.title"),
-    labelKey: "neuvector.dashboard.label",
+    labelKey: "neuvector.title",
     name: "neuvector-overview",
     namespaced: false,
     route: {
@@ -30,8 +29,7 @@ export function init($plugin: IPlugin, store: any) {
     },
   });
   virtualType({
-    label: store.getters["i18n/t"]("dashboard.SEC_EVENT"),
-    labelKey: "neuvector.sec-event.label",
+    labelKey: "dashboard.SEC_EVENT",
     name: "neuvector-sec-events",
     namespaced: false,
     route: {
@@ -41,8 +39,7 @@ export function init($plugin: IPlugin, store: any) {
     },
   });
   virtualType({
-    label: store.getters["i18n/t"]("sidebar.nav.SCAN"),
-    labelKey: "neuvector.scan.label",
+    labelKey: "sidebar.nav.SCAN",
     name: "neuvector-scan",
     namespaced: false,
     route: {
@@ -52,8 +49,7 @@ export function init($plugin: IPlugin, store: any) {
     },
   });
   virtualType({
-    label: store.getters["i18n/t"]("sidebar.nav.BENCH"),
-    labelKey: "neuvector.bench.label",
+    labelKey: "sidebar.nav.BENCH",
     name: "neuvector-bench",
     namespaced: false,
     route: {
