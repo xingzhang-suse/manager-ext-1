@@ -1,5 +1,4 @@
 <script>
-    import { Card } from '@components/Card';
     import Checkbox from '@components/Form/Checkbox/Checkbox';
     import LabeledSelect from '@shell/components/form/LabeledSelect';
     import { LabeledInput } from '@components/Form/LabeledInput';
@@ -8,7 +7,6 @@
 
     export default {
         components: {
-          Card,
           Checkbox,
           LabeledSelect,
           LabeledInput
