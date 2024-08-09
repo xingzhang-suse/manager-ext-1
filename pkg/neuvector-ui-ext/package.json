@@ -6,7 +6,7 @@
   "icon": "https://raw.githubusercontent.com/neuvector/manager-ext/main/pkg/neuvector-ui-ext/nv-icon.svg",
   "rancher": {
     "annotations": {
-      "catalog.cattle.io/rancher-version": ">= v2.7.9",
+      "catalog.cattle.io/rancher-version": ">= v2.8.5",
 	  "catalog.cattle.io/display-name": "NeuVector UI Extension"
     }
   },

@@ -184,3 +184,33 @@ export function shortenString(str: string, limit: number) {
   }
   return str;
 }
+
+export function sortByOrder<T>(array: T[], order: string[]): T[] {
+  return array.map((item: any) => {
+    const sortedKeys = Object.keys(item).sort((a, b) => {
+      const indexA = order.indexOf(a);
+      const indexB = order.indexOf(b);
+
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+
+      if (indexA !== -1) {
+        return -1;
+      }
+
+      if (indexB !== -1) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    const sortedItem: any = {};
+    sortedKeys.forEach(key => {
+      sortedItem[key] = item[key];
+    });
+
+    return sortedItem;
+  });
+}
