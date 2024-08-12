@@ -1,15 +1,13 @@
 <script>
-    import { nvVariables, NV_CONST } from '../../../types/neuvector';
+    import { NV_CONST } from '../../../types/neuvector';
     import { arrayToCsv, sortByOrder, parseDatetimeStr } from '../../../utils/common';
-    import { getCsvData } from '../../../utils/security-events';
     import { saveAs } from 'file-saver';
-    import dayjs from 'dayjs';
     export default {
         components: {
         },
         props: {
             vulnerabilities: Array,
-            hostName: String,
+            csvFileName: String,
         },
         methods: {
             exportCSV: function() {
@@ -24,7 +22,7 @@
                 });
                 const csv = arrayToCsv(sortByOrder(vuls, NV_CONST.ORDERED_CVS_KEYS));
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-                const filename = `vulnerabilities-${this.hostName}_${parseDatetimeStr(
+                const filename = `vulnerabilities-${this.csvFileName}_${parseDatetimeStr(
                 new Date()
                 )}.csv`;
                 saveAs(blob, filename);

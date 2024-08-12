@@ -1,10 +1,10 @@
 <script>
     import { parseDatetimeStr } from '../../../utils/common';
-    import VulnerabilitiesGrid from '../grids/VulnerabilitiesGrid';
+    import NodeVulnerabilitiesGrid from '../grids/NodeVulnerabilitiesGrid';
 
     export default {
         components: {
-          VulnerabilitiesGrid
+          NodeVulnerabilitiesGrid
         },
         props: {
             host: Object,
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="nv-modal">
-          <VulnerabilitiesGrid v-if="showSlideIn" :host="host"></VulnerabilitiesGrid>
+          <NodeVulnerabilitiesGrid v-if="showSlideIn" :host="host"></NodeVulnerabilitiesGrid>
         </div> 
       </div>
   </div>

@@ -5,5 +5,8 @@ export default {
     },
     updateWorkloads(state: StateConfig, workloads: any[]) {
         state.workloads = workloads;
+    },
+    updateRancherWorkloadMap(state: StateConfig, rancherWorkloadMap: Map<string, string>) {
+        state.rancherWorkloadMap = rancherWorkloadMap;
     }
 }

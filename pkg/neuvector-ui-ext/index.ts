@@ -3,7 +3,7 @@ import { IPlugin, TableColumnLocation, PanelLocation, TabLocation } from '@shell
 import neuvectorRouting from './routing/neuvector-routing';
 import neuvectorStore from './store/neuvector';
 import {
-  NAMESPACE, POD, WORKLOAD_TYPES, INGRESS, SERVICE
+  NAMESPACE, POD, WORKLOAD_TYPES, INGRESS, SERVICE, NODE
 } from '@shell/config/types';
 
 // Init the package
@@ -27,7 +27,21 @@ export default function(plugin: IPlugin) {
   plugin.addTab(
     TabLocation.RESOURCE_DETAIL,
     { resource: [
-      'node',
+      NODE,
+    ]},
+    {
+      name:       'vulnerabilities',
+      labelKey:   'dashboard.VULNERBILITIES',
+      label:      'Vulnerabilities',
+      weight:     -5,
+      showHeader: false,
+      component:  () => import('./components/Nodes/grids/NodeVulnerabilitiesGrid.vue')
+    }
+  );
+
+  plugin.addTab(
+    TabLocation.RESOURCE_DETAIL,
+    { resource: [
       POD,
       WORKLOAD_TYPES.CRON_JOB,
       WORKLOAD_TYPES.DAEMON_SET,
@@ -43,7 +57,7 @@ export default function(plugin: IPlugin) {
       label:      'Vulnerabilities',
       weight:     -5,
       showHeader: false,
-      component:  () => import('./components/Nodes/grids/VulnerabilitiesGrid.vue')
+      component:  () => import('./components/Workloads/grids/WorkloadVulnerabilitiesGrid.vue')
     }
   );
 

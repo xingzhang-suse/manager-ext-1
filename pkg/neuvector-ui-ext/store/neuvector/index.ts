@@ -7,6 +7,7 @@ import actions from './actions';
 export interface StateConfig {
     hosts: any[],
     workloads: any[],
+    rancherWorkloadMap: Map<string, string>
 }
 
 const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
@@ -15,6 +16,7 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
             return {
                 hosts: config.hosts,
                 workloads: config.workloads,
+                rancherWorkloadMap: config.rancherWorkloadMap,
             }
         },
         getters:   { ...getters },
@@ -30,6 +32,7 @@ export default {
         {
             hosts: [],
             workloads: [],
+            rancherWorkloadMap: new Map<string, string>()
         }
     ),
     config,
