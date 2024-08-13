@@ -1,5 +1,7 @@
 import { NV_CONST, nvVariables } from '../types/neuvector';
 import dayjs from 'dayjs';
+import { SERVICE } from '@shell/config/types';
+import { Store } from 'vuex';
 
 const _keyStr: string =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -213,4 +215,15 @@ export function sortByOrder<T>(array: T[], order: string[]): T[] {
 
     return sortedItem;
   });
+};
+
+export async function cacheNvNamespace(store: Store<any>) {
+  let currentCluster = store.getters['currentCluster'];
+  nvVariables.currentCluster = currentCluster.id;
+  if ( store.getters['cluster/canList'](SERVICE) ) {
+    let allServices = await store.dispatch('cluster/findAll', { type: SERVICE }, { root: true });
+    if ( Array.isArray(allServices) && allServices.length ) {
+      nvVariables.ns = allServices.find(svc => svc?.id?.includes(NV_CONST.NV_SERVICE)).metadata.namespace
+    }
+  }
 }
