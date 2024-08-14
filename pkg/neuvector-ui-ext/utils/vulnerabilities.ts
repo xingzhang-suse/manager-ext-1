@@ -25,7 +25,7 @@ export function getCsvData(vulnerabilityList: any) {
         (acc: any, curr: any) =>
           acc +
           curr.package_version +
-          " > " +
+          " -> " +
           (curr.fixed_version || "N/A") +
           " ",
         ""
@@ -58,17 +58,19 @@ export function getCsvData(vulnerabilityList: any) {
         services: i > (serviceList?.length || 0) - 1 ? "" : serviceList[i],
         workloads: i > (workloadList?.length || 0) - 1 ? "" : workloadList[i],
         images: i > (imageList?.length || 0) - 1 ? "" : imageList[i],
-        "package_versions>fixed_version":
+        "package_versions->fixed_version":
           i > (pv2fvList?.length || 0) - 1 ? "" : pv2fvList[i],
         last_modified_datetime:
           i === 0
-            ? dayjs(entryData.last_modified_timestamp).format(
-                "MMM dd, y HH:mm:ss"
-              )
+            ? dayjs
+                .unix(entryData.last_modified_timestamp)
+                .format("MMM DD, YYYY HH:mm:ss")
             : "",
         published_datetime:
           i === 0
-            ? dayjs(entryData.published_timestamp).format("MMM dd, y HH:mm:ss")
+            ? dayjs
+                .unix(entryData.published_timestamp)
+                .format("MMM DD, YYYY HH:mm:ss")
             : "",
       });
     }
@@ -81,8 +83,8 @@ export function getCsvData(vulnerabilityList: any) {
       entryData.workloads ? entryData.workloads.length : 0,
       entryData.services ? entryData.services.length : 0,
       entryData.domains ? entryData.domains.length : 0,
-      entryData["package_versions>fixed_version"]
-        ? entryData["package_versions>fixed_version"].length
+      entryData["package_versions->fixed_version"]
+        ? entryData["package_versions->fixed_version"].length
         : 0
     );
     let maxRow4Entry = Math.ceil(maxLen / NV_MAP.EXCEL_CELL_LIMIT);
@@ -132,16 +134,16 @@ export function getCsvData(vulnerabilityList: any) {
               )
             : entryData.images.substring(NV_MAP.EXCEL_CELL_LIMIT * i)
           : "",
-        "package_versions>fixed_version": entryData[
-          "package_versions>fixed_version"
+        "package_versions->fixed_version": entryData[
+          "package_versions->fixed_version"
         ]
-          ? entryData["package_versions>fixed_version"].length >
+          ? entryData["package_versions->fixed_version"].length >
             NV_MAP.EXCEL_CELL_LIMIT * (i + 1)
-            ? entryData["package_versions>fixed_version"].substring(
+            ? entryData["package_versions->fixed_version"].substring(
                 NV_MAP.EXCEL_CELL_LIMIT * i,
                 NV_MAP.EXCEL_CELL_LIMIT * (i + 1)
               )
-            : entryData["package_versions>fixed_version"].substring(
+            : entryData["package_versions->fixed_version"].substring(
                 NV_MAP.EXCEL_CELL_LIMIT * i
               )
           : "",
@@ -215,7 +217,7 @@ export function prepareEntryData(cve: any, reportType: string) {
 
     cve.domains = Array.from(
       filteredWorkload.reduce(
-        (acc: any, curr: any) => acc.add(...curr.domains),
+        (acc: any, curr: any) => acc.add(curr.domain),
         new Set()
       )
     ).join(" ");
@@ -232,13 +234,13 @@ export function prepareEntryData(cve: any, reportType: string) {
   }
 
   if (cve.packages) {
-    cve["package_versions>fixed_version"] = Object.entries(cve.packages)
+    cve["package_versions->fixed_version"] = Object.entries(cve.packages)
       .map(([k, v]) => {
         return `${k}:(${(v as any).reduce(
           (acc: any, curr: any) =>
             acc +
             curr.package_version +
-            " > " +
+            " -> " +
             (curr.fixed_version || "N/A") +
             " ",
           ""
@@ -247,10 +249,10 @@ export function prepareEntryData(cve: any, reportType: string) {
       .join(" ");
   }
   cve.last_modified_datetime = dayjs(cve.last_modified_timestamp).format(
-    "MMM dd, y HH:mm:ss"
+    "MMM DD, YYYY HH:mm:ss"
   );
   cve.published_datetime = dayjs(cve.published_timestamp).format(
-    "MMM dd, y HH:mm:ss"
+    "MMM DD, YYYY HH:mm:ss"
   );
   delete cve.package_versions;
   delete cve.packages;
