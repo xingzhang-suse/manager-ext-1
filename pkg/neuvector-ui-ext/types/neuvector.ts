@@ -1,3 +1,5 @@
+export const NEUVECTOR_PRODUCT_NAME = "neuvector";
+
 export interface FilterOptions {
   dateFrom?: number;
   dateTo?: number;

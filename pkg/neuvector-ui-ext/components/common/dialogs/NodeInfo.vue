@@ -2,6 +2,7 @@
     import { Card } from '@components/Card';
     import { nvVariables } from '../../../types/neuvector';
     import { capitalize, parseDatetimeStr } from '../../../utils/common';
+    import { getSSOUrl } from '../../../utils/common';
     export default {
         components: {
             Card
@@ -19,8 +20,14 @@
         methods: {
           close() {
             this.$emit('close');
-          }
-        }
+          },
+          goToNvNodes: () => {
+            window.open(`${getSSOUrl('#/hosts')}`, '_blank');
+          },
+          goToNvGroups: (groupName) => {
+             window.open(`${getSSOUrl('#/group')}?group=${groupName}`, '_blank');
+          },
+        },
     };
 </script>
 
@@ -147,7 +154,7 @@
                                     <a
                                         v-if="host.scan_summary?.high || host.scan_summary?.medium"
                                         style="display: table-cell; font-size: 11px; line-height: 15px">
-                                        <em class="icon-external-link"></em>
+                                        <em class="icon-external-link" target="_blank" @click="goToNvNodes()"></em>
                                     </a>
                                     <label
                                         v-if="
@@ -170,7 +177,7 @@
                                     nodes
                                     <a
                                         style="display: table-cell; font-size: 11px; line-height: 15px">
-                                        <em class="icon-external-link"></em>
+                                        <em class="icon-external-link" target="_blank" @click="goToNvGroups('nodes')"></em>
                                     </a>
                                 </span>
                             </div>
