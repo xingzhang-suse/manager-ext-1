@@ -1,6 +1,5 @@
 <template>
     <Bar
-      v-if="!isEmptyData"
       :chart-options="chartOptions"
       :chart-data="chartData"
       :chart-id="chartId"
@@ -11,14 +10,10 @@
       :width="width"
       :height="height"
     />
-    <div class="message-content" v-else>
-      <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_VULNERABLE_NODE')"/>
-    </div>
   </template>
   
   <script>
   import { Bar } from 'vue-chartjs/legacy';
-  import EmptyDataMessage from '../../Dashboard/contents/EmptyDataMessage';
   
   import {
     Chart as ChartJS,
@@ -36,7 +31,6 @@
     name: 'BarChart',
     components: {
       Bar,
-      EmptyDataMessage
     },
     props: {
       chartId: {
@@ -79,17 +73,12 @@
         topHighVulnerableAssetsData.fill(0);
         topMediumVulnerableAssetsData.fill(0);
         topLowVulnerableAssetsData.fill(0);
-        if (this.topVulHosts.length === 0) {
-          this.isEmptyData = true;
-        } else {
-          this.isEmptyData = false;
-          this.topVulHosts.forEach((asset, index) => {
-            topVulnerableAssetsLabel[index] = asset.display_name;
-            topHighVulnerableAssetsData[index] = asset.high;
-            topMediumVulnerableAssetsData[index] = asset.medium;
-            topLowVulnerableAssetsData[index] = asset.low;
-          });
-        }
+        this.topVulHosts.forEach((asset, index) => {
+          topVulnerableAssetsLabel[index] = asset.display_name;
+          topHighVulnerableAssetsData[index] = asset.high;
+          topMediumVulnerableAssetsData[index] = asset.medium;
+          topLowVulnerableAssetsData[index] = asset.low;
+        });
         return {
           labels: topVulnerableAssetsLabel,
           datasets: [
@@ -154,8 +143,7 @@
             }
           },
           maintainAspectRatio: false
-        },
-        isEmptyData: false
+        }
       }
     }
   }
