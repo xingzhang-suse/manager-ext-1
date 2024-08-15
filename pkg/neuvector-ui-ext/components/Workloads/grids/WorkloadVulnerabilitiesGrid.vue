@@ -36,8 +36,14 @@
                     }
                     this.rancherWorkloadName = rancherWorkloadName
                 }
-                let scannedWorkloadsRes = await getWorkloadVulnerabilities(nvContainerId);
-                this.vulnerabilities = scannedWorkloadsRes.data.report.vulnerabilities;
+                const scannedWorkloadMap = this.$store.getters['neuvector/scannedWorkloadMap'];
+                if (scannedWorkloadMap.has(nvContainerId)) {
+                    this.vulnerabilities = scannedWorkloadMap.get(nvContainerId);
+                } else {
+                    let scannedWorkloadsRes = await getWorkloadVulnerabilities(nvContainerId);
+                    this.vulnerabilities = scannedWorkloadsRes.data.report.vulnerabilities;
+                    this.$store.dispatch('neuvector/updateScannedWorkloadMap', {workloadID: nvContainerId, scannedResult: this.vulnerabilities});
+                }
             } catch (error) {
                 console.error(error);
             }

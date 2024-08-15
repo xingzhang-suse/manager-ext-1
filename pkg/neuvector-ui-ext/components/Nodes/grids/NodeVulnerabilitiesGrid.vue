@@ -33,8 +33,14 @@
                     }
                     this.rancherHostName = rancherHostName
                 }
-                let vulRes = await getHostVulnerabilities(hostId);
-                this.vulnerabilities = vulRes.data.report.vulnerabilities;
+                const scannedNodeMap = this.$store.getters['neuvector/scannedNodeMap'];
+                if (scannedNodeMap.has(hostId)) {
+                    this.vulnerabilities = scannedNodeMap.get(hostId);
+                } else {
+                    let vulRes = await getHostVulnerabilities(hostId);
+                    this.vulnerabilities = vulRes.data.report.vulnerabilities;
+                    this.$store.dispatch('neuvector/updateScannedNodeMap', { nodeID: hostId, scannedResult: this.vulnerabilities });
+                }
             } catch (error) {
                 console.error(error);
             }
