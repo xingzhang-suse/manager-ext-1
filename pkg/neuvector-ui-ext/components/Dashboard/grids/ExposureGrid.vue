@@ -183,7 +183,7 @@
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .badge {
     border-radius: 4px;
     color: #141823;
