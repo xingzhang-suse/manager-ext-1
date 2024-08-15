@@ -89,6 +89,7 @@
       :headers="VUL_HEADER"
       :table-actions="false"
       :row-actions="false"
+      :paging="true"
       default-sort-by="name"
     >
       <template #col:name="{row}">
@@ -164,5 +165,9 @@
             top: 0;
             z-index: 20;
         }
+    }
+
+    .badge {
+      border-radius: 4px;
     }
 </style>
