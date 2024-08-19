@@ -52,7 +52,7 @@ export const nvVariables = {
       excludedKeyword: ''
     }
   },
-  isLightTheme: false,
+  isLightTheme: true,
   showPacketModal: {
     value: false
   },

@@ -139,7 +139,7 @@
         },
         computed: {
             isLightTheme: function() {
-                nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) === RANCHER_CONST.THEME.LIGHT;
+                nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK;
                 return nvVariables.isLightTheme;
             }
         },
