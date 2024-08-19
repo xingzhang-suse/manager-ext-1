@@ -2,13 +2,16 @@
     import SortableTable from '@shell/components/SortableTable';
     import { capitalize, parseDatetimeStr } from '../../../utils/common';
     import { Banner } from '@components/Banner';
+    import { RANCHER_CONST } from '../../../types/neuvector';
     import DownloadVulnerabilititesCSV from '../buttons/DownloadVulnerabilititesCSV';
+    import VulnerabilityInfoModal from '../../Vulnerabilities/dialogs/VulnerabilityInfoModal';
 
     export default {
         components: {
           SortableTable,
           Banner,
           DownloadVulnerabilititesCSV,
+          VulnerabilityInfoModal,
         },
         props: {
             vulnerabilities: Array,
@@ -73,15 +76,43 @@
                 label: this.t('scan.gridHeader.PUBLISHED_TIME'),
                 sort:  'published_timestamp'
               },
-            ]
+            ],
+            selectedVulnerability: Object,
+            isLightTheme: sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK,
+            showInfoModal: false,
           };
         },
+        methods: {
+          showInfo(row) {
+            this.selectedVulnerability = row;
+            this.showInfoModal = true;
+          },
+          closeInfo(event) {
+            this.showInfoModal = false;
+          },
+        },
+        computed: {
+          vulnerbilityCount() {
+            return this.vulnerabilities.reduce((cnt, vul) => {
+              cnt.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
+              cnt.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
+              return cnt;
+            }, {high: 0, medium: 0});
+          }
+        }
     };
 </script>
 
 <template>
   <div class="vulnerabilities-wrap">
-    <DownloadVulnerabilititesCSV class="download-btn" :csvFileName="csvFileName" :vulnerabilities="vulnerabilities"></DownloadVulnerabilititesCSV>
+    <div v-if="vulnerabilities.length > 0" class="download-btn">
+      <DownloadVulnerabilititesCSV class="pull-left" :csvFileName="csvFileName" :vulnerabilities="vulnerabilities"></DownloadVulnerabilititesCSV>
+      <div class="pull-left" style="margin-top: -3px;">
+        <div class="vul-cnt text-right"><span class="pl-2 pr-2 badge badge-danger">High</span><span>{{ vulnerbilityCount.high }}</span></div>
+        <div class="vul-cnt text-right"><span class="pl-2 pr-2 badge badge-warning">Medium</span><span>{{ vulnerbilityCount.medium }}</span></div>
+      </div>
+    </div>
+    <VulnerabilityInfoModal v-if="showInfoModal" :vulnerability="selectedVulnerability" :isLightTheme="isLightTheme" @close="closeInfo"></VulnerabilityInfoModal>
     <SortableTable
       data-testid="nv-vul-sortable-table"
       id="nv-vul-sortable-table"
@@ -94,7 +125,7 @@
     >
       <template #col:name="{row}">
         <td>
-          <span>{{ row.name || '-' }}</span>
+          <span class="hand text-info" @click="showInfo(row)">{{ row.name || '-' }}</span>
         </td>
       </template>
 
@@ -151,6 +182,7 @@
 
 
 <style lang="scss">
+    @import '../../../styles/neuvector.scss';
     #nv-vul-sortable-table table thead tr {
         background-color: var(--sortable-table-header-bg) !important;
         color: var(--body-text);
@@ -169,5 +201,13 @@
 
     .badge {
       border-radius: 4px;
+    }
+
+    .vul-cnt {
+      display: block;
+      margin: 3px 5px;
+      span {
+        margin: 0 5px;
+      }
     }
 </style>

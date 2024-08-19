@@ -56,7 +56,6 @@
                 v-if="secEvent.details.labels.length === 0"
             >{{ t('securityEvent.label.OTHER') }}
             </span>
-            <div class="sec-event-right-mask" style="margin-top: -4px;"></div>
         </div>
         <div
             class="col-sm-2 sec-event-time text-muted pl-0 auto-hide"
