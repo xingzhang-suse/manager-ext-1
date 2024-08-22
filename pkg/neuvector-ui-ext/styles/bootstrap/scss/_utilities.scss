@@ -657,23 +657,6 @@ $utilities: map-merge(
         100: 1
       ),
     ),
-    // scss-docs-end utils-links
-    // scss-docs-start utils-bg-color
-    "background-color": (
-      property: background-color,
-      class: bg,
-      local-vars: (
-        "bg-opacity": 1
-      ),
-      values: map-merge(
-        $utilities-bg-colors,
-        (
-          "transparent": transparent,
-          "body-secondary": rgba(var(--#{$prefix}secondary-bg-rgb), var(--#{$prefix}bg-opacity)),
-          "body-tertiary": rgba(var(--#{$prefix}tertiary-bg-rgb), var(--#{$prefix}bg-opacity)),
-        )
-      )
-    ),
     "bg-opacity": (
       css-var: true,
       class: bg-opacity,
