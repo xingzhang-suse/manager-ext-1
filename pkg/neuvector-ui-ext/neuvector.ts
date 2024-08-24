@@ -58,11 +58,22 @@ export function init($plugin: IPlugin, store: any) {
       meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
     },
   });
+  virtualType({
+    labelKey: "sidebar.nav.POLICY",
+    name: "neuvector-policy",
+    namespaced: false,
+    route: {
+      name: `c-cluster-${NEUVECTOR}-policy`,
+      params: { product: NEUVECTOR },
+      meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
+    },
+  });
 
   basicType([
     "neuvector-overview",
     "neuvector-sec-events",
     "neuvector-scan",
     "neuvector-bench",
+    "neuvector-policy",
   ]);
 }
