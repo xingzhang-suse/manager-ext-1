@@ -62,12 +62,12 @@ general:
   CANCEL: Cancel
   CLOSE: Close
   PROCESSING: Processing
-  PDF_TBL_ROW_LIMIT: "(Showing the latest %{max} records)"
-  PDF_SUMMARY_RANGE: "(Analyzed %{rangedCount} records from %{from} to %{to})"
+  PDF_TBL_ROW_LIMIT: "(Showing the latest {max} records)"
+  PDF_SUMMARY_RANGE: "(Analyzed {rangedCount} records from {from} to {to})"
   PDF_SUMMARY_RANGE_FILTERED:
-    "(Analyzed %{filteredCount} filtered records out of
-    %{rangedCount} from %{from} to %{to})"
-  PDF_SUMMARY_RANGE_2: "(Analyzed %{rangedCount} records)"
+    "(Analyzed {filteredCount} filtered records out of
+    {rangedCount} from {from} to {to})"
+  PDF_SUMMARY_RANGE_2: "(Analyzed {rangedCount} records)"
   FILTER_MATCH_ALL: Match All of the Following Rules
   REPORTED_FROM: Reported from
   REPORTED_TO: Reported to
@@ -243,19 +243,19 @@ login:
     NeuVector default admin user's password should
     be changed!
   CHANGE_EXPIRING_PASSWORD:
-    You should change password, as it is expiring within %{expiring_Days}
+    You should change password, as it is expiring within {expiring_Days}
     day(s)!
   CHANGE_EXPIRING_PASSWORD_NOW:
     You should change password immediately, as it is expiring
     today!
   UNSUPPORTED_ROLE: This user account is only for CI integration.
   VERSION_MISMATCHED: Manager, Controller, Enforcer are running different versions.
-  CVE_DB_OLD: CVE Database has not been updated for %{day} days
+  CVE_DB_OLD: CVE Database has not been updated for {day} days
   UPGRADE_AVAILABLE:
-    NeuVector is running %{currentVersion} and can be upgraded to
-    %{newVersion}
+    NeuVector is running {currentVersion} and can be upgraded to
+    {newVersion}
 dashboard:
-  WELCOME: Welcome to %{appName}
+  WELCOME: Welcome to {appName}
   REFRESH: Refresh
   TITLE: Dashboard
   GENERAL_REPORT: Security Event and Risk Report
@@ -1270,9 +1270,9 @@ cveProfile:
     IMPORT_FAILED: Error happens when importing vulnerability profile!
   gridHeader:
     VULNERABILITY: Vulnerability Name
-    REPORTED_DAYS: Vulnerabilities reported within %{days} day(s)
+    REPORTED_DAYS: Vulnerabilities reported within {days} day(s)
     REPORTED_DAYS_WITHOUT_FIX:
-      Vulnerabilities reported within %{days} day(s) without
+      Vulnerabilities reported within {days} day(s) without
       fix
     DAYS_PREFIX: Reported within
     DAYS_PREFIX_WITHOUT_FIX: Reported within
@@ -1309,6 +1309,8 @@ scan:
   UNPROTECTED_NODE: UnProtected Node
   PROTECTED_CONTAINER: Protected container
   LAST_MODIFIED: Last Modified
+  SCOPE: Scope
+  EXPORT: Export
   PUBLISHED: Published
   PUBLISHED_TYPE: Published Type
   WITH_FIX: With Fix
@@ -1324,10 +1326,10 @@ scan:
   MAX_REPORT_ROW_HINT: Report prints the first 500 records
   MAX_REPORT_ROW_HINT_2: according to last modified datetime
   MAX_REPORT_ROW_HINT_3:
-    Report prints the first %{ noAppendixMaxRow } records for
+    Report prints the first { noAppendixMaxRow } records for
     each type of assets
   APPENDIX_LIMIT_HINT_4:
-    In appendix，report prints only for first %{ noAppendixMaxRow
+    In appendix，report prints only for first { noAppendixMaxRow
     } vulnerability records
   report:
     TITLE: Vulnerability reports (Vulnerability View)
@@ -1379,15 +1381,15 @@ scan:
       SEVERITY_DIS: Vulnerabilities Severity Distribution
       TARGET_DIS: Vulnerabilities Target Distribution
       CONTAINER_INS:
-        "Containers (Vulnerable Workloads (No Vulnerabilities): %{ safeRate4Containers
-        } (%{ containerCnt } Workload(s)))"
+        "Containers (Vulnerable Workloads (No Vulnerabilities): { safeRate4Containers
+        } ({ containerCnt } Workload(s)))"
       HOST_INS:
-        "Hosts (Vulnerable Hosts (NoVulnerabilities): %{ safeRate4Hosts }
-        (%{ hostCnt } host(s)))"
+        "Hosts (Vulnerable Hosts (NoVulnerabilities): { safeRate4Hosts }
+        ({ hostCnt } host(s)))"
       PLATFORM_INS: Platforms
       IMAGE_INS:
-        "Images (Vulnerable Images (No Vulnerabilities): %{ safeRate4Images
-        } (%{ imageCnt } image(s)))"
+        "Images (Vulnerable Images (No Vulnerabilities): { safeRate4Images
+        } ({ imageCnt } image(s)))"
   status:
     SCANNED: "Scanned: "
     FAILED: "Failed: "
@@ -1646,19 +1648,19 @@ cis:
       SEVERITY_DIS: Compliance Severity Distribution
       CONTAINER_INS:
         "Containers (Compliant Workloads (No Compliance Violations):
-        %{ safeRate4Containers } (%{ containerCnt } Workload(s)))"
+        { safeRate4Containers } ({ containerCnt } Workload(s)))"
       HOST_INS:
-        "Hosts (Compliant Hosts (No Compliance Violations): %{ safeRate4Hosts
-        } (%{ hostCnt } host(s)))"
+        "Hosts (Compliant Hosts (No Compliance Violations): { safeRate4Hosts
+        } ({ hostCnt } host(s)))"
       PLATFORM_INS: Platforms
       IMAGE_INS:
-        "Images (Compliant Images (No Compliance Violations): %{ safeRate4Images
-        } (%{ imageCnt } image(s)))"
+        "Images (Compliant Images (No Compliance Violations): { safeRate4Images
+        } ({ imageCnt } image(s)))"
   tooltips:
     EDIT_REGULATION: Edit Regulation
     EDIT_TEMPLATE: Edit Template
 securityEvent:
-  VIOLATION_NAME: Network rule %{policy_id} was violated
+  VIOLATION_NAME: Network rule {policy_id} was violated
   VIOLATION_NAME_DEFAULT: Implicit deny rule was violated
   CROSS_NAMESPACE_BOUNDARY: Cross namespace boundary violation
   SOURCE: Source
@@ -1692,87 +1694,87 @@ securityEvent:
   VIOLATED_RULE: Violated Rule
   IMPLICIT_RULE_BRIEF:
     Under "Monitor" or "Protect" mode, There is an implicit rule
-    to deny the access from "%{from}" to "%{to}"
-  VIOLATED_RULE_BRIEF_1: Rule %{id}
+    to deny the access from "{from}" to "{to}"
+  VIOLATED_RULE_BRIEF_1: Rule {id}
   DENY: denied
   ALLOW: allowed
   ON_ANY_APPS: any applications
-  ON_APPS: any of applications in "%{applications}"
+  ON_APPS: any of applications in "{applications}"
   ON_ANY_PORTS: on any ports
-  ON_PORTS: on any of ports in "%{ports}"
-  VIOLATED_RULE_BRIEF_2: from "%{from}" to "%{to}"
-  HOST_FILE_MODIFIED: The files under "%{file_path}" on host "%{host_name}" was
+  ON_PORTS: on any of ports in "{ports}"
+  VIOLATED_RULE_BRIEF_2: from "{from}" to "{to}"
+  HOST_FILE_MODIFIED: The files under "{file_path}" on host "{host_name}" was
     modified
   CONTAINER_FILE_MODIFIED:
-    The files under "%{file_path}" in container "%{container}"
+    The files under "{file_path}" in container "{container}"
     was modified
-  HOST_PACKAGE_UPDATED: The package under "%{file_path}" on host "%{host_name}"
+  HOST_PACKAGE_UPDATED: The package under "{file_path}" on host "{host_name}"
     was updated
   CONTAINER_PACKAGE_UPDATED:
-    The package under "%{file_path}" in container "%{container}"
+    The package under "{file_path}" in container "{container}"
     was updated
   HOST_PRIVILEGE_ESCALATION:
-    The privilege by command "%{proc_cmd}" on host "%{host_name}"
+    The privilege by command "{proc_cmd}" on host "{host_name}"
     was escalated
   CONTAINER_PRIVILEGE_ESCALATION:
-    The privilege by command "%{proc_cmd}" in container
-    "%{container}" was escalated
+    The privilege by command "{proc_cmd}" in container
+    "{container}" was escalated
   HOST_SUSPICIOUS_PROCESS:
-    Suspicious process "%{proc_name}" on host "%{host_name}"
+    Suspicious process "{proc_name}" on host "{host_name}"
     was found
   CONTAINER_SUSPICIOUS_PROCESS:
-    Suspicious process "%{proc_name}" in container "%{container}"
+    Suspicious process "{proc_name}" in container "{container}"
     was found
-  HOST_TUNNEL_DETECTED: Tunnel by command "%{proc_name}" on host "%{host_name}"
+  HOST_TUNNEL_DETECTED: Tunnel by command "{proc_name}" on host "{host_name}"
     was detected
   CONTAINER_TUNNEL_DETECTED:
-    Tunnel by command "%{proc_name}" in container "%{container}"
+    Tunnel by command "{proc_name}" in container "{container}"
     was detected
   PROCESS_PROFILE_VIOLATION:
-    Process profile rule violation by command "%{proc_name}"
-    on container "%{container}" was detected
+    Process profile rule violation by command "{proc_name}"
+    on container "{container}" was detected
   HOST_PROCESS_VIOLATION:
-    Process profile rule violation by command "%{proc_name}"
-    on host "%{host_name}" was detected
+    Process profile rule violation by command "{proc_name}"
+    on host "{host_name}" was detected
   CONTAINER_FILEACCESS_VIOLATION:
-    The file "%{file_path}" in container "%{container}"
-    was accessed by command "%{proc_name}"
-  HOST_FILEACCESS_VIOLATION: The file "%{file_path}" on host "%{host_name}" was
-    accessed by command "%{proc_name}"
+    The file "{file_path}" in container "{container}"
+    was accessed by command "{proc_name}"
+  HOST_FILEACCESS_VIOLATION: The file "{file_path}" on host "{host_name}" was
+    accessed by command "{proc_name}"
   HOST_PRIVILEGE_ESCALATION_NO_PROC_CMD:
-    The privilege by some commands on host "%{host_name}"
+    The privilege by some commands on host "{host_name}"
     was escalated
   CONTAINER_PRIVILEGE_ESCALATION_NO_PROC_CMD:
     The privilege by some commands in container
-    "%{container}" was escalated
+    "{container}" was escalated
   HOST_SUSPICIOUS_PROCESS_NO_PROC_NAME:
-    Suspicious process on host "%{host_name}"
+    Suspicious process on host "{host_name}"
     was found
   CONTAINER_SUSPICIOUS_PROCESS_NO_PROC_NAME:
-    Suspicious process in container "%{container}"
+    Suspicious process in container "{container}"
     was found
   HOST_TUNNEL_DETECTED_NO_PROC_NAME:
-    Tunnel by some commands on host "%{host_name}"
+    Tunnel by some commands on host "{host_name}"
     was detected
   CONTAINER_TUNNEL_DETECTED_NO_PROC_NAME:
-    Tunnel by some command in container "%{container}"
+    Tunnel by some command in container "{container}"
     was detected
   PROCESS_PROFILE_VIOLATION_NO_PROC_NAME:
     Process profile rule violation by some commands
-    on container "%{container}" was detected
+    on container "{container}" was detected
   HOST_PROCESS_VIOLATION_NO_PROC_NAME:
     Process profile rule violation by some commands
-    on host "%{host_name}" was detected
+    on host "{host_name}" was detected
   CONTAINER_FILEACCESS_VIOLATION_NO_PROC_NAME:
-    The file "%{file_path}" in container
-    "%{container}" was created/removed
+    The file "{file_path}" in container
+    "{container}" was created/removed
   HOST_FILEACCESS_VIOLATION_NO_PROC_NAME:
-    The file "%{file_path}" on host "%{host_name}"
+    The file "{file_path}" on host "{host_name}"
     was was created/removed
   HOST_ERR: Error happened when getting host details
   CONTAINER_ERR: Error happened when getting container details
   ENFORCER_ERR: Error happened when getting enforcer details
-  AUTOCOMPLETE_INVALID: "%{field} not recognized. Click one of the autocomplete options."
+  AUTOCOMPLETE_INVALID: "{field} not recognized. Click one of the autocomplete options."
   label:
     NETWORK: Network
     PRIVILEDGE: Privilege
@@ -2029,7 +2031,7 @@ user:
     ADD_NS: Add Namespace
     ADMIN_HINT: Add namespaces for which this user has admin privileges
     READER_HINT: Add namespaces for which this user has read-only privileges
-    NS_ROLE_HINT: Add namespaces for which this user has %{role} privileges
+    NS_ROLE_HINT: Add namespaces for which this user has {role} privileges
   editUser:
     TITLE: Edit User
     EDIT: Update
@@ -2037,14 +2039,14 @@ user:
     SUBMIT_NG: Failed to update user!
   deleteUser:
     title: Remove
-    prompt: Are you going to remove the user %{username}?
-    group_prompt: Are you going to remove selected %{count} users?
+    prompt: Are you going to remove the user {username}?
+    group_prompt: Are you going to remove selected {count} users?
   passwordRequirement:
-    MIN_LENGTH: "%{minLength} character(s) minimum."
-    MIN_UPPER: "%{minUpper} uppercase character(s)."
-    MIN_LOWER: "%{minLower} lowercase character(s)."
-    MIN_DIGIT: "%{minDigit} number(s)."
-    MIN_SP_CHAR: '%{minSpChar} special character(s). e.g. !"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
+    MIN_LENGTH: "{minLength} character(s) minimum."
+    MIN_UPPER: "{minUpper} uppercase character(s)."
+    MIN_LOWER: "{minLower} lowercase character(s)."
+    MIN_DIGIT: "{minDigit} number(s)."
+    MIN_SP_CHAR: '{minSpChar} special character(s). e.g. !"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     PASSWORD_SECURE: Please enter it again in Confirm Password field.
     ALL_SET: Your password is all set!
 apikey:
@@ -2081,14 +2083,14 @@ apikey:
     CREATED: A new API Key has been created
     AUTH_INSTRUCTION: "Use this token directly against the API:"
     AUTH_CODE:
-      '> curl -k -H "Content-Type: application/json" -H "X-Auth-Apikey: %{apikey}"
+      '> curl -k -H "Content-Type: application/json" -H "X-Auth-Apikey: {apikey}"
       https://...'
     SAVE_WARNING:
       Save the info above! This is the only time you'll be able to see
       it. If you lose it, you'll need to create a new API Key.
     ADD_OK: Adding API Key is successful.
     ADD_NG: Failed to add API Key
-    REMOVE_CFM: Are you sure you want to remove API Key %{name}?
+    REMOVE_CFM: Are you sure you want to remove API Key {name}?
     REMOVE_OK: Removing API Key is successful
     REMOVE_ERR: Failed to remove API Key
   addApikey:
@@ -2270,7 +2272,7 @@ group:
   SELECT_ALL_ALERT: "The selection contains 'nodes' group. Please confirm if you
     want to switch this group to "
   SWITCH_MODE_DISABLED:
-    Policy mode in following %{noModeGroupCount} group(s) cannot
+    Policy mode in following {noModeGroupCount} group(s) cannot
     be switched.
   SCORED_DISABLED:
     Cannot turn on/off scorable attribute for one or more currently
@@ -2837,9 +2839,9 @@ admissionControl:
     ENABLE_CONFIRM: "Enable default whitelist rule? - ID: "
     DISABLE_CONFIRM_DEFAULT:
       Disabling this default rule may prevent deployment in
-      %{namespace} namespace
+      {namespace} namespace
     ENABLE_CONFIRM_DEFAULT:
-      Enabling this default rule will allow deployment in %{namespace}
+      Enabling this default rule will allow deployment in {namespace}
       namespace
     PROTECT_CONFIRM: Will you switch to 'Protect Mode'?
     UNSUPPORTED: Unsupported operation because it is not Kubernetes platform.
@@ -2995,20 +2997,20 @@ admissionControl:
     RISKY_ROLE_CREATE_POD: Service Account can create workload resource
     RISKY_ROLE_EXEC_INTO_CONTAINER: Service Account can execute into container
   display:
-    "<=": within %{days} day(s)
-    ">=": "%{days} day(s) ago"
-    CVE_HIGH_COUNT_WITH_REPORT_DAYS: "%{comparison} %{count} high severity CVEs
+    "<=": within {days} day(s)
+    ">=": "{days} day(s) ago"
+    CVE_HIGH_COUNT_WITH_REPORT_DAYS: "{comparison} {count} high severity CVEs
       that were reported"
     CVE_HIGH_WITH_FIX_COUNT_WITH_REPORT_DAYS:
-      "%{comparison} %{count} high severity
+      "{comparison} {count} high severity
       CVEs with fix that were reported"
     CVE_MEDIUM_COUNT_WITH_REPORT_DAYS:
-      "%{comparison} %{count} medium severity CVEs
+      "{comparison} {count} medium severity CVEs
       that were reported"
     CVE_SCORE_COUNT_WITH_COUNT:
-      "%{countComparison} %{count} CVEs whose score %{scoreComparison}
-      %{score}"
-    RESOURCE_LIMIT: "RLC: %{details}"
+      "{countComparison} {count} CVEs whose score {scoreComparison}
+      {score}"
+    RESOURCE_LIMIT: "RLC: {details}"
     cveScore:
       "<=": is lower than
       ">=": is higher than
@@ -3016,7 +3018,7 @@ admissionControl:
     TITLE: Test results
     REPORT_TITLE: Admission Control Matching Test Report
     UNAVAILABLE_PROP:
-      Property %{propsUnavailable} in the resources are not available
+      Property {propsUnavailable} in the resources are not available
       for evaluation.
     INDEX: Resource
     KIND: Kind
@@ -3098,16 +3100,16 @@ multiCluster:
     leave_failure: Failed to leave the Primary Cluster
     query_failure: Failed to access the clusters
     token_failure: Failed to generate the token
-    redirect_failure: "%{ name } is unreachable"
-    redirect_ok: Redirected to the cluster %{ name }
-    deploy_ok: The sync notification has sent to the cluster %{ name }
+    redirect_failure: "{ name } is unreachable"
+    redirect_ok: Redirected to the cluster { name }
+    deploy_ok: The sync notification has sent to the cluster { name }
     deploy_failure: Failed to send the sync notification
     api_failure: Multiple Cluster Service is not available
     get_name_failure: Failed to access the cluster name
     SCORE_UNAVAILIBlE: Unavailable
   prompt:
-    remove: Are you sure you want to remove %{ name } from this Primary Cluster?
-    demote: Are you sure you want to demote the cluster ( %{ name } ) ?
+    remove: Are you sure you want to remove { name } from this Primary Cluster?
+    demote: Are you sure you want to demote the cluster ( { name } ) ?
     leave: Are you sure you want to leave from the cluster ?
   validation:
     token: Invalid token format
@@ -3187,10 +3189,10 @@ setting:
   SERVER_CERTIFICATE: Server Certificate
   EXPORT: Export
   IMPORT: Import
-  CLOUD_BILLING: "%{cloud} Marketplace Support"
+  CLOUD_BILLING: "{cloud} Marketplace Support"
   CLOUD_BILLING_HINT_1:
     "If you have subscribed to NeuVector by SUSE support through
-    the %{cloud} Marketplace (i.e. integrated billing through your %{cloud} account),
+    the {cloud} Marketplace (i.e. integrated billing through your {cloud} account),
     please download this special support file. You will need to upload it to your
     SUSE SCC account at "
   CLOUD_SUPPORT_LINK: https://scc.suse.com/cloudsupport
@@ -3281,13 +3283,13 @@ setting:
   PASSWORD: Password
   IBM_INTEGRATE: Integrate with IBM Security Advisor
   GENERATE_URL: Generate url
-  URL_EXPIRE: URL is valid until %{time}
+  URL_EXPIRE: URL is valid until {time}
   IBM_SA_ERR: Error happened when getting URL
   DASHBOARD_URL: Dashboard URL
   IBM_SETUP_URL: NeuVector setup URL
   GET_URL: Get URL
   SETUP_DONE_NO_TIME: Connected
-  SETUP_DONE: Connected at %{time}
+  SETUP_DONE: Connected at {time}
   UNUSED_GROUP_AGE: Auto-Deletion of Unused Groups
   UNUSED_GROUP_HINT:
     Groups with no members (e.g. pods/containers) will be deleted
@@ -3304,9 +3306,9 @@ setting:
   ENFORCERS: Enforcers
   ENFORCERS_HINT:
     Select enforcers to include their support information if necessary.
-    Up to %{maxSlectedEnforcer} enforcers can be selected.
+    Up to {maxSlectedEnforcer} enforcers can be selected.
   MAX_SELECTED_ENFORCER_HINT:
-    Please select no more than %{maxSlectedEnforcer} enforcers
+    Please select no more than {maxSlectedEnforcer} enforcers
     for support information.
   AS_STANDALONE: Import configuration as standalone cluster
   RANCHER_EP: Rancher Endpoint
@@ -3336,7 +3338,7 @@ setting:
     NAME_PATTERN_NG: Start with "fed."
     LOCAL_NAME_PATTERN_NG: Can't start with "fed."
     LEAVE_PAGE: Do you want to leave the page without saving configuration setting?
-    DELETE_CONFIRM: Do you want to remove webhook - %{name}
+    DELETE_CONFIRM: Do you want to remove webhook - {name}
     OTHER_TYPE: Key-Value Pairs
   remote_repository:
     title: Remote Repository Configuration
@@ -3420,7 +3422,7 @@ setting:
       independent of the default group policy mode.
     ENABLED_NET_POLICY_MODE_GROUP:
       The Network Security Policy will be set globally
-      to a single mode %{name} and will enforce Network policies independently from
+      to a single mode {name} and will enforce Network policies independently from
       the current Group process mode.
     DISABLED_NET_POLICY_MODE:
       The Network Security Policy will use the Group Policy
@@ -3497,7 +3499,7 @@ ldap:
   ROLE_DOMAIN_INSTRUCTION:
     Select access role in the table, then edit namespace list
     under the table
-  DM_ROLE_HINT: Add namespaces for which this user has %{role} privileges
+  DM_ROLE_HINT: Add namespaces for which this user has {role} privileges
   SINGLE_DOMAIN_HINT: Edit namespace here
   HOST: Host Name
   PORT: Port
@@ -3538,7 +3540,7 @@ ldap:
   SERVER_SAVE_FAILED: Failed to save server
   GROUP_ROLE: Role
   GROUPS: Groups
-  GP_ROLE_HINT: Add groups for which this user has %{role} privileges
+  GP_ROLE_HINT: Add groups for which this user has {role} privileges
   message:
     GET_LDAP_ERR: Error happened when getting LDAP configuration
 okta:
@@ -3627,52 +3629,52 @@ signatures:
     REMOVE_VERIFIER_OK: Removed a verifier successfully!
     REMOVE_VERIFIER_NG: Error happens when removing verifier!
 just_now: just now
-seconds_ago: "%{time} seconds ago"
+seconds_ago: "{time} seconds ago"
 a_minute_ago: a minute ago
-minutes_ago: "%{time} minutes ago"
+minutes_ago: "{time} minutes ago"
 an_hour_ago: an hour ago
-hours_ago: "%{time} hours ago"
+hours_ago: "{time} hours ago"
 a_day_ago: yesterday
-days_ago: "%{time} days ago"
+days_ago: "{time} days ago"
 a_week_ago: a week ago
-weeks_ago: "%{time} weeks ago"
+weeks_ago: "{time} weeks ago"
 a_month_ago: a month ago
-months_ago: "%{time} months ago"
+months_ago: "{time} months ago"
 a_year_ago: a year ago
-years_ago: "%{time} years ago"
+years_ago: "{time} years ago"
 over_a_year_ago: over a year ago
-seconds_from_now: "%{time} seconds from now"
+seconds_from_now: "{time} seconds from now"
 a_minute_from_now: a minute from now
-minutes_from_now: "%{time} minutes from now"
+minutes_from_now: "{time} minutes from now"
 an_hour_from_now: an hour from now
-hours_from_now: "%{time} hours from now"
+hours_from_now: "{time} hours from now"
 a_day_from_now: tomorrow
-days_from_now: "%{time} days from now"
+days_from_now: "{time} days from now"
 a_week_from_now: a week from now
-weeks_from_now: "%{time} weeks from now"
+weeks_from_now: "{time} weeks from now"
 a_month_from_now: a month from now
-months_from_now: "%{time} months from now"
+months_from_now: "{time} months from now"
 a_year_from_now: a year from now
-years_from_now: "%{time} years from now"
+years_from_now: "{time} years from now"
 over_a_year_from_now: over a year from now
-MINUTES_INTERVAL: Every %{time} minutes
+MINUTES_INTERVAL: Every {time} minutes
 ONE_HOUR_INTERVAL: Every hour
-HOURS_INTERVAL: Every %{time} hours
+HOURS_INTERVAL: Every {time} hours
 ONE_DAY_INTERVAL: Every day
-DAYS_INTERVAL: Every %{time} days
+DAYS_INTERVAL: Every {time} days
 time:
-  YEARS: "%{time} years"
+  YEARS: "{time} years"
   YEAR: 1 year
-  MONTHS: "%{time} months"
+  MONTHS: "{time} months"
   MONTH: 1 month
-  DAYS: "%{time} days"
+  DAYS: "{time} days"
   DAY: 1 day
-  HOURS: "%{time} hours"
+  HOURS: "{time} hours"
   HOUR: 1 hour
-  MINUTES: "%{time} minutes"
+  MINUTES: "{time} minutes"
   MINUTE: 1 minute
-  SECONDS: "%{time} seconds"
+  SECONDS: "{time} seconds"
   SECOND: 1 second
   relative:
-    FUTURE: "%{time} from now"
-    PAST: "%{time} ago"
+    FUTURE: "{time} from now"
+    PAST: "{time} ago"

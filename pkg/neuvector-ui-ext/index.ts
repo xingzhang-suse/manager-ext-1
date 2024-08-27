@@ -1,6 +1,10 @@
 import { importTypes } from '@rancher/auto-import';
-import { IPlugin, TableColumnLocation } from '@shell/core/types';
+import { IPlugin, TableColumnLocation, PanelLocation, TabLocation } from '@shell/core/types';
 import neuvectorRouting from './routing/neuvector-routing';
+import neuvectorStore from './store/neuvector';
+import {
+  NAMESPACE, POD, WORKLOAD_TYPES, INGRESS, SERVICE, NODE
+} from '@shell/config/types';
 
 // Init the package
 export default function(plugin: IPlugin) {
@@ -16,6 +20,69 @@ export default function(plugin: IPlugin) {
 
   // Add Vue Routes
   plugin.addRoutes(neuvectorRouting);
+
+  // Add Vuex store
+  plugin.addDashboardStore(neuvectorStore.config.namespace, neuvectorStore.specifics, neuvectorStore.config);
+
+  plugin.addTab(
+    TabLocation.RESOURCE_DETAIL,
+    { resource: [
+      NODE,
+    ]},
+    {
+      name:       'vulnerabilities',
+      labelKey:   'dashboard.VULNERBILITIES',
+      label:      'Vulnerabilities',
+      weight:     -5,
+      showHeader: false,
+      component:  () => import('./components/Nodes/grids/NodeVulnerabilitiesGrid.vue')
+    }
+  );
+
+  plugin.addTab(
+    TabLocation.RESOURCE_DETAIL,
+    { resource: [
+      POD,
+      WORKLOAD_TYPES.CRON_JOB,
+      WORKLOAD_TYPES.DAEMON_SET,
+      WORKLOAD_TYPES.DEPLOYMENT,
+      WORKLOAD_TYPES.JOB,
+      WORKLOAD_TYPES.STATEFUL_SET,
+      INGRESS,
+      SERVICE
+    ]},
+    {
+      name:       'vulnerabilities',
+      labelKey:   'dashboard.VULNERBILITIES',
+      label:      'Vulnerabilities',
+      weight:     -5,
+      showHeader: false,
+      component:  () => import('./components/Workloads/grids/WorkloadVulnerabilitiesGrid.vue')
+    }
+  );
+
+  plugin.addPanel(
+    PanelLocation.RESOURCE_LIST,
+    { path: [{ urlPath: 'explorer/node', endsWith: true }] },
+    { component: () => import('./components/Nodes/NodePanel.vue') }
+  );
+
+  plugin.addPanel(
+    PanelLocation.RESOURCE_LIST,
+    {
+      resource: [
+        POD,
+        WORKLOAD_TYPES.CRON_JOB,
+        WORKLOAD_TYPES.DAEMON_SET,
+        WORKLOAD_TYPES.DEPLOYMENT,
+        WORKLOAD_TYPES.JOB,
+        WORKLOAD_TYPES.STATEFUL_SET,
+        INGRESS,
+        SERVICE
+      ]
+    },
+    { component: () => import('./components/Workloads/WorkloadPanel.vue') }
+  );
 
   plugin.addTableColumn(
     TableColumnLocation.RESOURCE,

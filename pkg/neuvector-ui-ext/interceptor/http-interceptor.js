@@ -38,19 +38,25 @@ instance.interceptors.response.use(
   async (error) => {
     // Handle response errors
     console.error('Response Error Interceptor:', error);
+    const originalRequest = error.config;
     if (
       error.response.status === NV_CONST.STATUS_AUTH_TIMEOUT ||
       error.response.status ===  NV_CONST.STATUS_UNAUTH
     ) {
-      return getAuth().then(
-        response => {
-          return response;
-        } 
-      ).catch(
-        error => {
-          return Promise.reject(error);
-        }
-      )
+      try {
+        let authRes = await getAuth();  // Assume this refreshes the auth token
+
+        sessionStorage.setItem('nv_token', authRes.data.token.token);
+        originalRequest.headers.set(NV_CONST.LOCAL_STORAGE_TOKEN, authRes.data.token.token)
+        .set('Cache-Control', 'no-cache')
+        .set('Pragma', 'no-cache');
+
+        return axios(originalRequest);
+      } catch (authError) {
+        // Handle the error in re-authentication
+        console.error('Authentication failed:', authError);
+        return Promise.reject(authError);
+      }
     } else {
       return Promise.reject(error);
     }

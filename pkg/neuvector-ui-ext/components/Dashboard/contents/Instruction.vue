@@ -51,7 +51,7 @@ export default {
     display: none;
     position: absolute;
     bottom: 20px;
-    background-color: #1f1f20;
+    background-color: #CFD8DC;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 100;
     padding: 12px 16px;
@@ -73,6 +73,6 @@ export default {
 
 /* Add a background color to the dropdown links on hover */
 .dropdown-content a:hover {
-    background-color: #1f1f20;
+    background-color: #CFD8DC;
 }
 </style>

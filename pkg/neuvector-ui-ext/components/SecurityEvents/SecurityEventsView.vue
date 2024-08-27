@@ -21,6 +21,7 @@
     import EnforcerInfo from '../common/dialogs/EnforcerInfo';
     import DownloadCsv from  './buttons/DownloadCsv';
     import Refresh from '../common/buttons/Refresh';
+    import Loading from '@shell/components/Loading';
 
     // library.add(faSomeIcon);
 
@@ -39,7 +40,8 @@
             PodInfo,
             EnforcerInfo,
             DownloadCsv,
-            Refresh
+            Refresh,
+            Loading
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -139,7 +141,7 @@
         },
         computed: {
             isLightTheme: function() {
-                nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) === RANCHER_CONST.THEME.LIGHT;
+                nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK;
                 return nvVariables.isLightTheme;
             }
         },
@@ -198,7 +200,8 @@
 </script>
 
 <template>
-    <div class="screen-area">
+    <Loading v-if="$fetchState.pending" />
+    <div v-else class="screen-area">
         <div id="sec-event" class="padding-top-0">
             <header style="margin-bottom: 10px;" id="security-events-title">
                 <div class="title">

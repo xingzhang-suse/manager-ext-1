@@ -1,3 +1,5 @@
+export const NEUVECTOR_PRODUCT_NAME = "neuvector";
+
 export interface FilterOptions {
   dateFrom?: number;
   dateTo?: number;
@@ -50,7 +52,7 @@ export const nvVariables = {
       excludedKeyword: ''
     }
   },
-  isLightTheme: false,
+  isLightTheme: true,
   showPacketModal: {
     value: false
   },

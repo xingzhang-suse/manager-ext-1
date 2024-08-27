@@ -1,6 +1,7 @@
 <script>
     import { getEnforcer } from '../../../../plugins/security-events-class';
     import { nvVariables } from '../../../../types/neuvector';
+    import { getSSOUrl } from '../../../../utils/common';
     export default {
         components: {
         },
@@ -8,17 +9,20 @@
             secEvent: Object
         },
         methods: {
-          showEnforcerDetails: async function(event, enforcerId, enforcerName) {
-            try {
-                let enforcerRes = await getEnforcer(enforcerId);
-                console.log(enforcerRes)
-                nvVariables.enforcer.value = enforcerRes.data.enforcer;
-                nvVariables.showEnforcerInfoModal.value = true;
-            } catch(error) {
-                console.error(error);
+            goToNvGroups: (groupName) => {
+                window.open(`${getSSOUrl('#/group')}?group=${groupName}`, '_blank');
+            },
+            showEnforcerDetails: async function(event, enforcerId, enforcerName) {
+                try {
+                    let enforcerRes = await getEnforcer(enforcerId);
+                    console.log(enforcerRes)
+                    nvVariables.enforcer.value = enforcerRes.data.enforcer;
+                    nvVariables.showEnforcerInfoModal.value = true;
+                } catch(error) {
+                    console.error(error);
+                }
             }
-          }
-        }
+        },
     };
 </script>
 
@@ -143,7 +147,7 @@
                 <span class="text-bold">{{ t('securityEvent.GROUP') }}:</span>&nbsp;
 
                 <!-- <span class="text-muted link hand" ui-sref="app.group({groupName: secEvent.details.message.group, from: 'process'})">   -->
-                <a data-role="button" class="text-muted link hand" @click="goToGroupPage(secEvent.details.message.group)">
+                <a data-role="button" class="text-muted link hand" target="_blank"  @click="goToNvGroups(secEvent.details.message.group)">
                 {{secEvent.details.message.group}}
                 </a>&nbsp;&nbsp;
             </span>

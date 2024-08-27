@@ -1,5 +1,7 @@
 import { NV_CONST, nvVariables } from '../types/neuvector';
 import dayjs from 'dayjs';
+import { SERVICE } from '@shell/config/types';
+import { Store } from 'vuex';
 
 const _keyStr: string =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -183,4 +185,45 @@ export function shortenString(str: string, limit: number) {
     )}`;
   }
   return str;
+}
+
+export function sortByOrder<T>(array: T[], order: string[]): T[] {
+  return array.map((item: any) => {
+    const sortedKeys = Object.keys(item).sort((a, b) => {
+      const indexA = order.indexOf(a);
+      const indexB = order.indexOf(b);
+
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+
+      if (indexA !== -1) {
+        return -1;
+      }
+
+      if (indexB !== -1) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    const sortedItem: any = {};
+    sortedKeys.forEach(key => {
+      sortedItem[key] = item[key];
+    });
+
+    return sortedItem;
+  });
+};
+
+export async function cacheNvNamespace(store: Store<any>) {
+  let currentCluster = store.getters['currentCluster'];
+  nvVariables.currentCluster = currentCluster.id;
+  if ( store.getters['cluster/canList'](SERVICE) ) {
+    let allServices = await store.dispatch('cluster/findAll', { type: SERVICE }, { root: true });
+    if ( Array.isArray(allServices) && allServices.length ) {
+      nvVariables.ns = allServices.find(svc => svc?.id?.includes(NV_CONST.NV_SERVICE)).metadata.namespace
+    }
+  }
 }
