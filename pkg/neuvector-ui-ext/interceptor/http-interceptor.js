@@ -41,7 +41,8 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     if (
       error.response.status === NV_CONST.STATUS_AUTH_TIMEOUT ||
-      error.response.status ===  NV_CONST.STATUS_UNAUTH
+      error.response.status ===  NV_CONST.STATUS_UNAUTH ||
+      (error.response.status === NV_CONST.STATUS_BAD_REQUEST && error.response.data === NV_CONST.TOKEN_REQUESTED_ERROR_MSG)
     ) {
       try {
         let authRes = await getAuth();  // Assume this refreshes the auth token
