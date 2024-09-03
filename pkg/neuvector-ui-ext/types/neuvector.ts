@@ -111,6 +111,8 @@ export const NV_CONST = {
   STATUS_INTERNAL_SERVER_ERR: 500,
   STATUS_NOT_FOUND: 404,
   STATUS_FORBIDDEN: 403,
+  STATUS_BAD_REQUEST: 400,
+  TOKEN_REQUESTED_ERROR_MSG: 'Request is missing required HTTP header \'Token\'',
   PATH_LOGIN: 'login',
   PATH_LOGOUT: 'logout',
   PATH_DEFAULT: 'dashboard',
