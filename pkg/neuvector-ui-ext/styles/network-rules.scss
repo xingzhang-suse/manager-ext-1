@@ -1,0 +1,72 @@
+@import './common/color.scss';
+.action-label {
+    @media print {
+      height: 15px;
+      line-height: 15px;
+      font-size: 10px;
+    }
+    @media screen {
+      height: 20px;
+      line-height: 20px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    min-width: 50px;
+    border-radius: 4px;
+    text-align: center;
+    display: inline-block;
+    color: #fff;
+    &.info {
+      background-color: $mdc-light-blue-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.deny {
+      background-color: $mdc-red-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.warning {
+      background-color: $mdc-orange-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.pink {
+      background-color: #e91e63;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.allow {
+      background-color: $mdc-light-green-500;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.discover {
+      background-color: #2196f3;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  
+    &.monitor {
+      background-color: #4e39c1;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  
+    &.protect {
+      background-color: #186d33;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  }
+  
+  .disabled-action {
+    background-color: $neuvector-grey-400 !important;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .disabled-action-2 {
+    color: $neuvector-grey-500 !important;
+    border: 1px solid $neuvector-grey-400;
+    -webkit-print-color-adjust: exact;
+  }

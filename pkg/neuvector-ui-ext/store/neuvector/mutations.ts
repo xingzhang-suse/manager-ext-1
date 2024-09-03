@@ -1,4 +1,6 @@
 import { StateConfig } from './index';
+import _ from 'lodash';
+
 export default {
     updateHosts(state: StateConfig, hosts: any[]) {
         state.hosts = hosts;
@@ -14,5 +16,11 @@ export default {
     },
     updateScannedNodeMap(state: StateConfig, entry: {nodeID: string, scannedResult: Object}) {
         state.scannedNodeMap.set(entry.nodeID, entry.scannedResult);
-    }
+    },
+    updateIsNetworkRuleChanged(state: StateConfig, isNetworkRuleChanged: Boolean) {
+        state.isNetworkRuleChanged = isNetworkRuleChanged;
+    },
+    updateNetworkRulesBackup(state: StateConfig, networkRules: any[]) {
+        state.networkRulesBackup = _.cloneDeep(networkRules);
+    },
 }

@@ -2,6 +2,7 @@ import { NV_CONST, nvVariables } from '../types/neuvector';
 import dayjs from 'dayjs';
 import { SERVICE } from '@shell/config/types';
 import { Store } from 'vuex';
+import axios from '../interceptor/http-interceptor';
 
 const _keyStr: string =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -226,4 +227,35 @@ export async function cacheNvNamespace(store: Store<any>) {
       nvVariables.ns = allServices.find(svc => svc?.id?.includes(NV_CONST.NV_SERVICE)).metadata.namespace
     }
   }
+}
+
+export function loadPagedData(
+  url: string,
+  params: any,
+  arrayName: string,
+  cb: Function,
+  handleError: Function,
+  finalize_cb: Function,
+  options: any = {}
+) {
+  axios({
+    url: getSSOUrl(url),
+    method: 'get',
+    params: params
+  }).then(
+    (res: any) => {
+      let data = arrayName ? res.data[arrayName] : res.data;
+      let length = arrayName ? data.length : data.length;
+      cb(data, options);
+      if (length === params.limit) {
+        params.start += params.limit;
+        loadPagedData(url, params, arrayName, cb, handleError, finalize_cb, options);
+      } else {
+        finalize_cb();
+      }
+    }
+  ).catch(e => {
+      handleError(e);
+      finalize_cb();
+  }); 
 }

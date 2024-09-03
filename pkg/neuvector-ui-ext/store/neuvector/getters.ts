@@ -6,4 +6,6 @@ export default {
     rancherWorkloadMap: (state: StateConfig): Map<string, string> => state.rancherWorkloadMap,
     scannedWorkloadMap: (state: StateConfig): Map<string, Object> => state.scannedWorkloadMap,
     scannedNodeMap: (state: StateConfig): Map<string, Object> => state.scannedNodeMap,
+    isNetworkRuleChanged: (state: StateConfig): Boolean => state.isNetworkRuleChanged,
+    networkRulesBackup: (state: StateConfig): any[] => state.networkRulesBackup,
 }

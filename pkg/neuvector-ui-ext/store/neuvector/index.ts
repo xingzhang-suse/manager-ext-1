@@ -10,6 +10,8 @@ export interface StateConfig {
     rancherWorkloadMap: Map<string, string>,
     scannedWorkloadMap: Map<string, Object>,
     scannedNodeMap: Map<string, Object>,
+    isNetworkRuleChanged: Boolean,
+    networkRulesBackup: any[],
 }
 
 const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
@@ -21,6 +23,8 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
                 rancherWorkloadMap: config.rancherWorkloadMap,
                 scannedWorkloadMap: config.scannedWorkloadMap,
                 scannedNodeMap: config.scannedNodeMap,
+                isNetworkRuleChanged: config.isNetworkRuleChanged,
+                networkRulesBackup: config.networkRulesBackup,
             }
         },
         getters:   { ...getters },
@@ -39,6 +43,8 @@ export default {
             rancherWorkloadMap: new Map<string, string>(),
             scannedWorkloadMap: new Map<string, Object>(),
             scannedNodeMap: new Map<string, Object>(),
+            isNetworkRuleChanged: false,
+            networkRulesBackup: [],
         }
     ),
     config,

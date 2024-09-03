@@ -8,7 +8,8 @@
     "annotations": {
       "catalog.cattle.io/kube-version": ">= v1.16.0-0 < v1.31.0-0",
       "catalog.cattle.io/rancher-version": ">= v2.8.5",
-      "catalog.cattle.io/display-name": "NeuVector UI Extension"
+      "catalog.cattle.io/display-name": "NeuVector UI Extension",
+      "catalog.cattle.io/ui-extension-version": ">= 2.0.1"
     }
   },
   "scripts": {
