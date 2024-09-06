@@ -4,18 +4,13 @@
     import ButtonDropdown from '@shell/components/ButtonDropdown';
     import SimpleBox from '@shell/components/SimpleBox';
     import LabeledSelect from '@shell/components/form/LabeledSelect';
-    import TopVulnerableNodesBarChart from './charts/TopVulnerableNodesBarChart.vue';
-    import TopVulnerableImagesBarChart from './charts/TopVulnerableImagesBarChart.vue';
-    import VulnerabilityItemsTable from './contents/VulnerabilityItemsTable.vue';
-    import VulnerabilityItemsChart from './contents/VulnerabilityItemsChart.vue';
-    import VulnerabilityItemsDetail from './contents/VulnerabilityItemsDetail.vue';
-    import AdvancedFilterModal from './dialogs/AdvancedFilterModal.vue';
-    import { getDomains, postVulnerabilityQuery } from '../../plugins/vulnerabilities-class';
+    import TopImpactComplianceBarChart from './charts/TopImpactComplianceBarChart.vue';
+    import TopImpactComplianceContainerBarChart from './charts/TopImpactComplianceContainerBarChart.vue';
+    import { getDomains, getContainerBrief, getAvailableFilters, getCompliance } from '../../plugins/compliance-class';
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
     import { refreshAuth } from '../../plugins/neuvector-class'; 
-    import { initVulQuery } from '../../utils/vulnerabilities';
-    import FileExportModal from './dialogs/FileExportModal.vue';
+    import { preprocessCompliance } from '../../utils/compliance';
 
     export default {
         components: {
@@ -24,13 +19,8 @@
             ButtonDropdown,
             SimpleBox,
             LabeledSelect,
-            TopVulnerableNodesBarChart,
-            TopVulnerableImagesBarChart,
-            VulnerabilityItemsTable,
-            VulnerabilityItemsChart,
-            VulnerabilityItemsDetail,
-            AdvancedFilterModal,
-            FileExportModal,
+            TopImpactComplianceBarChart,
+            TopImpactComplianceContainerBarChart
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -41,18 +31,7 @@
             }
             this.currentCluster = this.$store.getters['currentCluster'];
             nvVariables.currentCluster = this.currentCluster.id;
-            try {
-                console.log('Vulnerabilities');
-                this.authRes = await refreshAuth();
-                nvVariables.user = this.authRes.data.token;
-                this.domains = (await getDomains()).data.domains
-                    .map(domain => domain.name)
-                    .filter(domain => domain.charAt(0) !== '_');
-                this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
-                console.log(this.domains, this.vulQueryData);
-            } catch(error) {
-                console.error(error);
-            }
+            await this.loadData();
         },
         props: {
         },
@@ -64,60 +43,93 @@
         },
         data() {
             return {
-                vulnerabilityViewsOptions: [ 
-                    this.t('scan.report.view.ALL'), 
-                    this.t('scan.report.view.CONTAINERS'), 
-                    this.t('scan.report.view.INFRASTRUCTURE'),
-                    this.t('scan.report.view.REGISTRY')
-                ],
-                selectedView: this.t('scan.report.view.ALL'),
-                vulQuery: initVulQuery(),
                 pieChartActive: false,
-                selectedVul: null,
-                vulQueryData: Object,
-                domains: Array
+                selectedCompliance: null,
+                workloadMap: new Map(),
+                complianceDist: {
+                    error: 0,
+                    high: 0,
+                    warning: 0,
+                    note: 0,
+                    pass: 0,
+                    info: 0,
+                    platform: 0,
+                    image: 0,
+                    node: 0,
+                    container: 0,
+                },
+                complianceData: Object,
+                domains: Array,
+                availableFilters: Array
             };
         },
         methods: {
-            triggerRefresh() {
-               this.$refs.refresh.$el.click();
+            async loadData() {
+                try {
+                    console.log('Compliance');
+                    this.authRes = await refreshAuth();
+                    nvVariables.user = this.authRes.data.token;
+                    this.domains = (await getDomains()).data.domains
+                        .map(domain => domain.name)
+                        .filter(domain => domain.charAt(0) !== '_');
+                    await this.makeWorkloadMap();
+                    // this.availableFilters = (await getAvailableFilters()).data.available_filter;
+                    let complianceData = preprocessCompliance((await getCompliance()).data);
+                    this.makeComplianceDist(complianceData);
+                    this.complianceData = this.mapWorkloadService(complianceData);
+                    console.log(this.domains, this.complianceData, this.complianceDist);
+                } catch(error) {
+                    console.error(error);
+                }
+            },
+            makeComplianceDist(compliance) {
+                compliance.compliances.forEach(compliance => {
+                    if (compliance.level === 'WARN') this.complianceDist.warning += 1;
+                    if (compliance.level === 'INFO') this.complianceDist.info += 1;
+                    if (compliance.level === 'PASS') this.complianceDist.pass += 1;
+                    if (compliance.level === 'NOTE') this.complianceDist.note += 1;
+                    if (compliance.level === 'ERROR') this.complianceDist.error += 1;
+                    if (compliance.level === 'HIGH') this.complianceDist.high += 1;
+                    if (compliance.platforms.length) this.complianceDist.platform += 1;
+                    if (compliance.images.length) this.complianceDist.image += 1;
+                    if (compliance.nodes.length) this.complianceDist.node += 1;
+                    if (compliance.workloads.length) this.complianceDist.container += 1;
+                });
+            },
+            async makeWorkloadMap() {
+                let workloads = await getContainerBrief();
+                workloads.data.workloads.forEach(workload => {
+                    this.workloadMap.set(workload.id, workload);
+                    if (workload.children) {
+                        workload.children.forEach(child => {
+                            this.workloadMap.set(child.id, workload);
+                        });
+                    }
+                });
+            },
+            mapWorkloadService(compliance) {
+                let compliances = compliance.compliances.map(item => {
+                    let services = new Set();
+                    item.workloads.forEach(workload => {
+                        let workloadDetails = this.workloadMap.get(workload.id);
+                        services.add(workloadDetails.service);
+                    });
+                    item.services = Array.from(services);
+                    return item;
+                });
+                compliance.compliances = compliances;
+                return compliance;
             },
             togglePieChart(value) {
                 this.pieChartActive = value;
             },
-            setSelectedVul(selectedVul) {
-                this.selectedVul = selectedVul;
-            },
-            async setAdvFilter(filter) {
-                if (filter) {
-                    this.vulQuery = {...this.vulQuery, ...filter};
-                } else {
-                    this.vulQuery = {...initVulQuery(), viewType: this.vulQuery.viewType };
-                }
-                this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
-            },
-            openAdvFilter() {
-                this.$refs.advFilter.show();
-            },
-            openFileExportDialog() {
-                this.$refs.fileExport.show();
-            },
-            closeAdvFilter(filter) {
-                if (filter.reset) {
-                    this.setAdvFilter();
-                } else {
-                    this.setAdvFilter(filter);
-                }
-            },
-            async changeView(value) {
-                this.selectedView = value;
-                this.vulQuery.viewType = this.selectedView.toLowerCase();
-                this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data;
+            setSelectedCompliance(selectedCompliance) {
+                this.selectedCompliance = selectedCompliance;
             },
             async refresh(buttonCb) {
                 try {
-                    this.vulQueryData = (await postVulnerabilityQuery(this.vulQuery)).data
-                    buttonCb(true)
+                    await this.loadData();
+                    buttonCb(true);
                 } catch (err) {
                     buttonCb(false);
                 }
@@ -128,31 +140,18 @@
 
 <template>
     <Loading v-if="$fetchState.pending" />
-    <div v-else class="vulnerabilities">
+    <div v-else class="compliance">
         <div class="screen-area">
-            <div id="scan" class="padding-top-0">
+            <div id="bench" class="padding-top-0">
                 <div class="clearfix">
                     <div class="fixed-header-actions">
                         <div class="bulk bulk d-flex align-items-center">
                             <h1 class="font-weight-light" id="vulnerabilities-title">
-                                {{ t('sidebar.nav.SCAN') }}
+                                {{ t('sidebar.nav.BENCH') }}
                             </h1>
-                            <LabeledSelect
-                                class="view-select ml-15"
-                                v-model="selectedView"
-                                :close-on-select="true"
-                                :multiple="false"
-                                :label="t('scan.report.view.TITLE')"
-                                :options="vulnerabilityViewsOptions"
-                                @input="changeView"
-                            />
                         </div>
                         <div class="search row">
-                            <div class="d-flex align-items-center">
-                                <button @click="openFileExportDialog()" class="mr-10 btn role-primary">
-                                    <i class="icon icon-lg icon-file"></i>
-                                    <span>{{ t('scan.EXPORT') }}</span>
-                                </button>
+                            <div class="d-flex align-items-center justify-content-end">
                                 <AsyncButton
                                     ref="refresh"
                                     class=" d-flex justify-content-center align-items-center" 
@@ -166,29 +165,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="vul-charts">
+                    <div class="bench-charts">
                         <div>
                             <div class="mb-10 chart-title" style="line-height: 15px;">
-                                <span class="mr-10">{{ t('scan.report.others.TOP_VULNERABLE_HOSTS') }}</span>
+                                <span class="mr-10">{{ t('cis.report.others.TOP_IMPACTFUL_COMP') }}</span>
                             </div>
-                            <TopVulnerableNodesBarChart 
-                                v-if="vulQueryData?.summary?.top_nodes" 
-                                :topVulHosts="vulQueryData.summary.top_nodes"
+                            <TopImpactComplianceBarChart 
+                                v-if="complianceData"
+                                :compliances="complianceData.compliances"
                             />
                         </div>
                         <div>
-                            <div class="mb-10 chart-title" style="line-height: 15px;">
-                                <span class="mr-10">{{ t('scan.report.others.TOP_VULNERABLE_IMAGES') }}</span>
-                            </div>
-                            <TopVulnerableImagesBarChart 
-                                v-if="vulQueryData?.summary?.top_images"     
-                                :topVulImages="vulQueryData.summary.top_images"
+                            <TopImpactComplianceContainerBarChart 
+                                v-if="complianceData"
+                                :compliances="complianceData.compliances"
                             />
                         </div>
                     </div>
                     <SimpleBox class="mt-10">
                         <div class="grid-area">
-                            <VulnerabilityItemsTable 
+                            <!-- <VulnerabilityItemsTable 
                                 v-if="vulQueryData && vulQuery"
                                 :isLightTheme="isLightTheme" 
                                 :vulQueryData="vulQueryData" 
@@ -208,31 +204,24 @@
                                     :selectedVul="selectedVul" 
                                     :isLightTheme="isLightTheme" 
                                 ></VulnerabilityItemsDetail>
-                            </div>
+                            </div> -->
                         </div>
                     </SimpleBox>
                 </div>
             </div>
         </div>
-        <AdvancedFilterModal 
+        <!-- <AdvancedFilterModal 
             ref="advFilter" 
             :isLightTheme="isLightTheme" 
             :vulQuery="vulQuery" 
             :domains="domains" 
             @close="closeAdvFilter"
-        ></AdvancedFilterModal>
-        <FileExportModal
-            ref="fileExport"
-            :isLightTheme="isLightTheme"
-            :title="'Export Vulnerabilities Report'"
-            :queryToken="vulQueryData?.query_token"
-        > 
-        </FileExportModal>
+        ></AdvancedFilterModal> -->
     </div>
 </template>
 
 <style lang="scss" scoped>
-    @import '../../styles/vulnerabilities.scss';
+    @import '../../styles/compliance.scss';
 
     @media print {
         @page {

@@ -1,0 +1,18 @@
+@import './common/color.scss';
+
+.bench-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-gap: 20px;
+
+  .chart-title {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.grid-area {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-gap: 20px;
+}

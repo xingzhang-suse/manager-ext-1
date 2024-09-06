@@ -50,6 +50,7 @@ export const PATH = {
     EXPORT_COMPLIANCE_PROFILE: 'risk/compliance/profile/export', //risks
     IMPORT_COMPLIANCE_PROFILE: 'risk/compliance/profile/import', //risks
     COMPLIANCE_TEMPLATE_URL: 'risk/compliance/template', //risks
+    COMPLIANCE_FILTER_URL: 'risk/compliance/available_filter', //risks
     SCAN_URL: 'scan/workload', //assets
     SCAN_HOST_URL: 'scan/host', //assets
     SCAN_PLATFORM_URL: 'scan/platform', //assets
