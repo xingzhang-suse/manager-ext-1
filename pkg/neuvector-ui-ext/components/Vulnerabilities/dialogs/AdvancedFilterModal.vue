@@ -179,7 +179,7 @@
       v-if="showSlideIn"
       class="glass"
       @click="hide()"
-    />
+    ></div>
     <div
       class="slideIn"
       :class="{'hide': false, 'slideIn__show': showSlideIn}"
@@ -242,12 +242,13 @@
               <Select
                 v-model="advFilter.scoreType"
                 :options="scoreOptions"
-              />
+              ></Select>
             </div>
             <div class="col-6">
               <MultiRangeSlider v-if="advFilter.scoreType === 'v2'"
                 id="slider-v2"
                 class="mr-10"
+                :key="'slider-v2'"
                 :baseClassName="'multi-range-slider'"
                 :min="0"
                 :max="10"
@@ -260,6 +261,7 @@
               <MultiRangeSlider v-else
                 id="slider-v3"
                 class="mr-10"
+                :key="'slider-v3'"
                 :baseClassName="'multi-range-slider'"
                 :min="0"
                 :max="10"
