@@ -1,6 +1,6 @@
 <script>
 import { EOS_LAUNCH_FILLED } from 'eos-icons-vue2';
-import { capitalize } from '../../../../utils/common';
+import { capitalize, getSSOUrl } from '../../../../utils/common';
 import dayjs from 'dayjs';
 
 export default {
@@ -17,11 +17,11 @@ export default {
         };
     },
     methods: {
-        goToHosts() {
-
+        goToNvHosts() {
+            window.open(`${getSSOUrl('#/hosts')}`, '_blank');
         },
-        goToGroup(group) {
-
+        goToNvGroup(group) {
+            window.open(`${getSSOUrl('#/group')}?group=${group}`, '_blank');
         }
     }
 }
@@ -139,8 +139,8 @@ export default {
                             {{ host.scan_summary.low }}
                         </span>
                         <a v-if="host.scan_summary?.high || host.scan_summary?.medium"
-                            @click="goToHosts()"
-                            style="display: table-cell; font-size: 11px; line-height: 15px">
+                            @click="goToNvHosts()"
+                            style="display: table-cell; font-size: 11px; line-height: 15px; cursor: pointer;">
                             <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                         </a>
                         <label v-if="host.scan_summary?.scanned_at &&
@@ -160,8 +160,8 @@ export default {
                     <span class="ml mr-lg auto-hide host-item-key">
                         nodes
                         <a
-                            @click="goToGroup('nodes')"
-                            style="display: table-cell; font-size: 11px; line-height: 15px">
+                            @click="goToNvGroup('nodes')"
+                            style="display: table-cell; font-size: 11px; line-height: 15px; cursor: pointer;">
                             <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                         </a>
                     </span>

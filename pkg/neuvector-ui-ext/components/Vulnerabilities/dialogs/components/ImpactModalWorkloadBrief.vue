@@ -1,6 +1,6 @@
 <script>
 import { EOS_LAUNCH_FILLED } from 'eos-icons-vue2';
-import { shortenString } from '../../../../utils/common';
+import { shortenString, getSSOUrl } from '../../../../utils/common';
 import dayjs from 'dayjs';
 
 export default {
@@ -34,8 +34,8 @@ export default {
         }
     },
     methods: {
-        goToGroup(group) {
-
+        goToNvGroup(group) {
+            window.open(`${getSSOUrl('#/group')}?group=${group}`, '_blank');
         }
     }
 }
@@ -115,8 +115,10 @@ export default {
                                 <span v-tooltip.top="{ content: workload.service_group }" ref="ttWorkloadServiceGroup">
                                     {{ shortenString(workload.service_group, 30) }}
                                 </span>
-                                <a @click="goToGroup(workload.service_group)"
-                                    style="display: table-cell; font-size: 11px; line-height: 15px">
+                                <a
+                                    @click="goToNvGroup(workload.service_group)"
+                                    style="display: table-cell; font-size: 11px; line-height: 15px; cursor: pointer;"
+                                >
                                     <EOS_LAUNCH_FILLED size="base" color="#3D98D3"></EOS_LAUNCH_FILLED>
                                 </a>
                             </span>
