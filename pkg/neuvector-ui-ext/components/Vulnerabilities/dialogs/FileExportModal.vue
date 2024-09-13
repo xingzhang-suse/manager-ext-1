@@ -45,7 +45,7 @@ export default {
                 selectedLastModifyDate: null,
             }
         },
-        async exportFile() {
+        async exportFile(buttonCb) {
             switch (this.exportReportCriteria.selectedScope) {
                 case SCOPE_OPTION.ASSET:
                     this.exportAssetsFile();
@@ -56,6 +56,8 @@ export default {
                 default:
                     break;
             }
+
+            buttonCb(true)
         },
         async exportAssetsFile() {
             try {
