@@ -6,6 +6,8 @@
     import LabeledSelect from '@shell/components/form/LabeledSelect';
     import TopImpactComplianceBarChart from './charts/TopImpactComplianceBarChart.vue';
     import TopImpactComplianceContainerBarChart from './charts/TopImpactComplianceContainerBarChart.vue';
+    import ComplianceItemsTable from './contents/ComplianceItemsTable.vue';
+    import ComplianceItemsDetail from './contents/ComplianceItemsDetail.vue';
     import { getDomains, getContainerBrief, getAvailableFilters, getCompliance } from '../../plugins/compliance-class';
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
@@ -20,7 +22,9 @@
             SimpleBox,
             LabeledSelect,
             TopImpactComplianceBarChart,
-            TopImpactComplianceContainerBarChart
+            TopImpactComplianceContainerBarChart,
+            ComplianceItemsTable,
+            ComplianceItemsDetail
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -60,7 +64,7 @@
                 },
                 complianceData: Object,
                 domains: Array,
-                availableFilters: Array
+                availableFilters: null,
             };
         },
         methods: {
@@ -73,7 +77,7 @@
                         .map(domain => domain.name)
                         .filter(domain => domain.charAt(0) !== '_');
                     await this.makeWorkloadMap();
-                    // this.availableFilters = (await getAvailableFilters()).data.available_filter;
+                    this.availableFilters = (await getAvailableFilters()).data.available_filter;
                     let complianceData = preprocessCompliance((await getCompliance()).data);
                     this.makeComplianceDist(complianceData);
                     this.complianceData = this.mapWorkloadService(complianceData);
@@ -106,6 +110,7 @@
                         });
                     }
                 });
+                nvVariables.complianceData.workloadMap = this.workloadMap;
             },
             mapWorkloadService(compliance) {
                 let compliances = compliance.compliances.map(item => {
@@ -184,18 +189,22 @@
                     </div>
                     <SimpleBox class="mt-10">
                         <div class="grid-area">
-                            <!-- <VulnerabilityItemsTable 
-                                v-if="vulQueryData && vulQuery"
-                                :isLightTheme="isLightTheme" 
-                                :vulQueryData="vulQueryData" 
-                                :vulQuery="vulQuery" 
-                                @refresh="triggerRefresh" 
-                                @togglePieChart="togglePieChart" 
-                                @selectedVul="setSelectedVul" 
-                                @openAdvFilter="openAdvFilter"
-                            ></VulnerabilityItemsTable>
-                            <div v-if="selectedVul">
-                                <VulnerabilityItemsChart 
+                            <ComplianceItemsTable 
+                                v-if="complianceData" 
+                                :isLightTheme="isLightTheme"
+                                :complianceData="complianceData"
+                                :availableFilters="availableFilters"
+                                @togglePieChart="togglePieChart"
+                                @setSelectedCompliance="setSelectedCompliance"
+                            ></ComplianceItemsTable>
+                            <div v-if="selectedCompliance">
+                                <div v-if="pieChartActive"></div>
+                                <ComplianceItemsDetail
+                                    v-else
+                                    :selectedCompliance="selectedCompliance"
+                                    :isLightTheme="isLightTheme"
+                                ></ComplianceItemsDetail>
+                                <!-- <VulnerabilityItemsChart 
                                     v-if="pieChartActive"
                                     :countDistribution="vulQueryData?.summary?.count_distribution" 
                                 ></VulnerabilityItemsChart>
@@ -203,8 +212,8 @@
                                     v-else
                                     :selectedVul="selectedVul" 
                                     :isLightTheme="isLightTheme" 
-                                ></VulnerabilityItemsDetail>
-                            </div> -->
+                                ></VulnerabilityItemsDetail> -->
+                            </div>
                         </div>
                     </SimpleBox>
                 </div>
