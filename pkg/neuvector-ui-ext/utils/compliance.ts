@@ -4,6 +4,26 @@ import { sortByDisplayName } from "./common";
 
 const workloadMap = nvVariables.complianceData.workloadMap;
 
+export function getRegulationCsv(tags: any) {
+  let tags4Csv: any[] = [];
+  const prepareTagData = (tag: any) => {
+    tag.description = `${tag.description.replace(/\"/g, "'")}`;
+    tag.title = `${tag.title.replace(/\"/g, "'")}`;
+    return tag;
+  };
+
+  tags.forEach((tag: any) => {
+    let entryData = prepareTagData(JSON.parse(JSON.stringify(tag)));
+    tags4Csv = tags4Csv.concat({
+      cis_subcontrol: entryData.CIS_Sub_Control,
+      description: entryData.description,
+      id: entryData.id,
+      title: entryData.title,
+    });
+  });
+  return tags4Csv;
+}
+
 export function getCsvData(complianceList: any, advFilter: any) {
   console.log("DOWNLOAD CSV");
   let compliance4Csv: any[] = [];

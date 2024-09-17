@@ -193,6 +193,7 @@
                                 v-if="complianceData" 
                                 :isLightTheme="isLightTheme"
                                 :complianceData="complianceData"
+                                :domains="domains"
                                 :availableFilters="availableFilters"
                                 @togglePieChart="togglePieChart"
                                 @setSelectedCompliance="setSelectedCompliance"
@@ -204,28 +205,12 @@
                                     :selectedCompliance="selectedCompliance"
                                     :isLightTheme="isLightTheme"
                                 ></ComplianceItemsDetail>
-                                <!-- <VulnerabilityItemsChart 
-                                    v-if="pieChartActive"
-                                    :countDistribution="vulQueryData?.summary?.count_distribution" 
-                                ></VulnerabilityItemsChart>
-                                <VulnerabilityItemsDetail 
-                                    v-else
-                                    :selectedVul="selectedVul" 
-                                    :isLightTheme="isLightTheme" 
-                                ></VulnerabilityItemsDetail> -->
                             </div>
                         </div>
                     </SimpleBox>
                 </div>
             </div>
         </div>
-        <!-- <AdvancedFilterModal 
-            ref="advFilter" 
-            :isLightTheme="isLightTheme" 
-            :vulQuery="vulQuery" 
-            :domains="domains" 
-            @close="closeAdvFilter"
-        ></AdvancedFilterModal> -->
     </div>
 </template>
 

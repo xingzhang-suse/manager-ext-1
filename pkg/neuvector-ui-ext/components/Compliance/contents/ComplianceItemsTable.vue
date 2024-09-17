@@ -3,6 +3,7 @@
     import PieChartView from '../buttons/PieChartView.vue';
     import QuickFilter from '../quickFilter/QuickFilter.vue';
     import ComplianceItemsGrid from '../grids/ComplianceItemsGrid.vue';
+    import AdvancedFilterModal from '../dialogs/AdvancedFilterModal.vue';
     import { initCompFilter } from '../../../utils/compliance';
 
     export default {
@@ -10,11 +11,13 @@
             AdvancedFilter,
             PieChartView,
             QuickFilter,
-            ComplianceItemsGrid
+            ComplianceItemsGrid,
+            AdvancedFilterModal
         },
         props: {
             complianceData: Object,
             availableFilters: Array,
+            domains: Array,
             isLightTheme: Boolean,
         },
         data() {
@@ -53,8 +56,22 @@
                 this.filteredCount = filteredCount;
             },
             openAdvFilter() {
-                return;
-            }
+                this.$refs.advFilter.show();
+            },
+            setAdvFilter(filter) {
+                if (filter) {
+                    this.advFilter = filter;
+                } else {
+                    this.advFilter = initCompFilter();
+                }
+            },
+            closeAdvFilter(filter) {
+                if (filter.reset) {
+                    this.setAdvFilter();
+                } else {
+                    this.setAdvFilter(filter);
+                }
+            },
         },
     };
 </script>
@@ -64,7 +81,7 @@
         <div class="fixed-header-actions">
             <div class="bulk bulk flex center">
                 <span class="d-block font-weight-bold text-info">
-                    <span v-if="filteredCount && filteredCount !== totalCount">
+                    <span v-if="filteredCount !== null && filteredCount !== totalCount">
                         {{ t('enum.FOUND') }} {{ filteredCount }}&nbsp;/
                     </span>
                     <span v-else>
@@ -86,12 +103,19 @@
         <ComplianceItemsGrid 
             :isLightTheme="isLightTheme" 
             :filterText="filterText" 
-            :advFilter="advFilter" 
-            :complianceData="complianceData" 
-            @togglePieChart="togglePieChart" 
+            :advFilter="advFilter"
+            :complianceData="complianceData"
+            @togglePieChart="togglePieChart"
             @setSelectedCompliance="setSelectedCompliance" 
             @setFilteredCount="setFilteredCount">
         </ComplianceItemsGrid>
+        <AdvancedFilterModal
+            ref="advFilter"
+            :inputFilter="advFilter" 
+            :isLightTheme="isLightTheme"
+            :domains="domains"
+            @close="closeAdvFilter"
+        ></AdvancedFilterModal>
     </div>
 </template>
 
