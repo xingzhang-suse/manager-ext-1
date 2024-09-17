@@ -9,13 +9,11 @@
         },
         methods: {
             openRegulation(type, content, name) {
-                if (content.length > 0) {
-                    this.$emit('openRegulation', {
-                        type: type, 
-                        content: content,
-                        name: name
-                    });
-                }
+                this.$emit('openRegulation', {
+                    type: type, 
+                    content: content,
+                    name: name
+                });
             },
             getComplianceTagClass(type) {
                 switch (type) {
@@ -59,12 +57,20 @@
 
 <template>
     <button
+        v-if="content.length > 0"
         @click="openRegulation(type, content, name)"
         :class="getComplianceTagClass(type)"
         :style="getComplianceTagStyle(type)"
         class="border-0 badge ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center">
         ⋮⋮&nbsp;&nbsp;{{ type }}
     </button>
+    <span 
+        v-else 
+        :class="getComplianceTagClass(type)"
+        :style="getComplianceTagStyle(type)"
+        class="border-0 badge ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center">
+        ⋮⋮&nbsp;&nbsp;{{ type }}
+    </span>
 </template>
 
 <style lang="scss" scoped>

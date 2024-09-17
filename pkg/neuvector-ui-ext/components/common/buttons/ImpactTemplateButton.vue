@@ -11,11 +11,18 @@
         },
         methods: {
             openBrief(type, content) {
-                if (['node', 'workload'].includes(type)) {
-                    this.$emit('openBrief', {
-                        type: type, 
-                        id: content.id 
-                    });
+                this.$emit('openBrief', {
+                    type: type, 
+                    id: content.id 
+                });
+            },
+            getClass(content) {
+                if (!content.policy_mode) {
+                    return 'badge-black';
+                } else if (content.policy_mode.toLowerCase() === 'discover') {
+                    return 'badge-danger';
+                } else {
+                    return 'badge-success';
                 }
             }
         }
@@ -23,34 +30,29 @@
 </script>
 
 <template>
-    <button
-        v-if="!content.policy_mode"
+    <button 
+        v-if="['node', 'workload'].includes(type)"
         @click="openBrief(type, content)"
         class="border-0 badge ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
-        style="background-color: black; color: white">
+        :class="getClass(content)">
         <ImpactIconTemplate :type="type"></ImpactIconTemplate>
         {{ content.display_name }}
     </button>
-    <button
-        v-else-if="content.policy_mode.toLowerCase() === 'discover'"
-        @click="openBrief(type, content)"
-        class="border-0 badge badge-danger ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
-        style="color: white">
+    <span v-else
+        class="border-0 badge ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
+        :class="getClass(content)">
         <ImpactIconTemplate :type="type"></ImpactIconTemplate>
         {{ content.display_name }}
-    </button>
-    <button
-        v-else
-        @click="openBrief(type, content)"
-        class="border-0 badge badge-success ml-0 mr-5 mb-2 d-inline-flex justify-content-center align-items-center"
-        style="color: white">
-        <ImpactIconTemplate :type="type"></ImpactIconTemplate>
-        {{ content.display_name }}
-    </button>
+    </span>
 </template>
 
 <style lang="scss" scoped>
 .badge {
     border-radius: 4px;
+    color: white;
+}
+
+.badge-black {
+    background-color: black;
 }
 </style>
