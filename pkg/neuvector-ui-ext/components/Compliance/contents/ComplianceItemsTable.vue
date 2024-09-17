@@ -1,4 +1,5 @@
 <script>
+    import { nvVariables } from '../../../types';
     import AdvancedFilter from '../buttons/AdvancedFilter.vue';
     import PieChartView from '../buttons/PieChartView.vue';
     import QuickFilter from '../quickFilter/QuickFilter.vue';
@@ -41,6 +42,7 @@
                         {}
                     )
                 }
+                nvVariables.complianceData.advFilter = advFilter;
                 return advFilter;
             },
             setQuickFilter(filterText) {
@@ -61,8 +63,9 @@
             setAdvFilter(filter) {
                 if (filter) {
                     this.advFilter = filter;
+                    nvVariables.complianceData.advFilter = this.advFilter;
                 } else {
-                    this.advFilter = initCompFilter();
+                    this.advFilter = this.initFilter();
                 }
             },
             closeAdvFilter(filter) {

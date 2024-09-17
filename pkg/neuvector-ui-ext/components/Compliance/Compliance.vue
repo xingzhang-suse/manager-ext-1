@@ -11,8 +11,11 @@
     import { getDomains, getContainerBrief, getAvailableFilters, getCompliance } from '../../plugins/compliance-class';
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
+    import { arrayToCsv, setRisks } from '../../utils/common';
     import { refreshAuth } from '../../plugins/neuvector-class'; 
-    import { preprocessCompliance } from '../../utils/compliance';
+    import { getCsvData, preprocessCompliance } from '../../utils/compliance';
+    import { saveAs } from 'file-saver';
+    import dayjs from 'dayjs';
 
     export default {
         components: {
@@ -68,6 +71,11 @@
             };
         },
         methods: {
+            downloadCsv() {
+                let csv = arrayToCsv(getCsvData(nvVariables.complianceData.filteredCis, nvVariables.complianceData.advFilter));
+                let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+                saveAs(blob, `compliance_${dayjs(new Date()).format('YYYYMMDDHHmmss')}.csv`);
+            },
             async loadData() {
                 try {
                     console.log('Compliance');
@@ -81,6 +89,8 @@
                     let complianceData = preprocessCompliance((await getCompliance()).data);
                     this.makeComplianceDist(complianceData);
                     this.complianceData = this.mapWorkloadService(complianceData);
+                    setRisks(this.complianceData.compliances, this.workloadMap);
+                    nvVariables.complianceData.filteredCis = this.complianceData.compliances;
                     console.log(this.domains, this.complianceData, this.complianceDist);
                 } catch(error) {
                     console.error(error);
@@ -157,6 +167,9 @@
                         </div>
                         <div class="search row">
                             <div class="d-flex align-items-center justify-content-end">
+                                <button @click="downloadCsv()" class="btn role-primary mr-10">
+                                    CSV
+                                </button>
                                 <AsyncButton
                                     ref="refresh"
                                     class=" d-flex justify-content-center align-items-center" 

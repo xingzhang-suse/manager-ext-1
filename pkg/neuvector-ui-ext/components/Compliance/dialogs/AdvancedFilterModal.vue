@@ -42,6 +42,9 @@
             this.$emit('close', this.advFilter);
             this.hide();
           },
+          changeImpact(selectedImpact) {
+            this.selectedImpact = selectedImpact;
+          },
           clear(filterView) {
             switch (filterView) {
               case 'service':

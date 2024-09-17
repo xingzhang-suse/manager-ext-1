@@ -12,6 +12,7 @@
 </template>
     
 <script>
+    import { nvVariables } from '../../../types';
     import 'ag-grid-community/styles/ag-grid.css';
     import 'ag-grid-community/styles/ag-theme-balham.min.css';
     import { AgGridVue } from 'ag-grid-vue';
@@ -175,6 +176,14 @@
                 let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
                 saveAs(blob, `${event.node.data.name}_${dayjs(new Date()).format('YYYYMMDDHHmmss')}.csv`);
             },
+            updateFiltered() {
+                const filteredCis = [];
+                this.gridApi.forEachNodeAfterFilterAndSort(node => {
+                    filteredCis.push(JSON.parse(JSON.stringify(node.data)));
+                });
+                nvVariables.complianceData.filteredCis = filteredCis;
+                this.$emit('updateCountDist');
+            },
             checkEntity(matchType, entities, pattern, result) {
                 const patterns = pattern.split(',').map(item => item.trim());
                 const theEntity = entities.find(entity => {
@@ -216,7 +225,6 @@
                         let res = Object.keys(this.advFilter.tags).filter(
                             filter => this.advFilter.tags[filter]
                         );
-                        console.log('selected', res, 'compliance', comlianceTags);
                         return comlianceTags.some(tag => res.includes(tag));
                     } else return false;
                 }
@@ -324,11 +332,19 @@
             }
         },
         watch:  {
+            complianceData(newComp, oldComp) {
+                this.complianceData.compliances = this.complianceData.compliances.map(compliance => {
+                    compliance.filteredImages = compliance.images;
+                    compliance.filteredWorkloads = compliance.workloads;
+                    return compliance;
+                });
+                if (this.gridApi) this.gridApi.setRowData(this.complianceData.compliances);
+            },
             filterText(newFilter, oldFilter) {
-                console.log('new', newFilter, 'old', oldFilter);
                 this.gridApi.setQuickFilter(newFilter);
                 const filteredCount = this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
                 this.$emit('setFilteredCount', filteredCount);
+                this.updateFiltered();
             },
             advFilter(newAdvFilter, oldAdvFilter) {
                 this.complianceData.compliances = this.complianceData.compliances.map(compliance => {
@@ -339,6 +355,7 @@
                 this.gridApi.onFilterChanged();
                 const filteredCount = this.gridApi.getModel()['rootNode'].childrenAfterFilter.length;
                 this.$emit('setFilteredCount', filteredCount);
+                this.updateFiltered();
             }
         }
     };

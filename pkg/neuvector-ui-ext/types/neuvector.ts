@@ -33,7 +33,9 @@ export const nvVariables = {
     array: [] as any[]
   },
   complianceData: {
-    workloadMap: new Map()
+    workloadMap: new Map(),
+    filteredCis: [] as any[],
+    advFilter: null,
   },
   securityEventsServiceData: {
     cachedSecurityEvents: [] as any[],
