@@ -8,6 +8,7 @@
     import TopImpactComplianceContainerBarChart from './charts/TopImpactComplianceContainerBarChart.vue';
     import ComplianceItemsTable from './contents/ComplianceItemsTable.vue';
     import ComplianceItemsDetail from './contents/ComplianceItemsDetail.vue';
+    import ComplianceItemsChart from './contents/ComplianceItemsChart.vue';
     import { getDomains, getContainerBrief, getAvailableFilters, getCompliance } from '../../plugins/compliance-class';
     import { SERVICE } from '@shell/config/types';
     import { nvVariables, NV_CONST, RANCHER_CONST } from '../../types';
@@ -27,7 +28,8 @@
             TopImpactComplianceBarChart,
             TopImpactComplianceContainerBarChart,
             ComplianceItemsTable,
-            ComplianceItemsDetail
+            ComplianceItemsDetail,
+            ComplianceItemsChart
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -76,6 +78,21 @@
                 let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
                 saveAs(blob, `compliance_${dayjs(new Date()).format('YYYYMMDDHHmmss')}.csv`);
             },
+            updateCountDist() {
+                this.complianceDist = {
+                    error: 0,
+                    high: 0,
+                    warning: 0,
+                    note: 0,
+                    pass: 0,
+                    info: 0,
+                    platform: 0,
+                    image: 0,
+                    node: 0,
+                    container: 0,
+                };
+                this.makeComplianceDist(nvVariables.complianceData.filteredCis);
+            },
             async loadData() {
                 try {
                     console.log('Compliance');
@@ -87,7 +104,7 @@
                     await this.makeWorkloadMap();
                     this.availableFilters = (await getAvailableFilters()).data.available_filter;
                     let complianceData = preprocessCompliance((await getCompliance()).data);
-                    this.makeComplianceDist(complianceData);
+                    this.makeComplianceDist(complianceData.compliances);
                     this.complianceData = this.mapWorkloadService(complianceData);
                     setRisks(this.complianceData.compliances, this.workloadMap);
                     nvVariables.complianceData.filteredCis = this.complianceData.compliances;
@@ -96,8 +113,8 @@
                     console.error(error);
                 }
             },
-            makeComplianceDist(compliance) {
-                compliance.compliances.forEach(compliance => {
+            makeComplianceDist(compliances) {
+                compliances.forEach(compliance => {
                     if (compliance.level === 'WARN') this.complianceDist.warning += 1;
                     if (compliance.level === 'INFO') this.complianceDist.info += 1;
                     if (compliance.level === 'PASS') this.complianceDist.pass += 1;
@@ -210,9 +227,13 @@
                                 :availableFilters="availableFilters"
                                 @togglePieChart="togglePieChart"
                                 @setSelectedCompliance="setSelectedCompliance"
+                                @updateCountDist="updateCountDist"
                             ></ComplianceItemsTable>
                             <div v-if="selectedCompliance">
-                                <div v-if="pieChartActive"></div>
+                                <ComplianceItemsChart
+                                    v-if="pieChartActive"
+                                    :complianceDist="complianceDist"
+                                ></ComplianceItemsChart>
                                 <ComplianceItemsDetail
                                     v-else
                                     :selectedCompliance="selectedCompliance"

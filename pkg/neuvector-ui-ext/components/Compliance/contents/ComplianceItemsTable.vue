@@ -57,6 +57,9 @@
             setFilteredCount(filteredCount) {
                 this.filteredCount = filteredCount;
             },
+            updateCountDist() {
+                this.$emit('updateCountDist');
+            },
             openAdvFilter() {
                 this.$refs.advFilter.show();
             },
@@ -110,7 +113,8 @@
             :complianceData="complianceData"
             @togglePieChart="togglePieChart"
             @setSelectedCompliance="setSelectedCompliance" 
-            @setFilteredCount="setFilteredCount">
+            @setFilteredCount="setFilteredCount"
+            @updateCountDist="updateCountDist">
         </ComplianceItemsGrid>
         <AdvancedFilterModal
             ref="advFilter"
