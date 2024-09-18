@@ -1,13 +1,21 @@
 <script>
 import Loading from '@shell/components/Loading';
 import { SERVICE } from '@shell/config/types';
-import { nvVariables, NV_CONST, NV_MAP } from '../../types/neuvector';
+import { nvVariables, NV_CONST, NV_MAP, RANCHER_CONST } from '../../types/neuvector';
 import { refreshAuth } from '../../plugins/neuvector-class';
 import { getAutoCompleteData } from '../../plugins/network-rule-class';
 import { PATH } from '../../types/path';
 import { loadPagedData } from '../../utils/common';
 import _axios from 'axios';
 import NetworkRulesGrid from './grids/NetWorkRulesGrid';
+import AddTuleToTopBtn from './buttons/AddRuleToTopBtn';
+import SaveBtn from './buttons/SaveBtn';
+import UndoBtn from './buttons/UndoBtn';
+import RemoveBtn from './buttons/RemoveBtn';
+import Refresh from '../common/buttons/Refresh';
+import DownloadCsvBtn from './buttons/DownloadCsvBtn';
+import MoveBtn from './buttons/MoveBtn';
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -17,6 +25,13 @@ export default {
   components: {
     Loading,
     NetworkRulesGrid,
+    AddTuleToTopBtn,
+    SaveBtn,
+    UndoBtn,
+    RemoveBtn,
+    Refresh,
+    DownloadCsvBtn,
+    MoveBtn,
   },
 
   async fetch() {
@@ -34,14 +49,26 @@ export default {
   data() {
     return {
       eof: false,
-      networkRules: [],
+      _networkRules: [],
       networkRuleErr: false,
-      isNetworkRuleChanged: this.$store.getters['neuvector/isNetworkRuleChanged']
+      autoCompleteData: {},
     };
   },
 
+  created() {
+    this.$store.dispatch('neuvector/updateNetworkRules', []);
+    this.$store.dispatch('neuvector/updateIsNetworkRuleListDirty', false);
+  },
+
   computed: {
-    
+    ...mapGetters({
+      networkRules: 'neuvector/networkRules',
+      isNetworkRuleListDirty: 'neuvector/isNetworkRuleListDirty',
+    }),
+    isLightTheme: function() {
+        nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK;
+        return nvVariables.isLightTheme;
+    }
   },
 
   methods: {
@@ -50,14 +77,18 @@ export default {
       nvVariables.user = authRes.data.token;
       this.getNetworkRules();
       getAutoCompleteData().then(_axios.spread((res1, res2, res3) => {
-        console.log(res1, res2, res3)
+        this.autoCompleteData = {
+          endpointOptions: res2.data.hosts.map(host => `Host:${host.name}`).concat(res1.data.groups.map(group => group.name)),
+          applicationOptions: res3.data.list.application,
+        }
       }));
     },
     getNetworkRules: function(source='') {
       this.eof = false;
       this.$store.dispatch('neuvector/updateIsNetworkRuleChanged', false);
+      this.$store.dispatch('neuvector/updateNetworkRules', []);
       this.networkRuleErr = false;
-      this.networkRules = [];
+      this._networkRules = [];
       loadPagedData(
         PATH.POLICY_URL,
         this.source === NV_CONST.NAV_SOURCE.FED_POLICY
@@ -78,9 +109,8 @@ export default {
     },
     mergeRulesByWebWorkerClient: function(rulesBlock) {
       let eof = rulesBlock.length < NV_MAP.PAGE.NETWORK_RULES;
-      this.networkRules = this.networkRules.concat(rulesBlock);
-      this.$store.dispatch('neuvector/updateNetworkRulesBackup', this.networkRules);
-      this.renderNetworkRule(this.networkRules, eof);
+      this._networkRules = this._networkRules.concat(rulesBlock);
+      this.renderNetworkRule(this._networkRules, eof);
     },
     handleError: function() {
       this.networkRuleErr = true;
@@ -103,6 +133,8 @@ export default {
           last_modified_timestamp: '',
         });
       }
+      this.$store.dispatch('neuvector/updateNetworkRulesBackup', this._networkRules);
+      this.$store.dispatch('neuvector/updateNetworkRules', this._networkRules);
     },
   }
 };
@@ -118,9 +150,16 @@ export default {
                 </div>
             </header>
     </div>
-    <NetworkRulesGrid :networkRules="networkRules"></NetworkRulesGrid>
+    <div>
+      <AddTuleToTopBtn :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddTuleToTopBtn>
+      <SaveBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
+      <UndoBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
+      <RemoveBtn class="pull-left mx-2"></RemoveBtn>
+      <MoveBtn class="pull-left mx-2"></MoveBtn>
+      <Refresh class="pull-right" :reloadData="loadData"></Refresh>
+      <DownloadCsvBtn class="pull-right mx-2" :networkRules="networkRules"></DownloadCsvBtn>
+    </div>
+    
+    <NetworkRulesGrid class="mt-2" :networkRules="networkRules" :autoCompleteData="autoCompleteData"></NetworkRulesGrid>
   </div>
 </template>
-
-<style lang="scss" scoped>
-</style>

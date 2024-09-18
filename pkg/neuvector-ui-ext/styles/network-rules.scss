@@ -70,3 +70,80 @@
     border: 1px solid $neuvector-grey-400;
     -webkit-print-color-adjust: exact;
   }
+
+  .new-rule {
+    border: 1px solid #83cd89;
+    background-color: #c4e9c7;
+    color: #45505c;
+  }
+  
+  .modified-rule {
+    border: 1px solid #68a2dc;
+    background-color: #bfdcf9;
+    color: #45505c;
+  }
+  
+  .readonly-rule {
+    border: 1px solid #ff0040;
+    background-color: #fc6d91;
+    color: #ffffff;
+  }
+  
+  .moved-rule {
+    border: 1px solid #60c3d6;
+    background-color: #a3eaf7;
+    color: #45505c;
+  }
+  
+  .customer-rule {
+    border: 1px solid #e6e600;
+    background-color: #ffffe6;
+    color: #45505c;
+  }
+  
+  .local-rule {
+    border: 1px solid #ebe3e4;
+    background-image: linear-gradient(to right, #ffffe6, #e6d9f1);
+    color: #45505c;
+  }
+  
+  .learn-rule {
+    border: 1px solid #d2aff1;
+    background-color: #e6d9f1;
+    color: #45505c;
+  }
+  
+  .ground-rule {
+    border: 1px solid #ff8a65;
+    background-color: #fdb69f;
+    color: #45505c;
+  }
+  
+  .fed-rule {
+    border: 1px solid #000;
+    background-color: $neuvector-grey-900;
+    color: #fff;
+  }
+  
+  .disabled-rule {
+    border: 1px solid $neuvector-grey-400 !important;
+    background-color: $neuvector-grey-100 !important;
+    color: #becfd5 !important;
+  }
+  
+  .disabled-rule-print {
+    border: 1px solid $neuvector-grey-600 !important;
+    background-color: $neuvector-grey-100 !important;
+    -webkit-print-color-adjust: exact;
+    color: $neuvector-grey-600 !important;
+  }
+  
+  .removed-rule {
+    background-color: #fff;
+    text-decoration: line-through double red;
+    color: #45505c;
+  }
+  
+  .policy-remove {
+    text-decoration: line-through double red;
+  }

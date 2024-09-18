@@ -1,8 +1,9 @@
 import { CoreStoreSpecifics, CoreStoreConfig } from '@shell/core/types';
-import { NEUVECTOR_PRODUCT_NAME } from '../../types/neuvector'
+import { NEUVECTOR_PRODUCT_NAME, NV_CONST } from '../../types/neuvector'
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
+import { NetworkRule } from 'types/network-rules';
 
 export interface StateConfig {
     hosts: any[],
@@ -11,7 +12,10 @@ export interface StateConfig {
     scannedWorkloadMap: Map<string, Object>,
     scannedNodeMap: Map<string, Object>,
     isNetworkRuleChanged: Boolean,
-    networkRulesBackup: any[],
+    networkRules: NetworkRule[],
+    networkRulesBackup: NetworkRule[],
+    isNetworkRuleListDirty: Boolean,
+    newId: number,
 }
 
 const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
@@ -24,7 +28,10 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
                 scannedWorkloadMap: config.scannedWorkloadMap,
                 scannedNodeMap: config.scannedNodeMap,
                 isNetworkRuleChanged: config.isNetworkRuleChanged,
+                networkRules: config.networkRules,
                 networkRulesBackup: config.networkRulesBackup,
+                isNetworkRuleListDirty: config.isNetworkRuleListDirty,
+                newId: config.newId,
             }
         },
         getters:   { ...getters },
@@ -44,7 +51,10 @@ export default {
             scannedWorkloadMap: new Map<string, Object>(),
             scannedNodeMap: new Map<string, Object>(),
             isNetworkRuleChanged: false,
+            networkRules: [],
             networkRulesBackup: [],
+            isNetworkRuleListDirty: false,
+            newId: NV_CONST.NEW_ID_SEED.NETWORK_RULE,
         }
     ),
     config,

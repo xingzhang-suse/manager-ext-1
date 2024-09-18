@@ -4,18 +4,20 @@
         components: {
         },
         props: {
-            action: String,
-            id: Number,
+            rule: Object,
         },
         computed: {
             getAction() {
-                if (this.id > -1) {
+                if (this.rule && this.rule.id > -1) {
                     return {
-                        className: `${(this.disable ? NV_MAP.colourMap['disabled_background'] : NV_MAP.colourMap[this.action.toLowerCase()])} ${this.remove ? 'policy-remove' : ''}`,
-                        text: this.t('policy.action.' + this.action.toUpperCase())
+                        className: `${(this.rule.disable ? NV_MAP.colourMap['disabled_background'] : NV_MAP.colourMap[this.rule.action.toLowerCase()])} ${this.rule.remove ? 'policy-remove' : ''}`,
+                        text: this.t('policy.action.' + this.rule.action.toUpperCase())
                     }
                 }
-                return '-';
+                return {
+                    className: '',
+                    text: '-'
+                };
             }
         }
     }

@@ -1,5 +1,7 @@
 import { StateConfig } from './index';
 import _ from 'lodash';
+import { NetworkRule } from 'types/network-rules';
+import { NV_CONST } from '../../types/neuvector'
 
 export default {
     updateHosts(state: StateConfig, hosts: any[]) {
@@ -20,7 +22,26 @@ export default {
     updateIsNetworkRuleChanged(state: StateConfig, isNetworkRuleChanged: Boolean) {
         state.isNetworkRuleChanged = isNetworkRuleChanged;
     },
-    updateNetworkRulesBackup(state: StateConfig, networkRules: any[]) {
+    updateNetworkRules(state: StateConfig, networkRules: NetworkRule[]) {
+        state.networkRules = networkRules;
+    },
+    insertNetworkRule(state: StateConfig, entry: {networkRule: NetworkRule, targetIndex: number}) {
+        state.networkRules.splice(entry.targetIndex, 0, entry.networkRule);
+    },
+    removeNetworkRule(state: StateConfig, entry: {networkRule: NetworkRule, targetIndex: number}) {
+        console.log(entry.targetIndex)
+        state.networkRules.splice(entry.targetIndex, 1);
+    },
+    updateIsNetworkRuleListDirty(state: StateConfig, isNetworkRuleListDirty: Boolean) {
+        state.isNetworkRuleListDirty = isNetworkRuleListDirty;
+    },
+    updateNetworkRulesBackup(state: StateConfig, networkRules: NetworkRule[]) {
         state.networkRulesBackup = _.cloneDeep(networkRules);
+    },
+    increaseNewId(state: StateConfig) {
+        state.newId ++;
+    },
+    initializeNewId(state: StateConfig) {
+        state.newId = NV_CONST.NEW_ID_SEED.NETWORK_RULE;
     },
 }
