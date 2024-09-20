@@ -1,7 +1,7 @@
 <script>
 import DashboardView from '../../../../components/Dashboard/DashboardView';
 import InstallView from '../../../../components/Dashboard/InstallView';
-import { SERVICE } from '@shell/config/types';
+import { SERVICE, SCHEMA } from '@shell/config/types';
 import { RANCHER_CONST, NV_CONST } from '../../../../types/neuvector';
 
 export default {
@@ -13,12 +13,17 @@ export default {
     if ( this.$store.getters['cluster/canList'](SERVICE) ) {
       this.allServices = await this.$store.dispatch('cluster/findAll', { type: SERVICE }, { root: true });
     }
+    if ( this.$store.getters['cluster/canList'](SCHEMA) ) {
+      this.allSchemas = await this.$store.dispatch('cluster/findAll', { type: SCHEMA }, { root: true });
+    }
   },
 
   data() {
     return {
       allServices: null,
-      index: -1
+      allSchemas: null,
+      index: -1,
+      NV_CONST: NV_CONST,
     }
   },
 
@@ -29,6 +34,12 @@ export default {
       }
 
       return null;
+    },
+    hasSchema() {
+      if ( this.$store.getters['cluster/canList'](SCHEMA) ) {
+        return this.$store.getters['cluster/schemaFor'](NV_CONST.NV_SCHEMA) || this.allSchemas.filter(schema => schema.id.includes(NV_CONST.PRODUCT)).length > 0;
+      }
+      return false;
     },
     rancherTheme: function() {
       const decodedCookie = decodeURIComponent(document.cookie);
@@ -50,6 +61,8 @@ export default {
 </script>
 
 <template>
-  <InstallView v-if="!uiService" :ui-service="uiService" />
-  <DashboardView v-else :ns="uiService.metadata.namespace" :rancherTheme="rancherTheme"/>
+  <div v-if="allSchemas">
+    <InstallView v-if="!hasSchema" :ui-service="uiService" />
+    <DashboardView v-else :ns="NV_CONST.NV_POD_NAMESPACE" :rancherTheme="rancherTheme"/>
+  </div>
 </template>

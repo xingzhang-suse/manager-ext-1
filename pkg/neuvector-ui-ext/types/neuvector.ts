@@ -19,70 +19,6 @@ export const NEUVECTOR_CHARTS = {
   CONTROLLER: "neuvector",
 };
 
-export const nvVariables = {
-  currentCluster: '',
-  ns: '',
-  authToken: '',
-  user: {} as any,
-  dateSliderCtx: {
-    page: 0,
-    begin: 0,
-    openedIndex: 0,
-    openedPage: 0,
-    limit: 0,
-    array: [] as any[]
-  },
-  securityEventsServiceData: {
-    cachedSecurityEvents: [] as any[],
-    displayedSecurityEvents: [] as any[],
-    domainList: [] as any[],
-    autoCompleteData: {} as any,
-    filterItems: {
-      dateFrom:  0,
-      dateTo:  0,
-      severity:  [] as any[],
-      location:  [] as any[],
-      category:  [] as any[],
-      other: [] as any[],
-      host: '',
-      source: '',
-      destination: '',
-      selectedDomains: [] as any[],
-      includedKeyword: '',
-      excludedKeyword: ''
-    }
-  },
-  isLightTheme: true,
-  showPacketModal: {
-    value: false
-  },
-  packet: {
-    value: ''
-  },
-  showHostInfoModal: {
-    value: false
-  },
-  host: {
-    value: {} as any
-  },
-  showWorkloadInfoModal: {
-    value: false
-  },
-  workload: {
-    value: {} as any
-  },
-  showEnforcerInfoModal: {
-    value: false
-  },
-  enforcer: {
-    value: {} as any
-  },
-  showAdvFilterModal: {
-    value: false
-  },
-  vulnerabilityAdvFilter: null,
-};
-
 export const RANCHER_CONST = {
   THEME: {
     AUTO: 'auto',
@@ -93,6 +29,9 @@ export const RANCHER_CONST = {
 };
 
 export const NV_CONST = {
+  NV_SCHEMA: 'neuvector.com.nvsecurityrule',
+  NV_POD_NAMESPACE: 'cattle-neuvector-system',
+  PRODUCT: 'neuvector',
   SAML: 'saml',
   LOCAL_STORAGE_CLUSTER: 'cluster',
   LOCAL_STORAGE_TOKEN: 'token',
@@ -860,7 +799,69 @@ export const NV_MAP = {
   },
 }
 
-
+export const nvVariables = {
+  currentCluster: '',
+  ns: NV_CONST.NV_SCHEMA,
+  authToken: '',
+  user: {} as any,
+  dateSliderCtx: {
+    page: 0,
+    begin: 0,
+    openedIndex: 0,
+    openedPage: 0,
+    limit: 0,
+    array: [] as any[]
+  },
+  securityEventsServiceData: {
+    cachedSecurityEvents: [] as any[],
+    displayedSecurityEvents: [] as any[],
+    domainList: [] as any[],
+    autoCompleteData: {} as any,
+    filterItems: {
+      dateFrom:  0,
+      dateTo:  0,
+      severity:  [] as any[],
+      location:  [] as any[],
+      category:  [] as any[],
+      other: [] as any[],
+      host: '',
+      source: '',
+      destination: '',
+      selectedDomains: [] as any[],
+      includedKeyword: '',
+      excludedKeyword: ''
+    }
+  },
+  isLightTheme: true,
+  showPacketModal: {
+    value: false
+  },
+  packet: {
+    value: ''
+  },
+  showHostInfoModal: {
+    value: false
+  },
+  host: {
+    value: {} as any
+  },
+  showWorkloadInfoModal: {
+    value: false
+  },
+  workload: {
+    value: {} as any
+  },
+  showEnforcerInfoModal: {
+    value: false
+  },
+  enforcer: {
+    value: {} as any
+  },
+  showAdvFilterModal: {
+    value: false
+  },
+  vulnerabilityAdvFilter: null,
+};
 
 
 
