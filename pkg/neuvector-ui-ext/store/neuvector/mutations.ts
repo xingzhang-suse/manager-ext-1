@@ -1,7 +1,8 @@
 import { StateConfig } from './index';
-import _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { NetworkRule } from 'types/network-rules';
-import { NV_CONST } from '../../types/neuvector'
+import { NV_CONST } from '../../types/neuvector';
+import { UserPermissions } from 'types/neuvector';
 
 export default {
     updateHosts(state: StateConfig, hosts: any[]) {
@@ -36,12 +37,18 @@ export default {
         state.isNetworkRuleListDirty = isNetworkRuleListDirty;
     },
     updateNetworkRulesBackup(state: StateConfig, networkRules: NetworkRule[]) {
-        state.networkRulesBackup = _.cloneDeep(networkRules);
+        state.networkRulesBackup = cloneDeep(networkRules);
     },
     increaseNewId(state: StateConfig) {
         state.newId ++;
     },
     initializeNewId(state: StateConfig) {
         state.newId = NV_CONST.NEW_ID_SEED.NETWORK_RULE;
+    },
+    updateTokenBakeup(state: StateConfig, tokenBakeup: string) {
+        state.tokenBakeup = tokenBakeup;
+    },
+    updateUserPermission(state: StateConfig, userPermission: UserPermissions) {
+        state.userPermission = userPermission;
     },
 }

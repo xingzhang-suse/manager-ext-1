@@ -1,7 +1,7 @@
 <script>
     import { Card } from '@components/Card';
     import { nvVariables } from '../../../types/neuvector';
-    import dayjs from 'dayjs';
+
     export default {
         components: {
             Card

@@ -1,4 +1,5 @@
 import { NetworkRule } from 'types/network-rules';
+import { UserPermissions } from 'types/neuvector';
 
 export default {
     updateHosts({ commit }: any, hosts: any[]) {
@@ -39,5 +40,11 @@ export default {
     },
     initializeNewId({ commit }: any) {
         commit('initializeNewId');
+    },
+    updateTokenBakeup({ commit }: any, tokenBakeup: string) {
+        commit('updateTokenBakeup', tokenBakeup);
+    },
+    updateUserPermission({ commit }: any, userPermission: UserPermissions) {
+        commit('updateUserPermission', userPermission);
     },
 }

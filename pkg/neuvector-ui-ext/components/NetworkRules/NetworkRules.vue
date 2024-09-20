@@ -51,7 +51,7 @@ export default {
       eof: false,
       _networkRules: [],
       networkRuleErr: false,
-      autoCompleteData: {},
+      autoCompleteData: null,
     };
   },
 
@@ -151,7 +151,7 @@ export default {
             </header>
     </div>
     <div>
-      <AddTuleToTopBtn :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddTuleToTopBtn>
+      <AddTuleToTopBtn v-if="autoCompleteData" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddTuleToTopBtn>
       <SaveBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
       <UndoBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
       <RemoveBtn class="pull-left mx-2"></RemoveBtn>
@@ -160,6 +160,6 @@ export default {
       <DownloadCsvBtn class="pull-right mx-2" :networkRules="networkRules"></DownloadCsvBtn>
     </div>
     
-    <NetworkRulesGrid class="mt-2" :networkRules="networkRules" :autoCompleteData="autoCompleteData"></NetworkRulesGrid>
+    <NetworkRulesGrid v-if="autoCompleteData" class="mt-2" :networkRules="networkRules" :autoCompleteData="autoCompleteData"></NetworkRulesGrid>
   </div>
 </template>

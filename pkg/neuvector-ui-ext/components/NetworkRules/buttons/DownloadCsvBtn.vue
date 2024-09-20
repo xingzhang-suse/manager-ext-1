@@ -9,11 +9,8 @@
         props: {
             networkRules: Array,
         },
-        data() {
-        },
         methods: {
             exportCsv() {
-                console.log(this.networkRules)
                 let reportData = this.networkRules.map((rule, index) => {
                     if (rule.id > 0) {
                         return {
@@ -38,8 +35,8 @@
                 let csv = arrayToCsv(reportData);
                 let blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
                 saveAs(
-                blob,
-                `Network_rules_Reports_${parseDatetimeStr(new Date())}.csv`
+                    blob,
+                    `Network_rules_Reports_${parseDatetimeStr(new Date())}.csv`
                 );
             }
         }

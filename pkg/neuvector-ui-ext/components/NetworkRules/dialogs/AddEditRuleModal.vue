@@ -7,7 +7,6 @@ import { UpdateType } from '../../../types/network-rules';
 import { ToggleSwitch } from '@components/Form/ToggleSwitch';
 import { updateGridData } from '../../../utils/network-rules';
 import { mapGetters } from 'vuex';
-import { watch } from 'vue';
 
 export default {
     components: {
@@ -26,7 +25,7 @@ export default {
     },
     watch: {
       showSlideIn(newShowSlideIn, oldShowSlideIn) {
-        if (newShowSlideIn) {
+        if (!!newShowSlideIn) {
           this.initializeForm();
         }
       }
@@ -65,7 +64,7 @@ export default {
           updateGridData([payload], this.selectedIndex, UpdateType.Edit, null, this.$store);
         } else {
           let payload = this.getAddedPayload();
-          updateGridData([payload], this.selectedIndex, UpdateType.Insert, null, this.$store);
+          updateGridData([payload], this.selectedIndex, this.opType, null, this.$store);
         }
         this.initializeForm();
         this.showSlideIn = false;

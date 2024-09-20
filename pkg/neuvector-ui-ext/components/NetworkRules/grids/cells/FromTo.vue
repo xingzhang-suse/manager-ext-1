@@ -10,7 +10,6 @@
         computed: {
             getFromTo() {
                 if (this.rule && this.rule.id > -1) {
-                    console.log(this.isFrom ? this.rule.from.length > 50 : this.rule.to.length > 50)
                     return {
                         className: this.rule.remove ? 'policy-remove' : '',
                         text: shortenString(this.isFrom ? this.rule.from : this.rule.to, 50),

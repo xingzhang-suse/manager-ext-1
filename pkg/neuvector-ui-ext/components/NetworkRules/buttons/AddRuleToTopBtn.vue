@@ -1,5 +1,6 @@
 <script>
     import AddEditRuleModal from '../dialogs/AddEditRuleModal';
+    import { UpdateType } from '../../../types/network-rules';
     export default {
         components: {
             AddEditRuleModal,
@@ -7,6 +8,11 @@
         props: {
             autoCompleteData: Object,
             isLightTheme: Boolean,
+        },
+        data() {
+            return {
+                UpdateType: UpdateType
+            }
         },
         methods: {
             openAddEditRuleModal: function() {
@@ -33,6 +39,7 @@
             ref="addEditRule"
             :isLightTheme="isLightTheme"
             :autoCompleteData="autoCompleteData"
+            :opType="UpdateType.AddToTop"
             @close="closeModal">
         </AddEditRuleModal>
     </div>

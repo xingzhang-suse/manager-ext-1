@@ -68,3 +68,17 @@ function moveRules(
     store.dispatch('neuvector/updateNetworkRules', networkRulesTmp);
     store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
 };
+
+export async function toggleDeleteRule(
+  selectedRule: NetworkRule,
+  targetIndex: number,
+  isMasked: Boolean,
+  store: Store<any>,
+) {
+  selectedRule.remove = !isMasked;
+  store.dispatch('neuvector/removeNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
+  setTimeout(() => {
+    store.dispatch('neuvector/insertNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
+    store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
+  }, 200);
+}

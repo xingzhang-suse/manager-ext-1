@@ -15,6 +15,19 @@ export interface FilterOptions {
   excludedKeyword?: string;
 };
 
+export interface Permission {
+  id: string;
+  read: boolean;
+  write: boolean;
+};
+
+export interface UserPermissions {
+  globalPermissions: string[],
+  remoteGlobalPermissions: string[],
+  ownedPermissions: string[],
+  isNamespaceUser: boolean,
+};
+
 export const NEUVECTOR_CHARTS = {
   CONTROLLER: "neuvector",
 };
@@ -24,6 +37,7 @@ export const nvVariables = {
   ns: '',
   authToken: '',
   user: {} as any,
+  isRemote: false,
   dateSliderCtx: {
     page: 0,
     begin: 0,

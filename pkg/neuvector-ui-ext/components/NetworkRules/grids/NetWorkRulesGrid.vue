@@ -10,7 +10,9 @@
     import Id from './cells/Id';
     import ActionMenu from '@shell/components/ActionMenu';
     import AddEditRuleModal from '../dialogs/AddEditRuleModal';
-    import { UpdateType } from '../../../types/network-rules'
+    import { UpdateType } from '../../../types/network-rules';
+    import Confirmation from '../../common/dialogs/Confirmation';
+    import { toggleDeleteRule } from '../../../utils/network-rules';
 
     export default {
         components: {
@@ -24,13 +26,13 @@
             Id,
             ActionMenu,
             AddEditRuleModal,
+            Confirmation,
         },
         props: {
           networkRules: Array,
           autoCompleteData: Object,
         },
         fetch() {
-         
         },
         data() {
           return {
@@ -92,7 +94,10 @@
             selectedRuleId: 0,
             selectedRule: null,
             selectedIndex: 0,
-            UpdateType: UpdateType.Insert,
+            opType: UpdateType.Insert,
+            confirmationMsg: '',
+            confirmedFn: null,
+            showConfirmationModal: false,
           };
         },
         methods: {
@@ -110,17 +115,40 @@
             }
           },
           addRuleBelow: function() {
-            this.UpdateType = UpdateType.Insert;
+            this.opType = UpdateType.Insert;
             this.$refs.addEditRule.show();
           },
           editRule: function() {
-            this.UpdateType = UpdateType.Edit;
+            this.opType = UpdateType.Edit;
             this.selectedRule = this.networkRules.filter(networkRule => networkRule.id === this.selectedRuleId)[0];
             this.$refs.addEditRule.show();
           },
+          deleteSelectedRule: function() {
+            this.confirmedFn = async () => {
+              await toggleDeleteRule(this.networkRules[this.selectedIndex], this.selectedIndex, false, this.$store);
+              this.showConfirmationModal = false;
+            };
+            this.showConfirmationModal = true;
+            this.confirmationMsg = `${this.t(
+              'policy.dialog.REMOVE'
+            )} ${this.selectedRuleId}`;
+          },
+          undeleteSelectedRule: function() {
+            this.confirmedFn = async () => {
+              await toggleDeleteRule(this.networkRules[this.selectedIndex], this.selectedIndex, true, this.$store);
+              this.showConfirmationModal = false;
+            };
+            this.showConfirmationModal = true;
+            this.confirmationMsg = `${this.t(
+              'policy.dialog.UNREMOVE'
+            )} ${this.selectedRuleId}`;
+          },
           closeAddEditRuleModal: function() {
             this.showAddEditRuleModal = false;
-          }
+          },
+          closeConfirmationModal() {
+            this.showConfirmationModal = false;
+          },
         },
         computed: {
           menuActions() {
@@ -243,6 +271,8 @@
         @close="setActionMenuState(false)"
         @addRule="addRuleBelow"
         @editRule="editRule"
+        @deleteRule="deleteSelectedRule"
+        @undeleteRule="undeleteSelectedRule"
     />
     <AddEditRuleModal
       ref="addEditRule"
@@ -250,9 +280,10 @@
       :autoCompleteData="autoCompleteData"
       :selectedRule="selectedRule"
       :selectedIndex="selectedIndex"
-      :opType="UpdateType"
+      :opType="opType"
       @close="closeAddEditRuleModal">
     </AddEditRuleModal>
+    <Confirmation v-if="showConfirmationModal" :message="confirmationMsg" @close="closeConfirmationModal" :okFn="confirmedFn"></Confirmation>
   </div>
   
 </template>

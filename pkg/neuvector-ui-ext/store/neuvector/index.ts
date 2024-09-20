@@ -4,6 +4,7 @@ import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 import { NetworkRule } from 'types/network-rules';
+import { UserPermissions } from 'types/neuvector';
 
 export interface StateConfig {
     hosts: any[],
@@ -16,6 +17,8 @@ export interface StateConfig {
     networkRulesBackup: NetworkRule[],
     isNetworkRuleListDirty: Boolean,
     newId: number,
+    tokenBakeup: string,
+    userPermission: UserPermissions,
 }
 
 const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
@@ -32,6 +35,8 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
                 networkRulesBackup: config.networkRulesBackup,
                 isNetworkRuleListDirty: config.isNetworkRuleListDirty,
                 newId: config.newId,
+                tokenBakeup: config.tokenBakeup,
+                userPermission: config.userPermission,
             }
         },
         getters:   { ...getters },
@@ -55,6 +60,13 @@ export default {
             networkRulesBackup: [],
             isNetworkRuleListDirty: false,
             newId: NV_CONST.NEW_ID_SEED.NETWORK_RULE,
+            tokenBakeup: '',
+            userPermission: {
+                globalPermissions: [],
+                remoteGlobalPermissions: [],
+                ownedPermissions: [],
+                isNamespaceUser: false,
+            },
         }
     ),
     config,
