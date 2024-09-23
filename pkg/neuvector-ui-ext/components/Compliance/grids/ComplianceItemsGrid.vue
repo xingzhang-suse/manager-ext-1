@@ -188,11 +188,11 @@
                 const patterns = pattern.split(',').map(item => item.trim());
                 const theEntity = entities.find(entity => {
                 if (entity && entity.display_name) {
-                    if (matchType === 'equal')
+                    if (matchType === 'equals')
                     return patterns.some(item => item === entity.display_name);
                     else return new RegExp(patterns.join('|')).test(entity.display_name);
                 } else {
-                    if (matchType === 'equal')
+                    if (matchType === 'equals')
                     return patterns.some(item => item === entity);
                     else return new RegExp(patterns.join('|')).test(entity);
                 }
