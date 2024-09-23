@@ -147,20 +147,6 @@
                                 @input="changeView"
                             />
                         </div>
-                        <div class="bulk bulk d-flex align-items-center">
-                            <h1 class="font-weight-light" id="vulnerabilities-title">
-                                {{ t('sidebar.nav.SCAN') }}
-                            </h1>
-                            <LabeledSelect
-                                class="view-select ml-15"
-                                v-model="selectedView"
-                                :close-on-select="true"
-                                :multiple="false"
-                                :label="t('scan.report.view.TITLE')"
-                                :options="vulnerabilityViewsOptions"
-                                @input="changeView"
-                            />
-                        </div>
                         <div class="search row">
                             <div class="d-flex align-items-center">
                                 <button @click="openFileExportDialog()" class="mr-10 btn role-primary">
@@ -189,8 +175,8 @@
                                 v-if="vulQueryData?.summary?.top_nodes" 
                                 :topVulHosts="vulQueryData.summary.top_nodes"
                             />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                             <div class="mb-10 chart-title" style="line-height: 15px;">
                                 <span class="mr-10">{{ t('scan.report.others.TOP_VULNERABLE_IMAGES') }}</span>
                             </div>

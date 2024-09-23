@@ -440,6 +440,35 @@ export const NV_MAP = {
     viewType: 'all',
   },
 
+  INIT_COMPLIANCE_ADV_FILTER: {
+    category: {
+      docker: true,
+      kubernetes: true,
+      custom: true,
+      image: true,
+    },
+    tags: {
+      GDPR: false,
+      HIPAA: false,
+      NIST: false,
+      PCI: false,
+    },
+    scoredType: 'all',
+    profileType: 'all',
+    matchType4Ns: 'equals',
+    matchTypes: {
+      Service: 'equals',
+      Image: 'equals',
+      Node: 'equals',
+      Container: 'equals',
+    },
+    selectedDomains: [],
+    serviceName: '',
+    imageName: '',
+    nodeName: '',
+    containerName: '',
+  },
+
   PDF_TEXT_COLOR: {
     IMAGE: '#76A4B9',
     CONTAINER: '#1597E4',
@@ -812,6 +841,11 @@ export const nvVariables = {
     limit: 0,
     array: [] as any[]
   },
+  complianceData: {
+    workloadMap: new Map(),
+    filteredCis: [] as any[],
+    advFilter: null,
+  },
   securityEventsServiceData: {
     cachedSecurityEvents: [] as any[],
     displayedSecurityEvents: [] as any[],
@@ -862,6 +896,3 @@ export const nvVariables = {
   },
   vulnerabilityAdvFilter: null,
 };
-
-
-
