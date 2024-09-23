@@ -295,6 +295,9 @@
             <PodInfo v-if="showWorkloadInfoModal && showWorkloadInfoModal.value" :workload="workload.value" @close="closeWorkloadInfoModal"></PodInfo>
             <EnforcerInfo v-if="showEnforcerInfoModal && showEnforcerInfoModal.value" :enforcer="enforcer.value" @close="closeEnforcerInfoModal"></EnforcerInfo>
         </div>
+        <div v-else class="text-center mt-5">
+            {{ t('general.NO_ROWS') }}
+        </div>
     </div>
 </template>
 
