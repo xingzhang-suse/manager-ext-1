@@ -20,6 +20,7 @@
   import { Pie } from 'vue-chartjs/legacy';
   import EmptyDataMessage from '../contents/EmptyDataMessage';
   import { NV_CONST } from '../../../types/neuvector';
+  import _ from 'lodash';
   
   import {
     Chart as ChartJS,
@@ -72,7 +73,7 @@
     },
     computed: {
       chartData: function() {
-        const modes = NV_CONST.MODES.reverse();
+        const modes = _.cloneDeep(NV_CONST.MODES).reverse();
         let assetsPolicyModeLabels = new Array(modes.length);
         let assetsPolicyModeData = new Array(modes.length);
         assetsPolicyModeLabels = modes.map((mode) => {
