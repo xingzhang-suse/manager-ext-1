@@ -846,6 +846,7 @@ export const nvVariables = {
   ns: NV_CONST.NV_SCHEMA,
   authToken: '',
   user: {} as any,
+  isRemote: false,
   dateSliderCtx: {
     page: 0,
     begin: 0,
