@@ -32,71 +32,6 @@ export const NEUVECTOR_CHARTS = {
   CONTROLLER: "neuvector",
 };
 
-export const nvVariables = {
-  currentCluster: '',
-  ns: '',
-  authToken: '',
-  user: {} as any,
-  isRemote: false,
-  dateSliderCtx: {
-    page: 0,
-    begin: 0,
-    openedIndex: 0,
-    openedPage: 0,
-    limit: 0,
-    array: [] as any[]
-  },
-  securityEventsServiceData: {
-    cachedSecurityEvents: [] as any[],
-    displayedSecurityEvents: [] as any[],
-    domainList: [] as any[],
-    autoCompleteData: {} as any,
-    filterItems: {
-      dateFrom:  0,
-      dateTo:  0,
-      severity:  [] as any[],
-      location:  [] as any[],
-      category:  [] as any[],
-      other: [] as any[],
-      host: '',
-      source: '',
-      destination: '',
-      selectedDomains: [] as any[],
-      includedKeyword: '',
-      excludedKeyword: ''
-    }
-  },
-  isLightTheme: true,
-  showPacketModal: {
-    value: false
-  },
-  packet: {
-    value: ''
-  },
-  showHostInfoModal: {
-    value: false
-  },
-  host: {
-    value: {} as any
-  },
-  showWorkloadInfoModal: {
-    value: false
-  },
-  workload: {
-    value: {} as any
-  },
-  showEnforcerInfoModal: {
-    value: false
-  },
-  enforcer: {
-    value: {} as any
-  },
-  showAdvFilterModal: {
-    value: false
-  },
-  vulnerabilityAdvFilter: null,
-};
-
 export const RANCHER_CONST = {
   THEME: {
     AUTO: 'auto',
@@ -107,6 +42,9 @@ export const RANCHER_CONST = {
 };
 
 export const NV_CONST = {
+  NV_SCHEMA: 'neuvector.com.nvsecurityrule',
+  NV_POD_NAMESPACE: 'cattle-neuvector-system',
+  PRODUCT: 'neuvector',
   SAML: 'saml',
   LOCAL_STORAGE_CLUSTER: 'cluster',
   LOCAL_STORAGE_TOKEN: 'token',
@@ -125,6 +63,8 @@ export const NV_CONST = {
   STATUS_INTERNAL_SERVER_ERR: 500,
   STATUS_NOT_FOUND: 404,
   STATUS_FORBIDDEN: 403,
+  STATUS_BAD_REQUEST: 400,
+  TOKEN_REQUESTED_ERROR_MSG: 'Request is missing required HTTP header \'Token\'',
   PATH_LOGIN: 'login',
   PATH_LOGOUT: 'logout',
   PATH_DEFAULT: 'dashboard',
@@ -513,6 +453,35 @@ export const NV_MAP = {
     viewType: 'all',
   },
 
+  INIT_COMPLIANCE_ADV_FILTER: {
+    category: {
+      docker: true,
+      kubernetes: true,
+      custom: true,
+      image: true,
+    },
+    tags: {
+      GDPR: false,
+      HIPAA: false,
+      NIST: false,
+      PCI: false,
+    },
+    scoredType: 'all',
+    profileType: 'all',
+    matchType4Ns: 'equals',
+    matchTypes: {
+      Service: 'equals',
+      Image: 'equals',
+      Node: 'equals',
+      Container: 'equals',
+    },
+    selectedDomains: [],
+    serviceName: '',
+    imageName: '',
+    nodeName: '',
+    containerName: '',
+  },
+
   PDF_TEXT_COLOR: {
     IMAGE: '#76A4B9',
     CONTAINER: '#1597E4',
@@ -872,7 +841,71 @@ export const NV_MAP = {
   },
 }
 
-
-
-
-
+export const nvVariables = {
+  currentCluster: '',
+  ns: NV_CONST.NV_SCHEMA,
+  authToken: '',
+  user: {} as any,
+  dateSliderCtx: {
+    page: 0,
+    begin: 0,
+    openedIndex: 0,
+    openedPage: 0,
+    limit: 0,
+    array: [] as any[]
+  },
+  complianceData: {
+    workloadMap: new Map(),
+    filteredCis: [] as any[],
+    advFilter: null,
+  },
+  securityEventsServiceData: {
+    cachedSecurityEvents: [] as any[],
+    displayedSecurityEvents: [] as any[],
+    domainList: [] as any[],
+    autoCompleteData: {} as any,
+    filterItems: {
+      dateFrom:  0,
+      dateTo:  0,
+      severity:  [] as any[],
+      location:  [] as any[],
+      category:  [] as any[],
+      other: [] as any[],
+      host: '',
+      source: '',
+      destination: '',
+      selectedDomains: [] as any[],
+      includedKeyword: '',
+      excludedKeyword: ''
+    }
+  },
+  isLightTheme: true,
+  showPacketModal: {
+    value: false
+  },
+  packet: {
+    value: ''
+  },
+  showHostInfoModal: {
+    value: false
+  },
+  host: {
+    value: {} as any
+  },
+  showWorkloadInfoModal: {
+    value: false
+  },
+  workload: {
+    value: {} as any
+  },
+  showEnforcerInfoModal: {
+    value: false
+  },
+  enforcer: {
+    value: {} as any
+  },
+  showAdvFilterModal: {
+    value: false
+  },
+  vulnerabilityAdvFilter: null,
+};

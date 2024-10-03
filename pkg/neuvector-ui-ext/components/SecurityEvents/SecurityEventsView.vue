@@ -21,6 +21,7 @@
     import EnforcerInfo from '../common/dialogs/EnforcerInfo';
     import DownloadCsv from  './buttons/DownloadCsv';
     import Refresh from '../common/buttons/Refresh';
+    import Loading from '@shell/components/Loading';
 
     // library.add(faSomeIcon);
 
@@ -39,7 +40,8 @@
             PodInfo,
             EnforcerInfo,
             DownloadCsv,
-            Refresh
+            Refresh,
+            Loading
         },
         async fetch() {
             if ( this.$store.getters['cluster/canList'](SERVICE) ) {
@@ -198,7 +200,8 @@
 </script>
 
 <template>
-    <div class="screen-area">
+    <Loading v-if="$fetchState.pending" />
+    <div v-else class="screen-area">
         <div id="sec-event" class="padding-top-0">
             <header style="margin-bottom: 10px;" id="security-events-title">
                 <div class="title">
@@ -291,6 +294,9 @@
             <NodeInfo v-if="showHostInfoModal && showHostInfoModal.value" :host="host.value" @close="closeHostInfoModal"></NodeInfo>
             <PodInfo v-if="showWorkloadInfoModal && showWorkloadInfoModal.value" :workload="workload.value" @close="closeWorkloadInfoModal"></PodInfo>
             <EnforcerInfo v-if="showEnforcerInfoModal && showEnforcerInfoModal.value" :enforcer="enforcer.value" @close="closeEnforcerInfoModal"></EnforcerInfo>
+        </div>
+        <div v-else class="text-center mt-5">
+            {{ t('general.NO_ROWS') }}
         </div>
     </div>
 </template>

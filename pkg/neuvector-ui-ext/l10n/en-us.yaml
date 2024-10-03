@@ -1310,6 +1310,8 @@ scan:
   UNPROTECTED_NODE: UnProtected Node
   PROTECTED_CONTAINER: Protected container
   LAST_MODIFIED: Last Modified
+  SCOPE: Scope
+  EXPORT: Export
   PUBLISHED: Published
   PUBLISHED_TYPE: Published Type
   WITH_FIX: With Fix

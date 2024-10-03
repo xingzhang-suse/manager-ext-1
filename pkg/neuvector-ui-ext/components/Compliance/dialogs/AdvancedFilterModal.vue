@@ -23,15 +23,9 @@
           DatePicker,
         },
         props: {
-            isLightTheme: Boolean,
-            vulQuery: Object,
-            domains: Array,
-        },
-        fetch() {
-          const advFilter = JSON.parse(JSON.stringify(this.vulQuery));
-          if (advFilter.last_modified_timestamp) advFilter.last_modified_timestamp *= 1000;
-          if (advFilter.publishedTime) advFilter.publishedTime *= 1000;
-          this.advFilter = advFilter;
+          isLightTheme: Boolean,
+          inputFilter: Object,
+          domains: Array,
         },
         methods: {
           show() {
@@ -45,9 +39,6 @@
             this.hide();
           },
           apply() {
-            if (this.advFilter.last_modified_timestamp) this.advFilter.last_modified_timestamp /= 1000;
-            if (this.advFilter.publishedTime) this.advFilter.publishedTime /= 1000;
-            console.log(this.advFilter);
             this.$emit('close', this.advFilter);
             this.hide();
           },
@@ -58,38 +49,26 @@
             switch (filterView) {
               case 'service':
                 this.advFilter.serviceName = '';
-                this.advFilter.matchTypeService = this.matchTypes[0].value;
+                this.advFilter.matchTypes.Service = this.matchTypes[0].value;
                 break;
               case 'image':
                 this.advFilter.imageName = '';
-                this.advFilter.matchTypeImage = this.matchTypes[0].value;
+                this.advFilter.matchTypes.Image = this.matchTypes[0].value;
                 break;
               case 'node':
                 this.advFilter.nodeName = '';
-                this.advFilter.matchTypeNode = this.matchTypes[0].value;
+                this.advFilter.matchTypes.Node = this.matchTypes[0].value;
                 break;
               case 'container':
                 this.advFilter.containerName = '';
-                this.advFilter.matchTypeContainer = this.matchTypes[0].value;
-                break;
-              case 'v2':
-                this.advFilter.scoreV2 = [0, 10];
-                break;
-              case 'v3':
-                this.advFilter.scoreV3 = [0, 10];
+                this.advFilter.matchTypes.Container = this.matchTypes[0].value;
                 break;
             }
-          },
-          updateScoreV2(e) {
-            this.advFilter.scoreV2 = [e.minValue, e.maxValue];
-          },
-          updateScoreV3(e) {
-            this.advFilter.scoreV3 = [e.minValue, e.maxValue];
           },
         },
         data() {
           return {
-            advFilter: null,
+            advFilter: JSON.parse(JSON.stringify(this.inputFilter)),
             matchTypes: [
               { label: '=', value: 'equals' },
               {
@@ -99,55 +78,28 @@
             ],
             scoredOptions: [
               { label: this.t('setting.ALL'), value: 'all' },
-              { label: this.t('scan.WITH_FIX'), value: 'withFix' },
-              { label: this.t('scan.WITHOUT_FIX'), value: 'withoutFix' },
+              { label: 'True', value: 'true' },
+              { label: 'False', value: 'false' },
             ],
-            severityOptions: [
+            profileOptions: [
               { label: this.t('setting.ALL'), value: 'all' },
-              { label: this.t('enum.HIGH'), value: 'high' },
-              { label: this.t('enum.MEDIUM'), value: 'medium' },
-              { label: this.t('enum.LOW'), value: 'low' },
+              { label: 'Level 1', value: 'Level 1' },
+              { label: 'Level 2', value: 'Level 2' },
             ],
             impactOptions: [
-              { label: this.t('admissionControl.names.SERVICE'), value: { matchType: 'matchTypeService', name: 'serviceName' } },
-              { label: this.t('admissionControl.names.IMAGE'), value: { matchType: 'matchTypeImage', name: 'imageName' } },
-              { label: this.t('admissionControl.names.NODE'), value: { matchType: 'matchTypeNode', name: 'nodeName' } },
-              { label: this.t('admissionControl.names.CONTAINER'), value: { matchType: 'matchTypeContainer', name: 'containerName' } },
-            ],
-            publishedOptions: [
-              { label: this.t('general.BEFORE'), value: 'before' },
-              { label: this.t('general.AFTER'), value: 'after' },
-            ],
-            scoreOptions: [
-              { label: 'V2', value: 'v2' },
-              { label: 'V3', value: 'v3' },
-            ],
-            lastModifiedDateShortcuts: [
-              {
-                text: this.t('scan.report.from.TWOWEEKS'),
-                onClick() {
-                  const today = new Date();
-                  return new Date(today.getFullYear(), today.getMonth(), today.getDate() - 14);
-                },
-              },
-              {
-                text: this.t('scan.report.from.ONEMONTH'),
-                onClick() {
-                  const today = new Date();
-                  return new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-                },
-              },
-              {
-                text: this.t('scan.report.from.THREEMONTHS'),
-                onClick() {
-                  const today = new Date();
-                  return new Date(today.getFullYear(), today.getMonth() - 3, today.getDate());
-                },
-              },
+              { label: this.t('admissionControl.names.SERVICE'), value: { matchType: 'Service', name: 'serviceName' } },
+              { label: this.t('admissionControl.names.IMAGE'), value: { matchType: 'Image', name: 'imageName' } },
+              { label: this.t('admissionControl.names.NODE'), value: { matchType: 'Node', name: 'nodeName' } },
+              { label: this.t('admissionControl.names.CONTAINER'), value: { matchType: 'Container', name: 'containerName' } },
             ],
             selectedImp: null,
             showSlideIn: false,
           };
+        },
+        watch: {
+          inputFilter(newAdvFilter, oldAdvFilter) {
+            this.advFilter = JSON.parse(JSON.stringify(newAdvFilter));
+          }
         },
         computed: {
           filteredImpactOptions() {
@@ -207,77 +159,37 @@
       <div class="adv-filter-modal">
         <div>
           <div class="row align-items-center mt-2">
-            <div class="col-3 text-bold">{{ t('scan.LAST_MODIFIED') }}</div>
+            <div class="col-3 text-bold">{{ t('nodes.gridHeader.CATEGORY') }}</div>
             <div class="col-9">
-              <date-picker v-model="advFilter.last_modified_timestamp" :shortcuts="lastModifiedDateShortcuts" valueType="timestamp"></date-picker>
+                <Checkbox v-model="advFilter.category.docker" label="Docker"/>
+                <Checkbox v-model="advFilter.category.kubernetes" label="Kubernetes"/>
+                <Checkbox v-model="advFilter.category.custom" label="Custom"/>
+                <Checkbox v-model="advFilter.category.image" label="Image"/>
             </div>
           </div>
           <div class="row align-items-center mt-2">
-            <div class="col-3 text-bold">{{ t('scan.PUBLISHED') }}</div>
-            <div class="col-3">
-              <Select
-                v-model="advFilter.publishedType"
-                :options="publishedOptions"
-              />
-            </div>
-            <div class="col-6">
-              <date-picker v-model="advFilter.publishedTime" valueType="timestamp"></date-picker>
+            <div class="col-3 text-bold">{{ t('cis.profile.REGULATIONS') }}</div>
+            <div class="col-9">
+                <Checkbox v-for="(_, key) in advFilter.tags" v-model="advFilter.tags[key]" :label="key"/>
             </div>
           </div>
           <div class="row align-items-center mt-2">
             <div class="col-3 text-bold">{{ t('cis.report.gridHeader.SCORED') }}</div>
             <div class="col-9">
-              <RadioGroup v-model="advFilter.packageType" name="score_filter" :options="scoredOptions" :row="true" class="vul-radio-group" />
+              <RadioGroup v-model="advFilter.scoredType" name="score_filter" :options="scoredOptions" :row="true" class="vul-radio-group" />
             </div>
           </div>
           <div class="row align-items-center mt-2">
             <div class="col-3 text-bold">{{ t('profile.TITLE') }}</div>
             <div class="col-9">
-              <RadioGroup v-model="advFilter.severityType" name="severity_filter" :options="severityOptions" :row="true" class="vul-radio-group" />
-            </div>
-          </div>
-          <div class="row align-items-center mt-2">
-            <div class="col-3 text-bold">{{ t('scan.report.gridHeader.SCORE') }}</div>
-            <div class="col-3">
-              <Select
-                v-model="advFilter.scoreType"
-                :options="scoreOptions"
-              ></Select>
-            </div>
-            <div class="col-6">
-              <MultiRangeSlider v-if="advFilter.scoreType === 'v2'"
-                id="slider-v2"
-                class="mr-10"
-                :key="'slider-v2'"
-                :baseClassName="'multi-range-slider'"
-                :min="0"
-                :max="10"
-                :step="1"
-                :ruler="false"
-                :minValue="advFilter.scoreV2[0]"
-                :maxValue="advFilter.scoreV2[1]"
-                @input="updateScoreV2"
-              />
-              <MultiRangeSlider v-else
-                id="slider-v3"
-                class="mr-10"
-                :key="'slider-v3'"
-                :baseClassName="'multi-range-slider'"
-                :min="0"
-                :max="10"
-                :step="1"
-                :ruler="false"
-                :minValue="advFilter.scoreV3[0]"
-                :maxValue="advFilter.scoreV3[1]"
-                @input="updateScoreV3"
-              />
+              <RadioGroup v-model="advFilter.profileType" name="severity_filter" :options="profileOptions" :row="true" class="vul-radio-group" />
             </div>
           </div>
           <div class="row align-items-center mt-2">
             <div class="col-3 text-bold">{{ t('ldap.gridHeader.DOMAINS') }}</div>
             <div class="col-3">
               <Select
-                v-model="advFilter.matchTypeNs"
+                v-model="advFilter.matchType4Ns"
                 :options="matchTypes"
               />
             </div>
@@ -304,7 +216,7 @@
             </div>
             <div class="col-3">
               <Select
-                v-model="advFilter[selectedImpact.value.matchType]"
+                v-model="advFilter.matchTypes[selectedImpact.value.matchType]"
                 :options="matchTypes"
               />
             </div>
@@ -315,7 +227,7 @@
           <div class="mt-15">
             <span v-if="advFilter.serviceName" class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
               {{ t('admissionControl.names.SERVICE') }}
-              {{ advFilter.matchTypeService === 'equals' ? '=' : '~' }}
+              {{ advFilter.matchTypes.Service === 'equals' ? '=' : '~' }}
               {{ advFilter.serviceName }}
               <button
                 id="remove-service"
@@ -326,7 +238,7 @@
             </span>
             <span v-if="advFilter.imageName" class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
               {{ t('admissionControl.names.IMAGE') }}
-              {{ advFilter.matchTypeImage === 'equals' ? '=' : '~' }}
+              {{ advFilter.matchTypes.Image === 'equals' ? '=' : '~' }}
               {{ advFilter.imageName }}
               <button
                 id="remove-image"
@@ -337,7 +249,7 @@
             </span>
             <span v-if="advFilter.nodeName" class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
               {{ t('admissionControl.names.NODE') }}
-              {{ advFilter.matchTypeNode === 'equals' ? '=' : '~' }}
+              {{ advFilter.matchTypes.Node === 'equals' ? '=' : '~' }}
               {{ advFilter.nodeName }}
               <button
                 id="remove-node"
@@ -348,48 +260,12 @@
             </span>
             <span v-if="advFilter.containerName" class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
               {{ t('admissionControl.names.CONTAINER') }}
-              {{ advFilter.matchTypeContainer === 'equals' ? '=' : '~' }}
+              {{ advFilter.matchTypes.Container === 'equals' ? '=' : '~' }}
               {{ advFilter.containerName }}
               <button
                 id="remove-container"
                 class="remove-button p-1"
                 @click="clear('container')">
-                <em class="icon icon-close"></em>
-              </button>
-            </span>
-            <span v-if="advFilter.scoreV2[1] < 10 || advFilter.scoreV2[0] > 0"
-              class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
-              <template v-if="advFilter.scoreV2[1] < 10">
-                V2 < {{ advFilter.scoreV2[1] }}
-              </template>
-              <template v-if="advFilter.scoreV2[1] < 10 && advFilter.scoreV2[0] > 0">
-                &nbsp; &&nbsp;
-              </template>
-              <template v-if="advFilter.scoreV2[0] > 0">
-                V2 > {{ advFilter.scoreV2[0] }}
-              </template>
-              <button
-                id="remove-container"
-                class="remove-button p-1"
-                @click="clear('v2')">
-                <em class="icon icon-close"></em>
-              </button>
-            </span>
-            <span v-if="advFilter.scoreV3[1] < 10 || advFilter.scoreV3[0] > 0"
-              class="badge badge-secondary mb-1 mr-5 d-inline-flex justify-content-center align-items-center">
-              <template v-if="advFilter.scoreV3[1] < 10">
-                V3 < {{ advFilter.scoreV3[1] }}
-              </template>
-              <template v-if="advFilter.scoreV3[1] < 10 && advFilter.scoreV3[0] > 0">
-                &nbsp; &&nbsp;
-              </template>
-              <template v-if="advFilter.scoreV3[0] > 0">
-                V3 > {{ advFilter.scoreV3[0] }}
-              </template>
-              <button
-                id="remove-container"
-                class="remove-button p-1"
-                @click="clear('v3')">
                 <em class="icon icon-close"></em>
               </button>
             </span>
