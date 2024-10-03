@@ -76,6 +76,7 @@ general:
   VIEW_MORE: View More
   VIEW_LESS: View Less
   SAMPLE: Sample
+  CONFIRMATION: Confirmation
 enum:
   FEDADMIN: Federated Administrator
   ADMIN: Administrator

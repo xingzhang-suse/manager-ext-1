@@ -1,0 +1,149 @@
+@import './common/color.scss';
+.action-label {
+    @media print {
+      height: 15px;
+      line-height: 15px;
+      font-size: 10px;
+    }
+    @media screen {
+      height: 20px;
+      line-height: 20px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    min-width: 50px;
+    border-radius: 4px;
+    text-align: center;
+    display: inline-block;
+    color: #fff;
+    &.info {
+      background-color: $mdc-light-blue-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.deny {
+      background-color: $mdc-red-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.warning {
+      background-color: $mdc-orange-400;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.pink {
+      background-color: #e91e63;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.allow {
+      background-color: $mdc-light-green-500;
+      -webkit-print-color-adjust: exact;
+    }
+  
+    &.discover {
+      background-color: #2196f3;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  
+    &.monitor {
+      background-color: #4e39c1;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  
+    &.protect {
+      background-color: #186d33;
+      -webkit-print-color-adjust: exact;
+      color: #fff;
+    }
+  }
+  
+  .disabled-action {
+    background-color: $neuvector-grey-400 !important;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .disabled-action-2 {
+    color: $neuvector-grey-500 !important;
+    border: 1px solid $neuvector-grey-400;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .new-rule {
+    border: 1px solid #83cd89;
+    background-color: #c4e9c7;
+    color: #45505c;
+  }
+  
+  .modified-rule {
+    border: 1px solid #68a2dc;
+    background-color: #bfdcf9;
+    color: #45505c;
+  }
+  
+  .readonly-rule {
+    border: 1px solid #ff0040;
+    background-color: #fc6d91;
+    color: #ffffff;
+  }
+  
+  .moved-rule {
+    border: 1px solid #60c3d6;
+    background-color: #a3eaf7;
+    color: #45505c;
+  }
+  
+  .customer-rule {
+    border: 1px solid #e6e600;
+    background-color: #ffffe6;
+    color: #45505c;
+  }
+  
+  .local-rule {
+    border: 1px solid #ebe3e4;
+    background-image: linear-gradient(to right, #ffffe6, #e6d9f1);
+    color: #45505c;
+  }
+  
+  .learn-rule {
+    border: 1px solid #d2aff1;
+    background-color: #e6d9f1;
+    color: #45505c;
+  }
+  
+  .ground-rule {
+    border: 1px solid #ff8a65;
+    background-color: #fdb69f;
+    color: #45505c;
+  }
+  
+  .fed-rule {
+    border: 1px solid #000;
+    background-color: $neuvector-grey-900;
+    color: #fff;
+  }
+  
+  .disabled-rule {
+    border: 1px solid $neuvector-grey-400 !important;
+    background-color: $neuvector-grey-100 !important;
+    color: #becfd5 !important;
+  }
+  
+  .disabled-rule-print {
+    border: 1px solid $neuvector-grey-600 !important;
+    background-color: $neuvector-grey-100 !important;
+    -webkit-print-color-adjust: exact;
+    color: $neuvector-grey-600 !important;
+  }
+  
+  .removed-rule {
+    background-color: #fff;
+    text-decoration: line-through double red;
+    color: #45505c;
+  }
+  
+  .policy-remove {
+    text-decoration: line-through double red;
+  }
