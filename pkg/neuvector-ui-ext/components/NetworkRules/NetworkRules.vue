@@ -16,6 +16,7 @@ import Refresh from '../common/buttons/Refresh';
 import DownloadCsvBtn from './buttons/DownloadCsvBtn';
 import MoveBtn from './buttons/MoveBtn';
 import { mapGetters } from 'vuex';
+import { getDisplayFlag } from '../../utils/auth';
 
 export default {
   props: {
@@ -69,7 +70,10 @@ export default {
     isLightTheme: function() {
         nvVariables.isLightTheme = sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK;
         return nvVariables.isLightTheme;
-    }
+    },
+    isWriteNetworkRuleAuthorized: function() {
+      return getDisplayFlag('write_network_rule', this.$store);
+    },
   },
 
   methods: {
@@ -88,7 +92,7 @@ export default {
         console.error(error);
         this.networkRuleErr = true;
       }
-      
+
     },
     getNetworkRules: function(source='') {
       this.eof = false;
@@ -158,11 +162,11 @@ export default {
             </header>
     </div>
     <div>
-      <AddRuleToTopBtn v-if="autoCompleteData" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddRuleToTopBtn>
-      <SaveBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
-      <UndoBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
-      <RemoveBtn class="pull-left mx-2"></RemoveBtn>
-      <MoveBtn class="pull-left mx-2"></MoveBtn>
+      <AddRuleToTopBtn v-if="autoCompleteData && isWriteNetworkRuleAuthorized" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddRuleToTopBtn>
+      <SaveBtn v-if="isNetworkRuleListDirty && isWriteNetworkRuleAuthorized" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
+      <UndoBtn v-if="isNetworkRuleListDirty && isWriteNetworkRuleAuthorized" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
+      <RemoveBtn v-if="isWriteNetworkRuleAuthorized" class="pull-left mx-2"></RemoveBtn>
+      <MoveBtn v-if="isWriteNetworkRuleAuthorized" class="pull-left mx-2"></MoveBtn>
       <Refresh class="pull-right" :reloadData="loadData"></Refresh>
       <DownloadCsvBtn class="pull-right mx-2" :networkRules="networkRules"></DownloadCsvBtn>
     </div>

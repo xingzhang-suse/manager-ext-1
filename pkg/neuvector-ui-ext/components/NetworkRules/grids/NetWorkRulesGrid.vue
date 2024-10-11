@@ -202,6 +202,9 @@
 
             return menuActions;
           },
+          isWriteNetworkRuleAuthorized: function() {
+            return getDisplayFlag('write_network_rule', this.$store);
+          },
         }
     };
 </script>
@@ -209,8 +212,9 @@
 <template>
   <div>
     <div class="network-rules-wrap">
+      {{ $refs.networkRules?.selectedRows }}
       <ResourceTable
-        v-bind="$attrs"
+        ref="networkRules"
         data-testid="nv-network-rules-sortable-table"
         id="nv-network-rules-sortable-table"
         :rows="networkRules"
@@ -218,7 +222,6 @@
         :table-actions="isNetworkRuleWritable"
         :row-actions="isNetworkRuleWritable"
         :paging="true"
-        default-sort-by="from"
         @clickedActionButton="setActionMenuState"
       >
         <template #col:id="{row}">
