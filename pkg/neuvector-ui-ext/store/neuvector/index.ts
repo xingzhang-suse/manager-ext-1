@@ -13,12 +13,14 @@ export interface StateConfig {
     scannedWorkloadMap: Map<string, Object>,
     scannedNodeMap: Map<string, Object>,
     isNetworkRuleChanged: Boolean,
-    networkRules: NetworkRule[],
+    networkRules: NetworkRule[] | null,
     networkRulesBackup: NetworkRule[],
     isNetworkRuleListDirty: Boolean,
     newId: number,
     tokenBakeup: string,
     userPermission: UserPermissions,
+    responseRules: any[] | null,
+    responseRuleConditionOptions: Object,
 }
 
 const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
@@ -37,6 +39,8 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
                 newId: config.newId,
                 tokenBakeup: config.tokenBakeup,
                 userPermission: config.userPermission,
+                responseRules: config.responseRules,
+                responseRuleConditionOptions: config.responseRuleConditionOptions,
             }
         },
         getters:   { ...getters },
@@ -56,7 +60,7 @@ export default {
             scannedWorkloadMap: new Map<string, Object>(),
             scannedNodeMap: new Map<string, Object>(),
             isNetworkRuleChanged: false,
-            networkRules: [],
+            networkRules: null,
             networkRulesBackup: [],
             isNetworkRuleListDirty: false,
             newId: NV_CONST.NEW_ID_SEED.NETWORK_RULE,
@@ -67,6 +71,8 @@ export default {
                 ownedPermissions: [],
                 isNamespaceUser: false,
             },
+            responseRules: null,
+            responseRuleConditionOptions: {},
         }
     ),
     config,

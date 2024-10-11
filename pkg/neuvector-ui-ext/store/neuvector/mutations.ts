@@ -23,15 +23,15 @@ export default {
     updateIsNetworkRuleChanged(state: StateConfig, isNetworkRuleChanged: Boolean) {
         state.isNetworkRuleChanged = isNetworkRuleChanged;
     },
-    updateNetworkRules(state: StateConfig, networkRules: NetworkRule[]) {
+    updateNetworkRules(state: StateConfig, networkRules: NetworkRule[] | null) {
         state.networkRules = networkRules;
     },
     insertNetworkRule(state: StateConfig, entry: {networkRule: NetworkRule, targetIndex: number}) {
-        state.networkRules.splice(entry.targetIndex, 0, entry.networkRule);
+        state.networkRules?.splice(entry.targetIndex, 0, entry.networkRule);
     },
     removeNetworkRule(state: StateConfig, entry: {networkRule: NetworkRule, targetIndex: number}) {
         console.log(entry.targetIndex)
-        state.networkRules.splice(entry.targetIndex, 1);
+        state.networkRules?.splice(entry.targetIndex, 1);
     },
     updateIsNetworkRuleListDirty(state: StateConfig, isNetworkRuleListDirty: Boolean) {
         state.isNetworkRuleListDirty = isNetworkRuleListDirty;
@@ -50,5 +50,11 @@ export default {
     },
     updateUserPermission(state: StateConfig, userPermission: UserPermissions) {
         state.userPermission = userPermission;
+    },
+    cacheResponseRules(state: StateConfig, responseRules: any[] | null) {
+        state.responseRules = responseRules;
+    },
+    saveResponseRuleConditionOptions(state: StateConfig, responseRuleConditionOptions: Object) {
+        state.responseRuleConditionOptions = responseRuleConditionOptions;
     },
 }

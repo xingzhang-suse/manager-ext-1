@@ -68,6 +68,16 @@ export function init($plugin: IPlugin, store: any) {
       meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
     },
   });
+  virtualType({
+    labelKey: "sidebar.nav.RESPONSE_POLICY",
+    name: "neuvector-response-rules",
+    namespaced: false,
+    route: {
+      name: `c-cluster-${NEUVECTOR}-response-rules`,
+      params: { product: NEUVECTOR },
+      meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
+    },
+  });
 
   basicType([
     "neuvector-overview",
@@ -75,5 +85,6 @@ export function init($plugin: IPlugin, store: any) {
     "neuvector-scan",
     "neuvector-bench",
     "neuvector-policy",
+    "neuvector-response-rules",
   ]);
 }
