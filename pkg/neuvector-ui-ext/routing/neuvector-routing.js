@@ -3,6 +3,7 @@ import SecurityEvents from '../components/SecurityEvents/SecurityEventsView.vue'
 import Vulnerabilities from '../components/Vulnerabilities/Vulnerabilities.vue';
 import NetworkRules from '../components/NetworkRules/NetworkRules.vue';
 import Compliance from '../components/Compliance/Compliance.vue';
+import ResponseRules from '../components/ResponseRules/ResponseRules';
 
 const NEUVECTOR = 'neuvector';
 
@@ -31,7 +32,12 @@ const routes = [
     name: `c-cluster-${ NEUVECTOR }-policy`,
     path: `/c/:cluster/${ NEUVECTOR }/policy`,
     component: NetworkRules,
-  }
+  },
+  {
+    name: `c-cluster-${ NEUVECTOR }-response-rules`,
+    path: `/c/:cluster/${ NEUVECTOR }/response-rules`,
+    component: ResponseRules,
+  },
 ];
 
 export default routes;

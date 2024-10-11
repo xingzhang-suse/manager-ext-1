@@ -2,10 +2,11 @@
 import Checkbox from '@components/Form/Checkbox/Checkbox';
 import LabeledSelect from '@shell/components/form/LabeledSelect';
 import { LabeledInput } from '@components/Form/LabeledInput';
-import { NV_CONST } from '../../../types/neuvector';
+import { NV_CONST, NV_MAP } from '../../../types/neuvector';
 import { UpdateType } from '../../../types/network-rules';
 import { ToggleSwitch } from '@components/Form/ToggleSwitch';
-import { updateGridData } from '../../../utils/network-rules';
+import { filterSelectedOptions, mapWebwooks } from '../../../utils/response-rules';
+import { insertUpdateResponseRuleData } from '../../../plugins/response-rules-class';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -17,10 +18,15 @@ export default {
     },
     props: {
         isLightTheme: Boolean,
+        startId: Number,
         autoCompleteData: Object,
+        webhooks: Array,
+        source: String,
         selectedRule: Object,
         selectedIndex: Number,
         opType: UpdateType,
+        isReadOnly: Boolean,
+        refreshFn: Function,
         mode: { type: String, default: 'edit' }
     },
     watch: {
@@ -31,9 +37,21 @@ export default {
       }
     },
     computed: {
-      ...mapGetters({
-        newId: 'neuvector/newId',
-      }),
+        getConditionOptions() {
+            let name = this.autoCompleteData.conditionOptions[this.rule.event].name ?
+                this.autoCompleteData.conditionOptions[this.rule.event].name : [];
+            let level = this.autoCompleteData.conditionOptions[this.rule.event].level ?
+                this.autoCompleteData.conditionOptions[this.rule.event].level : [];
+            let list = name.concat(level);
+            return list.sort();
+        },
+        isWebhookSelected() {
+            return this.opType === UpdateType.Edit ?
+                this.selectedRule.actions.includes('webhook') :
+                this.rule.actions[
+                    NV_CONST.RESPONSE_RULE[NV_MAP.responseRuleActionMap[this.rule.event]].findIndex(action => action === 'webhook')
+                ];
+        }
     },
     methods: {
       show() {
@@ -46,51 +64,49 @@ export default {
       initializeForm() {
         this.rule = this.opType === UpdateType.Edit ?
         {
-          ...this.selectedRule,
-          isAllow: this.selectedRule.action === NV_CONST.PROCESS_PROFILE_RULE.ACTION.ALLOW,
+            ...this.selectedRule,
+            actions: this.selectedRule.actions.map(action => {
+                return NV_CONST.RESPONSE_RULE[NV_MAP.responseRuleActionMap[this.selectedRule.event]].includes(action);
+            }),
+            webhooks: mapWebwooks(
+                this.selectedRule ? this.selectedRule.webhooks : [],
+                this.webhooks
+            ),
         } :
         {
-          comment: '',
-          from: '',
-          to: '',
-          applications: [],
-          ports: '',
-          isAllow: false,
+            id: this.startId,
+            event: NV_CONST.RESPONSE_RULE.EVENTS_K8S[0],
+            group: '',
+            comment: '',
+            conditions: [],
+            actions: [false, false, false],
+            disable: false,
+            webhooks: [],
         };
+        this.shouldHideWebhookList =
+            (
+                this.opType === NV_CONST.MODAL_OP.EDIT &&
+                (
+                    this.selectedRule.cfg_type === NV_CONST.CFG_TYPE.FED ||
+                    this.selectedRule.cfg_type === NV_CONST.CFG_TYPE.GROUND
+                ) && this.isReadOnly
+            ) && this.source !== NV_CONST.NAV_SOURCE.FED_POLICY;
       },
-      updateRule() {
-        if (this.opType === UpdateType.Edit) {
-          let payload = this.getUpdatedPayload();
-          updateGridData([payload], this.selectedIndex, UpdateType.Edit, null, this.$store);
-        } else {
-          let payload = this.getAddedPayload();
-          updateGridData([payload], this.selectedIndex, this.opType, null, this.$store);
-        }
+      async updateRule() {
+        try {
+            await insertUpdateResponseRuleData(
+            this.rule,
+            NV_CONST.RESPONSE_RULE[NV_MAP.responseRuleActionMap[this.rule.event]],
+            this.opType,
+            this.webhooks,
+            NV_CONST.SCOPE.LOCAL,
+        )
+        this.refreshFn();
         this.initializeForm();
-        this.showSlideIn = false;
-      },
-      getAddedPayload() {
-        this.$store.dispatch('neuvector/increaseNewId');
-        return {
-          ...this.rule,
-          applications: this.rule.applications,
-          action: this.rule.isAllow ?
-            NV_CONST.PROCESS_PROFILE_RULE.ACTION.ALLOW :
-            NV_CONST.PROCESS_PROFILE_RULE.ACTION.DENY,
-          state: NV_CONST.NETWORK_RULES_STATE.NEW,
-          disable: false,
-          learned: false,
-          id: this.newId,
-        };
-      },
-      getUpdatedPayload() {
-        return {
-          ...this.rule,
-          state: this.selectedRule.id >= NV_CONST.NEW_ID_SEED.NETWORK_RULE ?
-            NV_CONST.NETWORK_RULES_STATE.NEW :
-            NV_CONST.NETWORK_RULES_STATE.MODIFIED,
-          disable: this.selectedRule.disable,
-          learned: false,
+        } catch (error) {
+            console.error(error);
+        } finally {
+            this.showSlideIn = false;
         }
       },
     },
@@ -98,14 +114,18 @@ export default {
       return {
         showSlideIn: false,
         rule: {
-          comment: '',
-          from: '',
-          to: '',
-          applications: [],
-          ports: '',
-          isAllow: false,
+            event: NV_CONST.RESPONSE_RULE.EVENTS_K8S[0],
+            group: '',
+            comment: '',
+            conditions: [],
+            actions: [false, false, false],
+            disable: false,
+            webhooks: [],
         },
         UpdateType: UpdateType,
+        NV_CONST: NV_CONST,
+        NV_MAP: NV_MAP,
+        shouldHideWebhookList: false,
       }
     }
 };
@@ -140,7 +160,9 @@ export default {
 
           <div class="add-edit-rule-title mt-20">
             <h5 :style="isLightTheme ? 'color: #888' : 'color: #fff'">
-              {{ opType === UpdateType.Edit ? t('policy.editPolicy.TITLE') : t('policy.addPolicy.TITLE') }}
+              {{ opType === UpdateType.Edit ? 
+                (isReadOnly ? t('policy.editPolicy.VIEW') : t('policy.editPolicy.TITLE')) :
+                t('policy.addPolicy.TITLE') }}
             </h5>
           </div>
         </div>
@@ -149,88 +171,95 @@ export default {
         <div class="mt-2" v-if="opType === UpdateType.Edit">
           <LabeledInput
             class="nv-labal-input"
-            v-model:value="rule.id"
+            v-model="rule.id"
             :disabled="true"
-            :label="t('policy.editPolicy.POLICY_ID')"
+            :label="t('responsePolicy.gridHeader.ID')"
             :mode="mode"
-            @update:value="update"
+            @input="update"
+          />
+        </div>
+        <div class="mt-2">
+          <LabeledSelect
+            v-model="rule.event"
+            :taggable="false"
+            :push-tags="true"
+            :close-on-select="false"
+            :mode="mode"
+            :multiple="false"
+            :label="t('responsePolicy.gridHeader.TYPE')"
+            :options="NV_CONST.RESPONSE_RULE.EVENTS_K8S"
+            :disabled="isReadOnly"
+            @input="update"
+          />
+        </div>
+        <div class="mt-2">
+          <LabeledSelect
+            v-if="!NV_MAP.EVENT_WITHOUT_GROUP.includes(rule.event)"
+            v-model="rule.group"
+            :taggable="false"
+            :searchable="true"
+            :push-tags="true"
+            :close-on-select="false"
+            :mode="mode"
+            :multiple="false"
+            :label="t('responsePolicy.gridHeader.GROUP')"
+            :options="autoCompleteData.groups"
+            :disabled="isReadOnly"
+            @input="update"
           />
         </div>
         <div class="mt-2">
           <LabeledInput
             class="nv-labal-input"
-            v-model:value="rule.comment"
+            v-model="rule.comment"
             :label="t('policy.addPolicy.COMMENT')"
             :mode="mode"
-            @update:value="update"
+            :disabled="isReadOnly"
+            @input="update"
           />
         </div>
         <div class="mt-2">
           <LabeledSelect
-            v-model:value="rule.from"
-            :taggable="false"
-            :searchable="true"
-            :push-tags="true"
-            :close-on-select="false"
-            :mode="mode"
-            :multiple="false"
-            :label="t('policy.addPolicy.FROM')"
-            :options="autoCompleteData.endpointOptions"
-            :disabled="mode==='view'"
-            @update:value="update"
-          />
-        </div>
-        <div class="mt-2">
-          <LabeledSelect
-            v-model:value="rule.to"
-            :taggable="false"
-            :searchable="true"
-            :push-tags="true"
-            :close-on-select="false"
-            :mode="mode"
-            :multiple="false"
-            :label="t('policy.addPolicy.TO')"
-            :options="autoCompleteData.endpointOptions"
-            :disabled="mode==='view'"
-            @update:value="update"
-          />
-        </div>
-        <div class="mt-2">
-          <LabeledSelect
-            v-model:value="rule.applications"
+            v-model="rule.conditions"
             :taggable="true"
             :searchable="true"
             :push-tags="true"
             :close-on-select="false"
             :mode="mode"
             :multiple="true"
-            :label="t('policy.addPolicy.APP')"
-            :options="autoCompleteData.applicationOptions"
+            :label="t('responsePolicy.message.ADD_CRITERIA')"
+            :options="getConditionOptions"
             :disabled="mode==='view'"
-            @update:value="update"
+            @input="update"
           />
         </div>
-        
-        <div class="mt-2">
-          <LabeledInput
-            class="nv-labal-input"
-            v-model:value="rule.ports"
-            :label="t('policy.editPolicy.PORT')"
-            :mode="mode"
-            @update:value="update"
-          />
+        <div class="mt-1">{{ t('responsePolicy.dialog.content.HINT')}}{{ NV_MAP.responseRuleCriteriaSampleMap[rule.event] || '' }}</div>
+        <div class="text-bold mt-2">{{ t('responsePolicy.gridHeader.ACTION') }}</div>
+            <div class="mt-2">
+                <Checkbox 
+                    v-for="(action, index) in NV_CONST.RESPONSE_RULE[NV_MAP.responseRuleActionMap[rule.event]]"
+                    :key="index"
+                    v-model="rule.actions[index]"
+                    :label="t('responsePolicy.actions.' + action.toUpperCase())"
+                    @input="update"
+                />
+            </div>
+        </div>
+        <div class="mt-2" v-if="isWebhookSelected && webhooks.length > 0 && !shouldHideWebhookList">
+            <div class="text-bold">{{ t('setting.WEBHOOKS') }}</div>
+            <div class="mt-2">
+                <Checkbox 
+                    v-for="(webhook, index) in webhooks"
+                    :key="index"
+                    v-model="rule.webhooks[index]"
+                    :label="webhook"
+                    @input="update"
+                />
+            </div>
         </div>
         <div class="mt-2">
           <ToggleSwitch
-            v-model:value="rule.isAllow"
-            name="label-system-toggle"
-            :off-label="t('policy.action.DENY')"
-            :on-label="t('policy.action.ALLOW')"
-          />
-        </div>
-        <div class="mt-2">
-          <ToggleSwitch
-            v-model:value="rule.disable"
+            v-model="rule.disable"
             name="label-system-toggle"
             :off-value="true"
             :off-label="t('policy.status.DISABLED')"
@@ -238,7 +267,7 @@ export default {
             :on-label="t('policy.status.ENABLED')"
           />
         </div>
-        <div class="mt-3" style="text-align: right">
+        <div class="mt-3" style="text-align: right" v-if="!isReadOnly">
           <a
             mat-button
             class="btn role-primary"
@@ -250,7 +279,6 @@ export default {
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 
@@ -267,7 +295,7 @@ export default {
   text-align: left;
 }
 
-:deep(.btn-sm) {
+::v-deep(.btn-sm) {
   padding: 0 7px 0 0;
 }
 
