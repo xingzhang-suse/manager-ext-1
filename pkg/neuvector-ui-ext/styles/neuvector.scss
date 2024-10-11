@@ -192,3 +192,13 @@
 .link {
   cursor: pointer;
 }
+
+.disabled-row {
+  color: $neuvector-grey-500 !important;
+}
+
+.disabled-row-print {
+  color: $neuvector-grey-500 !important;
+  background-color: $neuvector-grey-50 !important;
+  -webkit-print-color-adjust: exact;
+}

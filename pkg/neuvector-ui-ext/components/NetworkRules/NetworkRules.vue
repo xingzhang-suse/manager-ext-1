@@ -8,7 +8,7 @@ import { PATH } from '../../types/path';
 import { loadPagedData } from '../../utils/common';
 import _axios from 'axios';
 import NetworkRulesGrid from './grids/NetWorkRulesGrid';
-import AddTuleToTopBtn from './buttons/AddRuleToTopBtn';
+import AddRuleToTopBtn from './buttons/AddRuleToTopBtn';
 import SaveBtn from './buttons/SaveBtn';
 import UndoBtn from './buttons/UndoBtn';
 import RemoveBtn from './buttons/RemoveBtn';
@@ -25,7 +25,7 @@ export default {
   components: {
     Loading,
     NetworkRulesGrid,
-    AddTuleToTopBtn,
+    AddRuleToTopBtn,
     SaveBtn,
     UndoBtn,
     RemoveBtn,
@@ -52,11 +52,12 @@ export default {
       _networkRules: [],
       networkRuleErr: false,
       autoCompleteData: null,
+      NV_CONST: NV_CONST,
     };
   },
 
   created() {
-    this.$store.dispatch('neuvector/updateNetworkRules', []);
+    this.$store.dispatch('neuvector/updateNetworkRules', null);
     this.$store.dispatch('neuvector/updateIsNetworkRuleListDirty', false);
   },
 
@@ -73,20 +74,26 @@ export default {
 
   methods: {
     loadData: async function() {
-      let authRes = await refreshAuth();
-      nvVariables.user = authRes.data.token;
-      this.getNetworkRules();
-      getAutoCompleteData().then(_axios.spread((res1, res2, res3) => {
-        this.autoCompleteData = {
-          endpointOptions: res2.data.hosts.map(host => `Host:${host.name}`).concat(res1.data.groups.map(group => group.name)),
-          applicationOptions: res3.data.list.application,
-        }
-      }));
+      try {
+        let authRes = await refreshAuth();
+        nvVariables.user = authRes.data.token;
+        this.getNetworkRules();
+        getAutoCompleteData().then(_axios.spread((groupsRes, hostsRes, applicationsRes) => {
+          this.autoCompleteData = {
+            endpointOptions: hostsRes.data.hosts.map(host => `Host:${host.name}`).concat(groupsRes.data.groups.map(group => group.name)),
+            applicationOptions: applicationsRes.data.list.application,
+          }
+        }));
+      } catch(error) {
+        console.error(error);
+        this.networkRuleErr = true;
+      }
+      
     },
     getNetworkRules: function(source='') {
       this.eof = false;
       this.$store.dispatch('neuvector/updateIsNetworkRuleChanged', false);
-      this.$store.dispatch('neuvector/updateNetworkRules', []);
+      this.$store.dispatch('neuvector/updateNetworkRules', null);
       this.networkRuleErr = false;
       this._networkRules = [];
       loadPagedData(
@@ -151,7 +158,7 @@ export default {
             </header>
     </div>
     <div>
-      <AddTuleToTopBtn v-if="autoCompleteData" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddTuleToTopBtn>
+      <AddRuleToTopBtn v-if="autoCompleteData" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddRuleToTopBtn>
       <SaveBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
       <UndoBtn v-if="isNetworkRuleListDirty" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
       <RemoveBtn class="pull-left mx-2"></RemoveBtn>
@@ -160,6 +167,15 @@ export default {
       <DownloadCsvBtn class="pull-right mx-2" :networkRules="networkRules"></DownloadCsvBtn>
     </div>
     
-    <NetworkRulesGrid v-if="autoCompleteData" class="mt-2" :networkRules="networkRules" :autoCompleteData="autoCompleteData"></NetworkRulesGrid>
+    <NetworkRulesGrid
+      v-if="autoCompleteData && networkRules?.length > 0"
+      class="mt-2"
+      :networkRules="networkRules"
+      :autoCompleteData="autoCompleteData"
+      :source="NV_CONST.NAV_SOURCE.SELF"
+    ></NetworkRulesGrid>
+    <div v-else-if="networkRules?.length === 0" class="text-center mt-5">
+      {{ t('general.NO_ROWS') }}
+    </div>
   </div>
 </template>

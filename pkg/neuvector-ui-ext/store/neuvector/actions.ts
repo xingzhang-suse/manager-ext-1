@@ -20,7 +20,7 @@ export default {
     updateIsNetworkRuleChanged({ commit }: any, entry: Boolean) {
         commit('updateIsNetworkRuleChanged', entry);
     },
-    updateNetworkRules({ commit }: any, networkRules: NetworkRule[]) {
+    updateNetworkRules({ commit }: any, networkRules: NetworkRule[] | null) {
         commit('updateNetworkRules', networkRules);
     },
     insertNetworkRule({ commit }: any, entry: {networkRule: NetworkRule, targetIndex: number}) {
@@ -46,5 +46,11 @@ export default {
     },
     updateUserPermission({ commit }: any, userPermission: UserPermissions) {
         commit('updateUserPermission', userPermission);
+    },
+    cacheResponseRules({ commit }: any, responseRules: any[] | null) {
+        commit('cacheResponseRules', responseRules);
+    },
+    saveResponseRuleConditionOptions({ commit }: any, responseRuleConditionOptions: Object) {
+        commit('saveResponseRuleConditionOptions', responseRuleConditionOptions);
     },
 }

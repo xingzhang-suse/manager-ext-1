@@ -3,6 +3,7 @@ import semver from 'semver';
 import axios from '../interceptor/http-interceptor';
 import { getSSOUrl } from '../utils/common';
 import { PATH } from '../types/path';
+import { NV_CONST } from '../types/neuvector';
 
 export function getLatestStableVersion(versions) {
   const allVersions = versions.map(v => v.version);
@@ -49,5 +50,16 @@ export async function refreshAuth(tokenInfo) {
       isOnNV: true,
       isRancherSSOUrl: true
     }
-});
+  });
+}
+
+export function getCfgType(scope) {
+  switch (scope) {
+    case NV_CONST.SCOPE.FED:
+      return NV_CONST.CFG_TYPE.FED;
+    case NV_CONST.SCOPE.LOCAL:
+      return NV_CONST.CFG_TYPE.CUSTOMER;
+    default:
+      return NV_CONST.CFG_TYPE.CUSTOMER;
+  }
 }

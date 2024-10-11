@@ -1,6 +1,6 @@
 <script>
     import ResourceTable from '@shell/components/ResourceTable';
-    import { RANCHER_CONST } from '../../../types/neuvector';
+    import { RANCHER_CONST, NV_CONST } from '../../../types/neuvector';
     import Action from './cells/Action';
     import CfgType from './cells/CfgType';
     import Ports from './cells/Ports';
@@ -13,6 +13,7 @@
     import { UpdateType } from '../../../types/network-rules';
     import Confirmation from '../../common/dialogs/Confirmation';
     import { toggleDeleteRule } from '../../../utils/network-rules';
+    import { getDisplayFlag } from '../../../utils/auth';
 
     export default {
         components: {
@@ -31,8 +32,15 @@
         props: {
           networkRules: Array,
           autoCompleteData: Object,
+          source: String,
         },
         fetch() {
+          this.isNetworkRuleWritable =
+            getDisplayFlag('write_network_rule', this.$store) &&
+            (this.source !== NV_CONST.NAV_SOURCE.GROUP &&
+            this.source !== NV_CONST.NAV_SOURCE.SELF
+              ? getDisplayFlag('multi_cluster_w', this.$store)
+              : true);
         },
         data() {
           return {
@@ -41,19 +49,19 @@
                 name:  'id',
                 value: 'id',
                 label: this.t('policy.gridHeader.ID'),
-                sort:  'id'
+                sort:  'id',
               },
               {
                 name:  'from',
                 value: 'from',
                 label: this.t('policy.gridHeader.FROM'),
-                sort:  'form'
+                sort:  'form',
               },
               {
                 name:  'to',
                 value: 'to',
                 label: this.t('policy.gridHeader.TO'),
-                sort:  'to'
+                sort:  'to',
               },
               {
                 name:  'applications',
@@ -65,25 +73,25 @@
                 name:  'ports',
                 value: 'ports',
                 label: this.t('policy.gridHeader.PORT'),
-                sort:  'ports'
+                sort:  'ports',
               },
               {
                 name:  'action',
                 value: 'action',
                 label: this.t('policy.gridHeader.ACTION'),
-                sort:  'action'
+                sort:  'action',
               },
               {
                 name:  'cfg_type',
                 value: 'cfg_type',
                 label: this.t('policy.gridHeader.TYPE'),
-                sort:  'cfg_type'
+                sort:  'cfg_type',
               },
               {
                 name:  'last_modified_timestamp',
                 value: 'last_modified_timestamp',
                 label: this.t('policy.gridHeader.UPDATE_AT'),
-                sort:  'last_modified_timestamp'
+                sort:  'last_modified_timestamp',
               },
             ],
             isLightTheme: sessionStorage.getItem(RANCHER_CONST.R_THEME) !== RANCHER_CONST.THEME.DARK,
@@ -98,6 +106,7 @@
             confirmationMsg: '',
             confirmedFn: null,
             showConfirmationModal: false,
+            isNetworkRuleWritable: false,
           };
         },
         methods: {
@@ -206,8 +215,8 @@
         id="nv-network-rules-sortable-table"
         :rows="networkRules"
         :headers="NETWORK_RULES_HEADER"
-        :table-actions="true"
-        :row-actions="true"
+        :table-actions="isNetworkRuleWritable"
+        :row-actions="isNetworkRuleWritable"
         :paging="true"
         default-sort-by="from"
         @clickedActionButton="setActionMenuState"
