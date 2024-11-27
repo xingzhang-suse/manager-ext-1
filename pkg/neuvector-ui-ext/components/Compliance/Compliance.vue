@@ -215,6 +215,7 @@
                             <TopImpactComplianceContainerBarChart 
                                 v-if="complianceData"
                                 :compliances="complianceData.compliances"
+                                :parentContext="this"
                             />
                         </div>
                     </div>
@@ -232,8 +233,9 @@
                             ></ComplianceItemsTable>
                             <div v-if="selectedCompliance">
                                 <ComplianceItemsChart
-                                    v-if="pieChartActive"
+                                    v-if="pieChartActive && complianceDist"
                                     :complianceDist="complianceDist"
+                                    :parentContext="this"
                                 ></ComplianceItemsChart>
                                 <ComplianceItemsDetail
                                     v-else
