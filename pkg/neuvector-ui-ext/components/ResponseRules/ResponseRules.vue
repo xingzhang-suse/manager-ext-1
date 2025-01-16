@@ -11,6 +11,7 @@
   import AddRuleToTopBtn from './buttons/AddRuleToTopBtn';
   import { mapGetters } from 'vuex';
   import QuickFilter from '../../components/common/inputs/QuickFilter';
+  import Error from '../common/error/Error';
 
   export default {
     name: "ResponseRules",
@@ -20,10 +21,11 @@
       ResponseRulesAgGrid,
       AddRuleToTopBtn,
       QuickFilter,
+      Error,
     },
     data() {
       return {
-        responseRuleErr: false,
+        errorRes: null,
         autoCompleteData: {
           groups: [],
           conditionOptions: [],
@@ -77,7 +79,7 @@
           this.responseRuleErr = false;
         } catch(error) {
           console.error(error);
-          this.responseRuleErr = true;
+          this.errorRes = error;
         }
       },
       setQuickFilter(filterText) {
@@ -89,6 +91,9 @@
 
 <template>
   <Loading v-if="$fetchState.pending" />
+  <div v-else-if="errorRes" :rancherTheme="rancherTheme" class="container">
+    <Error :error="errorRes"></Error>
+  </div>
   <div v-else>
     <div id="response-rules" class="padding-top-0">
       <header style="margin-bottom: 10px;" id="response-rules-title">

@@ -4,7 +4,7 @@
     import { getDisplayFlag } from '../../../utils/auth';
     import 'ag-grid-community/styles/ag-grid.css';
     import 'ag-grid-community/styles/ag-theme-balham.min.css';
-    import { AgGridVue } from 'ag-grid-vue';
+    import { AgGridVue } from 'ag-grid-vue3';
     import ActionsCellComponent from './agCells/ActionsCellComponent';
     import CategoryCellComponent from './agCells/CategoryCellComponent';
     import CfgTypeCellComponent from './agCells/CfgTypeCellComponent';
@@ -181,7 +181,7 @@
             const $win = $(window);
             if (params && params.api) {
               this.gridApi = params.api;
-              this.gridApi.setRowData(this.responseRules);
+              // this.gridApi.setRowData(this.responseRules);
             }
             setTimeout(() => {
               if (params && params.api) {
@@ -284,6 +284,7 @@
             :class="isLightTheme ? 'ag-theme-balham' : 'ag-theme-balham-dark'"
             :columnDefs="columnDefs"
             :gridOptions="gridOptions"
+            :rowData="responseRules"
             :context="context"
         >
         </ag-grid-vue>

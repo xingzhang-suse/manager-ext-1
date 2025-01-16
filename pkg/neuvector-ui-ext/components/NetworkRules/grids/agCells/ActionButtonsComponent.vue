@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { EOS_ADD_FILLED, EOS_EDIT_FILLED, EOS_DELETE_FILLED, EOS_RECYCLING_FILLED, EOS_INGRESS_FILLED, EOS_SETTINGS_BACKUP_RESTORE_FILLED } from 'eos-icons-vue2';
+import { EOS_ADD_FILLED, EOS_EDIT_FILLED, EOS_DELETE_FILLED, EOS_RECYCLING_FILLED, EOS_INGRESS_FILLED, EOS_SETTINGS_BACKUP_RESTORE_FILLED } from 'eos-icons-vue3';
 import { NV_CONST } from '../../../../types/neuvector';
 export default {
   components: {

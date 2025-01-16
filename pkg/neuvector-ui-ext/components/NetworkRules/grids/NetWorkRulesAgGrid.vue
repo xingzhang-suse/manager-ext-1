@@ -16,7 +16,7 @@
     import { getDisplayFlag } from '../../../utils/auth';
     import 'ag-grid-community/styles/ag-grid.css';
     import 'ag-grid-community/styles/ag-theme-balham.min.css';
-    import { AgGridVue } from 'ag-grid-vue';
+    import { AgGridVue } from 'ag-grid-vue3';
 
     export default {
         components: {
@@ -225,7 +225,7 @@
             if (params && params.api) {
               this.gridApi = params.api;
               this.$store.dispatch('neuvector/saveNetworkRulesGridApi', this.gridApi);
-              this.gridApi.setRowData(this.networkRules);
+              // this.gridApi.setRowData(this.networkRules);
             }
             setTimeout(() => {
               if (params && params.api) {
@@ -402,6 +402,7 @@
         :class="isLightTheme ? 'ag-theme-balham' : 'ag-theme-balham-dark'"
         :columnDefs="columnDefs"
         :gridOptions="gridOptions"
+        :rowData="networkRules"
         :context="context"
       >
       </ag-grid-vue>

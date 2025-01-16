@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { EOS_ADD_FILLED, EOS_EDIT_FILLED, EOS_DELETE_FILLED, EOS_TEXT_SNIPPET_FILLED, EOS_HIGHLIGHT_OFF_FILLED, EOS_TASK_ALT_FILLED } from 'eos-icons-vue2';
+import { EOS_ADD_FILLED, EOS_EDIT_FILLED, EOS_DELETE_FILLED, EOS_TEXT_SNIPPET_FILLED, EOS_HIGHLIGHT_OFF_FILLED, EOS_TASK_ALT_FILLED } from 'eos-icons-vue3';
 import { NV_CONST } from '../../../../types/neuvector';
 import { getDisplayFlag } from '../../../../utils/auth';
 

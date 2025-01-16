@@ -21,6 +21,7 @@ import { mapGetters } from 'vuex';
 import { getDisplayFlag } from '../../utils/auth';
 import { UpdateType } from '../../types/network-rules';
 import QuickFilter from '../../components/common/inputs/QuickFilter';
+import Error from '../common/error/Error';
 
 export default {
   props: {
@@ -40,6 +41,7 @@ export default {
     MoveBtn,
     PromoteBtn,
     QuickFilter,
+    Error,
   },
 
   async fetch() {
@@ -58,7 +60,7 @@ export default {
     return {
       eof: false,
       _networkRules: [],
-      networkRuleErr: false,
+      errorRes: null,
       autoCompleteData: null,
       NV_CONST: NV_CONST,
       UpdateType: UpdateType,
@@ -103,7 +105,7 @@ export default {
         }));
       } catch(error) {
         console.error(error);
-        this.networkRuleErr = true;
+        this.errorRes = error;
       }
 
     },
@@ -111,7 +113,7 @@ export default {
       this.eof = false;
       this.$store.dispatch('neuvector/updateIsNetworkRuleChanged', false);
       this.$store.dispatch('neuvector/updateNetworkRules', null);
-      this.networkRuleErr = false;
+      this.errorRes = null;
       this._networkRules = [];
       loadPagedData(
         PATH.POLICY_URL,
@@ -170,6 +172,9 @@ export default {
 
 <template>
   <Loading v-if="$fetchState.pending" />
+  <div v-else-if="errorRes" :rancherTheme="rancherTheme" class="container">
+    <Error :error="errorRes"></Error>
+  </div>
   <div v-else>
     <div id="network-rules" class="padding-top-0">
             <header style="margin-bottom: 10px;" id="network-rules-title">
