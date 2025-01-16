@@ -8,15 +8,19 @@ import { PATH } from '../../types/path';
 import { loadPagedData } from '../../utils/common';
 import _axios from 'axios';
 import NetworkRulesGrid from './grids/NetWorkRulesGrid';
+import NetworkRulesAgGrid from './grids/NetWorkRulesAgGrid';
 import AddRuleToTopBtn from './buttons/AddRuleToTopBtn';
 import SaveBtn from './buttons/SaveBtn';
 import UndoBtn from './buttons/UndoBtn';
 import RemoveBtn from './buttons/RemoveBtn';
+import PromoteBtn from './buttons/PromoteBtn';
 import Refresh from '../common/buttons/Refresh';
 import DownloadCsvBtn from './buttons/DownloadCsvBtn';
 import MoveBtn from './buttons/MoveBtn';
 import { mapGetters } from 'vuex';
 import { getDisplayFlag } from '../../utils/auth';
+import { UpdateType } from '../../types/network-rules';
+import QuickFilter from '../../components/common/inputs/QuickFilter';
 
 export default {
   props: {
@@ -26,6 +30,7 @@ export default {
   components: {
     Loading,
     NetworkRulesGrid,
+    NetworkRulesAgGrid,
     AddRuleToTopBtn,
     SaveBtn,
     UndoBtn,
@@ -33,6 +38,8 @@ export default {
     Refresh,
     DownloadCsvBtn,
     MoveBtn,
+    PromoteBtn,
+    QuickFilter,
   },
 
   async fetch() {
@@ -54,12 +61,15 @@ export default {
       networkRuleErr: false,
       autoCompleteData: null,
       NV_CONST: NV_CONST,
+      UpdateType: UpdateType,
+      filterText: '',
     };
   },
 
   created() {
     this.$store.dispatch('neuvector/updateNetworkRules', null);
     this.$store.dispatch('neuvector/updateIsNetworkRuleListDirty', false);
+    this.$store.dispatch('neuvector/updateSelectedNetworkRules', null);
   },
 
   computed: {
@@ -73,6 +83,9 @@ export default {
     },
     isWriteNetworkRuleAuthorized: function() {
       return getDisplayFlag('write_network_rule', this.$store);
+    },
+    hasSelectedRules: function() {
+      return this.$store.getters['neuvector/selectedNetworkRules']?.length > 0;
     },
   },
 
@@ -144,8 +157,12 @@ export default {
           last_modified_timestamp: '',
         });
       }
+      console.log(this._networkRules)
       this.$store.dispatch('neuvector/updateNetworkRulesBackup', this._networkRules);
       this.$store.dispatch('neuvector/updateNetworkRules', this._networkRules);
+    },
+    setQuickFilter(filterText) {
+      this.filterText = filterText;
     },
   }
 };
@@ -162,22 +179,26 @@ export default {
             </header>
     </div>
     <div>
-      <AddRuleToTopBtn v-if="autoCompleteData && isWriteNetworkRuleAuthorized" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" class="pull-left mx-2"></AddRuleToTopBtn>
-      <SaveBtn v-if="isNetworkRuleListDirty && isWriteNetworkRuleAuthorized" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
-      <UndoBtn v-if="isNetworkRuleListDirty && isWriteNetworkRuleAuthorized" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
-      <RemoveBtn v-if="isWriteNetworkRuleAuthorized" class="pull-left mx-2"></RemoveBtn>
-      <MoveBtn v-if="isWriteNetworkRuleAuthorized" class="pull-left mx-2"></MoveBtn>
+      <AddRuleToTopBtn :disabled="!(autoCompleteData && isWriteNetworkRuleAuthorized)" :autoCompleteData="autoCompleteData" :isLightTheme="isLightTheme" :opType="UpdateType.AddToTop" class="pull-left mx-2"></AddRuleToTopBtn>
+      <SaveBtn :disabled="!(isNetworkRuleListDirty && isWriteNetworkRuleAuthorized)" class="pull-left mx-2" :reloadFn="getNetworkRules"></SaveBtn>
+      <UndoBtn :disabled="!(isNetworkRuleListDirty && isWriteNetworkRuleAuthorized)" class="pull-left mx-2" :reloadFn="getNetworkRules"></UndoBtn>
+      <RemoveBtn :disabled="!(isWriteNetworkRuleAuthorized && hasSelectedRules)" class="pull-left mx-2"></RemoveBtn>
+      <PromoteBtn :disabled="!(isWriteNetworkRuleAuthorized && hasSelectedRules)" class="pull-left mx-2" :reloadData="loadData"></PromoteBtn>
+      <MoveBtn :disabled="!(isWriteNetworkRuleAuthorized && hasSelectedRules)" class="pull-left mx-2"></MoveBtn>
       <Refresh class="pull-right" :reloadData="loadData"></Refresh>
       <DownloadCsvBtn class="pull-right mx-2" :networkRules="networkRules"></DownloadCsvBtn>
+      <QuickFilter class="pull-right w-auto mr-10"  @quickFilter="setQuickFilter"></QuickFilter>
     </div>
-    
-    <NetworkRulesGrid
+    <NetworkRulesAgGrid
       v-if="autoCompleteData && networkRules?.length > 0"
       class="mt-2"
       :networkRules="networkRules"
       :autoCompleteData="autoCompleteData"
+      :isWriteNetworkRuleAuthorized="isWriteNetworkRuleAuthorized"
+      :filterText="filterText"
       :source="NV_CONST.NAV_SOURCE.SELF"
-    ></NetworkRulesGrid>
+      :reloadData = "loadData"
+    ></NetworkRulesAgGrid>
     <div v-else-if="networkRules?.length === 0" class="text-center mt-5">
       {{ t('general.NO_ROWS') }}
     </div>

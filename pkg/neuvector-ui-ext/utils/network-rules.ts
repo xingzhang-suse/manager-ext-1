@@ -1,7 +1,7 @@
 import { Store } from 'vuex';
 import { NetworkRule, UpdateType } from '../types/network-rules';
 
-export function updateGridData(
+export async function updateGridData(
     updatedNetworkRules: Array<NetworkRule>,
     targetIndex: number,
     updateType: UpdateType,
@@ -10,52 +10,50 @@ export function updateGridData(
 ) {
     switch (updateType) {
         case UpdateType.AddToTop:
-          insertRule(updatedNetworkRules[0], -1, store);
+          await insertRule(updatedNetworkRules[0], 0, store);
           break;
         case UpdateType.Insert:
-          insertRule(updatedNetworkRules[0], targetIndex, store);
+          await insertRule(updatedNetworkRules[0], targetIndex, store);
           break;
         case UpdateType.Edit:
-          replaceRule(updatedNetworkRules[0], targetIndex, store);
+          await replaceRule(updatedNetworkRules[0], targetIndex, store);
           break;
         case UpdateType.MoveBefore:
-          moveRules(updatedNetworkRules, targetId, updateType, store);
+          await moveRules(updatedNetworkRules, targetId, updateType, store);
           break;
         case UpdateType.MoveAfter:
-          moveRules(updatedNetworkRules, targetId, updateType, store);
+          await moveRules(updatedNetworkRules, targetId, updateType, store);
           break;
     }
 }
 
-function insertRule(
+async function insertRule(
     updatedNetworkRule: NetworkRule,
     targetIndex: number,
     store: Store<any>,
 ) {
-  store.dispatch('neuvector/insertNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
-  store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
+  await store.dispatch('neuvector/insertNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
+  await store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
 }
 
-function replaceRule(
+async function replaceRule(
   updatedNetworkRule: NetworkRule,
   targetIndex: number,
   store: Store<any>,
 ) {
-  store.dispatch('neuvector/removeNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
-  setTimeout(() => {
-    store.dispatch('neuvector/insertNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
-    store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
-  }, 200);
+  await store.dispatch('neuvector/removeNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
+  await store.dispatch('neuvector/insertNetworkRule', { networkRule: updatedNetworkRule, targetIndex: targetIndex });
+  await store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
 }
 
-function moveRules(
+async function moveRules(
     selectedNetworkRules: Array<NetworkRule>,
     targetId: number,
     moveType: UpdateType,
     store: Store<any>,
 ) {
     let selectedRuleId = selectedNetworkRules.map(rule => rule.id);
-    let networkRules: Array<NetworkRule> = store.getters['neuvector/networkRules'];
+    let networkRules: Array<NetworkRule> = await store.getters['neuvector/networkRules'];
     let networkRulesTmp = networkRules.filter(rule => {
       return !selectedRuleId.includes(rule.id);
     });
@@ -65,8 +63,8 @@ function moveRules(
     } else {
       networkRulesTmp.splice(targetIndex + 1, 0, ...selectedNetworkRules);
     }
-    store.dispatch('neuvector/updateNetworkRules', networkRulesTmp);
-    store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
+    await store.dispatch('neuvector/updateNetworkRules', networkRulesTmp);
+    await store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
 };
 
 export async function toggleDeleteRule(
@@ -76,9 +74,25 @@ export async function toggleDeleteRule(
   store: Store<any>,
 ) {
   selectedRule.remove = !isMasked;
-  store.dispatch('neuvector/removeNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
-  setTimeout(() => {
-    store.dispatch('neuvector/insertNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
-    store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
-  }, 200);
+  await store.dispatch('neuvector/removeNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
+  await store.dispatch('neuvector/insertNetworkRule', { networkRule: selectedRule, targetIndex: targetIndex });
+  await store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
+}
+
+export async function deleteRules(
+  networkRules: NetworkRule[],
+  selectedRules: NetworkRule[],
+  store: Store<any>,
+) {
+  let index = 0;
+  let ids = selectedRules.map(rule => rule.id);
+  let networkRulesAfterRemoval = networkRules.map((rule: NetworkRule) => {
+    if (rule.id === ids[index] && rule.id !== -1) {
+      rule.remove = true;
+      index++;
+    }
+    return rule;
+  });
+  await store.dispatch('neuvector/updateNetworkRules', networkRulesAfterRemoval);
+  await store.dispatch('neuvector/updateIsNetworkRuleListDirty', true);
 }

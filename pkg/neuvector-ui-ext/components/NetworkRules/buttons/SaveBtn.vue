@@ -9,6 +9,7 @@
         },
         props: {
             reloadFn: Function,
+            disabled: Boolean,
         },
         data() {
             return {
@@ -24,11 +25,16 @@
             },
             async saveRules() {
                 let networkRulesCopy = JSON.parse(JSON.stringify(this.$store.getters['neuvector/networkRules']));
-                let UpdateRulesRes = await submitNetworkRule(networkRulesCopy, NV_CONST.NAV_SOURCE.SELF);
-                this.$store.dispatch('neuvector/updateIsNetworkRuleListDirty', false);
-                this.showConfirmationModal = false;
-                this.$store.dispatch('neuvector/initializeNewId');
-                this.reloadFn()
+                try {
+                    let UpdateRulesRes = await submitNetworkRule(networkRulesCopy, NV_CONST.NAV_SOURCE.SELF);
+                    this.$store.dispatch('neuvector/updateIsNetworkRuleListDirty', false);
+                    this.showConfirmationModal = false;
+                    this.$store.dispatch('neuvector/initializeNewId');
+                    this.reloadFn()
+                } catch(error) {
+                    console.error(error);
+                }
+                
             }
         }
     };
@@ -36,14 +42,15 @@
 
 <template>
     <div>
-        <a
+        <button
             mat-button
             class="btn role-primary"
             aria-label="Save rules"
             type="button"
+            :disabled="disabled"
             @click="confirmSaving()">
             {{ t('policy.toolBar.SAVE') }}
-        </a>
+        </button>
         <Confirmation v-if="showConfirmationModal" :message="t('policy.POLICY_DEPLOY_CONFIRM')" @close="closeConfirmationModal" :okFn="saveRules"></Confirmation>
     </div>
 </template>
