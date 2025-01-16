@@ -18,18 +18,20 @@
         data() {
             return {
                 isLightTheme: nvVariables.isLightTheme,
-                selectedId: '',
+                targetId: '',
                 moveType: UpdateType.MoveBefore,
                 UpdateType: UpdateType,
+                selectedNetworkRules: [],
             };
         },
         methods: {
           close() {
             this.$emit('close');
           },
-          moveRules() {
-            console.log(this.moveType, this.selectedId)
-            this.data.selectedNetworkRules = this.data.selectedNetworkRules.map(rule => {
+          async moveRules() {
+            console.log(this.moveType, this.targetId)
+            this.selectedNetworkRules = await this.$store.getters['neuvector/selectedNetworkRules'];
+            this.selectedNetworkRules = this.selectedNetworkRules.map(rule => {
                 if (
                     rule.state !== NV_CONST.NETWORK_RULES_STATE.MODIFIED &&
                     rule.state !== NV_CONST.NETWORK_RULES_STATE.NEW
@@ -38,7 +40,9 @@
                 }
                 return rule;
             });
-            updateGridData(this.data.selectedNetworkRules, 0, this.moveType, this.selectedId, this.$store);
+            await updateGridData(this.selectedNetworkRules, 0, this.moveType, parseInt(this.targetId, 10), this.$store);
+            let gridApi = await this.$store.getters['neuvector/networkRulesGridApi'];
+            gridApi.setRowData(this.$store.getters['neuvector/networkRules']);
             this.$emit('close');
           },
         }
@@ -72,7 +76,7 @@
                     <LabeledInput
                         class="nv-labal-input"
                         style="width: 100px;"
-                        v-model:value="selectedId"
+                        v-model:value="targetId"
                         label="ID"
                         :mode="mode"
                     />

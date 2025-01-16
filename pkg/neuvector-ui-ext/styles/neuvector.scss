@@ -202,3 +202,29 @@
   background-color: $neuvector-grey-50 !important;
   -webkit-print-color-adjust: exact;
 }
+
+#multi-clusters-grid .ag-row,
+#policy-grid .ag-row,
+#admission-rule-grid .ag-row,
+#response-rule-grid .ag-row,
+#dlp-sensors-grid .ag-row,
+#dlp-rules-grid .ag-row,
+#groups-grid .ag-row,
+#waf-grid .ag-row,
+#roles-grid .ag-row {
+  .rule-actions-expand {
+    display: none;
+  }
+  .rule-actions-collapse {
+    display: block;
+  }
+  &:hover {
+    .rule-actions-expand {
+      display: block;
+    }
+    .rule-actions-collapse {
+      display: none;
+    }
+    background-color: $neuvector-light-green-50;
+  }
+}

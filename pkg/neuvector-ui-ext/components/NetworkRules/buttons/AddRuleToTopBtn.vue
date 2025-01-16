@@ -8,6 +8,7 @@
         props: {
             autoCompleteData: Object,
             isLightTheme: Boolean,
+            disabled: Boolean,
         },
         data() {
             return {
@@ -27,14 +28,15 @@
 
 <template>
     <div>
-        <a
+        <button
             mat-button
-            class="btn role-primary"
+            class="btn role-secondary"
             aria-label="Open add rule modal"
             type="button"
+            :disabled="disabled"
             @click="openAddEditRuleModal()">
             {{ t('policy.toolBar.INSERT_TO_TOP') }}
-        </a>
+        </button>
         <AddEditRuleModal 
             ref="addEditRule"
             :isLightTheme="isLightTheme"

@@ -1,5 +1,6 @@
 import { NetworkRule } from 'types/network-rules';
 import { UserPermissions } from 'types/neuvector';
+import { GridApi } from 'ag-grid-community';
 
 export default {
     updateHosts({ commit }: any, hosts: any[]) {
@@ -22,6 +23,12 @@ export default {
     },
     updateNetworkRules({ commit }: any, networkRules: NetworkRule[] | null) {
         commit('updateNetworkRules', networkRules);
+    },
+    saveNetworkRulesGridApi({ commit }: any, gridApi: GridApi | null) {
+        commit('saveNetworkRulesGridApi', gridApi);
+    },
+    updateSelectedNetworkRules({ commit }: any, selectedNetworkRules: NetworkRule[] | null) {
+        commit('updateSelectedNetworkRules', selectedNetworkRules);
     },
     insertNetworkRule({ commit }: any, entry: {networkRule: NetworkRule, targetIndex: number}) {
         commit('insertNetworkRule', entry);

@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { NetworkRule } from 'types/network-rules';
 import { NV_CONST } from '../../types/neuvector';
 import { UserPermissions } from 'types/neuvector';
+import { GridApi } from 'ag-grid-community';
 
 export default {
     updateHosts(state: StateConfig, hosts: any[]) {
@@ -25,6 +26,12 @@ export default {
     },
     updateNetworkRules(state: StateConfig, networkRules: NetworkRule[] | null) {
         state.networkRules = networkRules;
+    },
+    saveNetworkRulesGridApi(state: StateConfig, gridApi: GridApi | null) {
+        state.networkRulesGridApi = gridApi;
+    },
+    updateSelectedNetworkRules(state: StateConfig, selectedNetworkRules: NetworkRule[] | null) {
+        state.selectedNetworkRules = selectedNetworkRules;
     },
     insertNetworkRule(state: StateConfig, entry: {networkRule: NetworkRule, targetIndex: number}) {
         state.networkRules?.splice(entry.targetIndex, 0, entry.networkRule);

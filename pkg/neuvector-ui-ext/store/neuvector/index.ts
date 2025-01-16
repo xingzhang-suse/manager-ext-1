@@ -1,5 +1,6 @@
 import { CoreStoreSpecifics, CoreStoreConfig } from '@shell/core/types';
-import { NEUVECTOR_PRODUCT_NAME, NV_CONST } from '../../types/neuvector'
+import { NEUVECTOR_PRODUCT_NAME, NV_CONST } from '../../types/neuvector';
+import { GridApi } from 'ag-grid-community';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
@@ -15,6 +16,8 @@ export interface StateConfig {
     isNetworkRuleChanged: Boolean,
     networkRules: NetworkRule[] | null,
     networkRulesBackup: NetworkRule[],
+    networkRulesGridApi: GridApi | null,
+    selectedNetworkRules: NetworkRule[] | null,
     isNetworkRuleListDirty: Boolean,
     newId: number,
     tokenBakeup: string,
@@ -35,6 +38,8 @@ const neuvectorFactory = (config: StateConfig): CoreStoreSpecifics => {
                 isNetworkRuleChanged: config.isNetworkRuleChanged,
                 networkRules: config.networkRules,
                 networkRulesBackup: config.networkRulesBackup,
+                networkRulesGridApi: config.networkRulesGridApi,
+                selectedNetworkRules: config.selectedNetworkRules,
                 isNetworkRuleListDirty: config.isNetworkRuleListDirty,
                 newId: config.newId,
                 tokenBakeup: config.tokenBakeup,
@@ -62,6 +67,8 @@ export default {
             isNetworkRuleChanged: false,
             networkRules: null,
             networkRulesBackup: [],
+            networkRulesGridApi: null,
+            selectedNetworkRules: [],
             isNetworkRuleListDirty: false,
             newId: NV_CONST.NEW_ID_SEED.NETWORK_RULE,
             tokenBakeup: '',

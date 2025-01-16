@@ -58,15 +58,17 @@ export default {
           isAllow: false,
         };
       },
-      updateRule() {
+      async updateRule() {
         if (this.opType === UpdateType.Edit) {
           let payload = this.getUpdatedPayload();
-          updateGridData([payload], this.selectedIndex, UpdateType.Edit, null, this.$store);
+          await updateGridData([payload], this.selectedIndex, UpdateType.Edit, null, this.$store);
         } else {
           let payload = this.getAddedPayload();
-          updateGridData([payload], this.selectedIndex, this.opType, null, this.$store);
+          await updateGridData([payload], this.selectedIndex + 1, this.opType, null, this.$store);
         }
         this.initializeForm();
+        let gridApi = await this.$store.getters['neuvector/networkRulesGridApi'];
+        gridApi.setRowData(this.$store.getters['neuvector/networkRules']);
         this.showSlideIn = false;
       },
       getAddedPayload() {
@@ -175,7 +177,7 @@ export default {
             :mode="mode"
             :multiple="false"
             :label="t('policy.addPolicy.FROM')"
-            :options="autoCompleteData.endpointOptions"
+            :options="autoCompleteData?.endpointOptions || []"
             :disabled="mode==='view'"
             @update:value="update"
           />
@@ -190,7 +192,7 @@ export default {
             :mode="mode"
             :multiple="false"
             :label="t('policy.addPolicy.TO')"
-            :options="autoCompleteData.endpointOptions"
+            :options="autoCompleteData?.endpointOptions || []"
             :disabled="mode==='view'"
             @update:value="update"
           />
@@ -205,7 +207,7 @@ export default {
             :mode="mode"
             :multiple="true"
             :label="t('policy.addPolicy.APP')"
-            :options="autoCompleteData.applicationOptions"
+            :options="autoCompleteData?.applicationOptions || []"
             :disabled="mode==='view'"
             @update:value="update"
           />

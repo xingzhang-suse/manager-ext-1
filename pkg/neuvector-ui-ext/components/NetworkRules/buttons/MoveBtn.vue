@@ -6,6 +6,7 @@
             MoveRulesModal,
         },
         props: {
+            disabled: Boolean,
         },
         data() {
             return {
@@ -25,14 +26,15 @@
 
 <template>
     <div>
-        <a
+        <button
             mat-button
             class="btn role-secondary"
             aria-label="Move sequence of rules"
+            :disabled="disabled"
             type="button"
             @click="openMoveRulesModal()">
             {{ t('policy.toolBar.MOVE_TO') }}
-        </a>
+        </button>
         <MoveRulesModal v-if="showMoveRulesModal" :message="t('policy.POLICY_DEPLOY_CONFIRM')" @close="closeMoveRulesModal"></MoveRulesModal>
     </div>
 </template>

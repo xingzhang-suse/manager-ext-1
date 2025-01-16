@@ -8,6 +8,7 @@
         },
         props: {
             networkRules: Array,
+            disabled: Boolean,
         },
         methods: {
             exportCsv() {
@@ -45,13 +46,14 @@
 
 <template>
     <div>
-        <a
+        <button
             mat-button
-            class="btn role-primary"
+            class="btn role-secondary"
             aria-label="Save rules"
             type="button"
+            :disabled="disabled"
             @click="exportCsv()">
             CSV
-        </a>
+        </button>
     </div>
 </template>

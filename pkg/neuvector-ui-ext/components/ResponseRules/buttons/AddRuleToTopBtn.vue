@@ -32,7 +32,7 @@
     <div>
         <a
             mat-button
-            class="btn role-primary"
+            class="btn role-secondary"
             aria-label="Open add rule modal"
             type="button"
             @click="openAddEditRuleModal()">

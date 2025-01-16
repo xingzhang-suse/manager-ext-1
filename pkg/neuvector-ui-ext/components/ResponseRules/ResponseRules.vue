@@ -7,17 +7,19 @@
   import _axios from 'axios';
   import Refresh from '../common/buttons/Refresh';
   import { getResponseRulesData, getAutoCompleteData } from '../../plugins/response-rules-class';
-  import ResponseRulesGrid from './grids/ResponseRulesGrid';
+  import ResponseRulesAgGrid from './grids/ResponseRulesAgGrid';
   import AddRuleToTopBtn from './buttons/AddRuleToTopBtn';
   import { mapGetters } from 'vuex';
+  import QuickFilter from '../../components/common/inputs/QuickFilter';
 
   export default {
     name: "ResponseRules",
     components: {
       Loading,
       Refresh,
-      ResponseRulesGrid,
+      ResponseRulesAgGrid,
       AddRuleToTopBtn,
+      QuickFilter,
     },
     data() {
       return {
@@ -28,6 +30,7 @@
         },
         webhooks: [],
         NV_CONST: NV_CONST,
+        filterText: '',
       };
     },
     created() {
@@ -76,7 +79,10 @@
           console.error(error);
           this.responseRuleErr = true;
         }
-      }
+      },
+      setQuickFilter(filterText) {
+        this.filterText = filterText;
+      },
     },
   }
 </script>
@@ -101,16 +107,18 @@
         class="pull-left mx-2">
       </AddRuleToTopBtn>
       <Refresh class="pull-right" :reloadData="loadData"></Refresh>
+      <QuickFilter class="pull-right w-auto mr-10"  @quickFilter="setQuickFilter"></QuickFilter>
     </div>
-    <ResponseRulesGrid
+    <ResponseRulesAgGrid
       v-if="autoCompleteData.conditionOptions && responseRules?.length > 0"
       :responseRules="responseRules"
       :autoCompleteData="autoCompleteData"
       :webhooks="webhooks"
+      :filterText="filterText"
       :source="NV_CONST.NAV_SOURCE.SELF"
       :refreshFn="loadData"
       class="mt-2" >
-    </ResponseRulesGrid>
+    </ResponseRulesAgGrid>
     <div v-else-if="responseRules?.length === 0" class="text-center mt-5">
       {{ t('general.NO_ROWS') }}
     </div>

@@ -3,6 +3,7 @@
         components: {
         },
         props: {
+            disabled: Boolean,
         },
         methods: {
             undoChanges() {
@@ -18,13 +19,14 @@
 
 <template>
     <div>
-        <a
+        <button
             mat-button
             class="btn role-secondary"
             aria-label="Undo changes"
             type="button"
+            :disabled="disabled"
             @click="undoChanges()">
             {{ t('policy.toolBar.UNDO') }}
-        </a>
+        </button>
     </div>
 </template>
