@@ -78,6 +78,26 @@ export function init($plugin: IPlugin, store: any) {
       meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
     },
   });
+  virtualType({
+    labelKey: "sidebar.nav.NETWORK_ACTIVITY",
+    name: "neuvector-network-activities",
+    namespaced: false,
+    route: {
+      name: `c-cluster-${NEUVECTOR}-network-activities`,
+      params: { product: NEUVECTOR },
+      meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
+    },
+  });
+  virtualType({
+    label: "Topology",
+    name: "neuvector-topology",
+    namespaced: false,
+    route: {
+      name: `c-cluster-${NEUVECTOR}-topology`,
+      params: { product: NEUVECTOR },
+      meta: { pkg: "neuvector-ui-ext", product: NEUVECTOR },
+    },
+  });
 
   basicType([
     "neuvector-overview",
@@ -86,5 +106,7 @@ export function init($plugin: IPlugin, store: any) {
     "neuvector-bench",
     "neuvector-policy",
     "neuvector-response-rules",
+    "neuvector-network-activities",
+    "neuvector-topology",
   ]);
 }

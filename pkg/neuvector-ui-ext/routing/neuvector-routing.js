@@ -4,6 +4,8 @@ import Vulnerabilities from '../components/Vulnerabilities/Vulnerabilities.vue';
 import NetworkRules from '../components/NetworkRules/NetworkRules.vue';
 import Compliance from '../components/Compliance/Compliance.vue';
 import ResponseRules from '../components/ResponseRules/ResponseRules';
+import NetworkActivities from '../components/NetworkActivities/NetworkActivities';
+import Topology from '../components/Topology/Topology';
 
 const NEUVECTOR = 'neuvector';
 
@@ -37,6 +39,16 @@ const routes = [
     name: `c-cluster-${ NEUVECTOR }-response-rules`,
     path: `/c/:cluster/${ NEUVECTOR }/response-rules`,
     component: ResponseRules,
+  },
+  {
+    name: `c-cluster-${ NEUVECTOR }-network-activities`,
+    path: `/c/:cluster/${ NEUVECTOR }/network-activities`,
+    component: NetworkActivities,
+  },
+  {
+    name: `c-cluster-${ NEUVECTOR }-topology`,
+    path: `/c/:cluster/${ NEUVECTOR }/topology`,
+    component: Topology,
   },
 ];
 
