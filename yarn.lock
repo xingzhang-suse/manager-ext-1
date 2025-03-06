@@ -13914,11 +13914,6 @@ vue-country-flag-next@^2.3.2:
   resolved "https://registry.yarnpkg.com/vue-country-flag-next/-/vue-country-flag-next-2.3.2.tgz#c35d283f83b7631be414c720391a8363991557c2"
   integrity sha512-Lv12L1VTwlBgizpZ3xPEPO3zuIETaJmeSiPuLOWLLgu2EakwU/o72iKYiKcdZ6BXiSkfss+Ski5fDzjuxZ1DcA==
 
-vue-country-flag@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/vue-country-flag/-/vue-country-flag-2.3.2.tgz#db500a8ee287675b2990360b6fa100cdf7d444c2"
-  integrity sha512-YhSS+GbLT9tp8tjMXxJKlqpBUd6dbhQJrttKj8ZbHtBocorIomFDMVMxraWVMs3hxaCW6SsAYaREkoYM00ORiA==
-
 vue-datepicker-next@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/vue-datepicker-next/-/vue-datepicker-next-1.0.3.tgz#755c33ef94e9cc2d16238f2c1a9fdffc9c02cfb3"
