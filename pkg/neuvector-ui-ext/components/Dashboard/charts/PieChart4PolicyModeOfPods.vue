@@ -11,13 +11,13 @@
         <EmptyDataMessage icon="icon-checkmark" color="#FBC02D" :message="t('dashboard.body.message.NO_MANAGED_CONTAINERS')"/>
       </div>
   </div>
-  
+
 </template>
 
 <script>
   import { PieChart } from 'vue-chart-3';
   import { Chart, registerables } from 'chart.js';
-  import { ref, defineComponent, getCurrentInstance } from 'vue';
+  import { ref, defineComponent } from 'vue';
   import EmptyDataMessage from '../contents/EmptyDataMessage';
   import { NV_CONST } from '../../../types/neuvector';
 
@@ -29,11 +29,6 @@
         PieChart,
         EmptyDataMessage,
       },
-      data() {
-        return {
-          isEmptyData: false,
-        };
-      },
       props: {
           width: { type: Number, default: 400 },
           height: { type: Number, default: 300 },
@@ -41,7 +36,7 @@
           parentContext: Object,
       },
       setup(props) {
-        const instance = getCurrentInstance();
+        let isEmptyData = ref(false);
         const modes = _.cloneDeep(NV_CONST.MODES).reverse().concat(['quarantined']);
         let assetsPolicyModeLabels = new Array(modes.length);
         let assetsPolicyModeData = new Array(modes.length);
@@ -55,9 +50,9 @@
           quarantined: 0
         };
         if (props.podMode.length === 0) {
-          instance.isEmptyData = true;
+          isEmptyData.value = true;
         } else {
-          instance.isEmptyData = false;
+          isEmptyData.value = false;
           props.podMode.forEach(container => {
             containerStateCount[container.state.toLowerCase()] ++;
           });
@@ -95,7 +90,7 @@
           },
           maintainAspectRatio: false
         });
-        return { chartData, chartOptions };
+        return { chartData, chartOptions, isEmptyData };
       },
   });
 </script>
@@ -104,7 +99,12 @@
   .chart-container {
       position: relative;
       width: 100%;
+      height: 300px;
       max-width: 600px;
       margin: auto;
+  }
+
+  .chart-container :deep(> div) {
+    width: 100%;
   }
 </style>

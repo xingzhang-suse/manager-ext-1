@@ -8,16 +8,20 @@
           :height="height"
       />
       <div class="message-content" v-else>
-        <EmptyDataMessage icon="icon-checkmark" color="#8bc34a" :message="t('dashboard.body.message.NO_VULNERABLE_CONTAINER')"/>
+        <EmptyDataMessage
+            icon="icon-checkmark"
+            color="#8bc34a"
+            :message="parentContext.t('dashboard.body.message.NO_VULNERABLE_CONTAINER')"
+        />
       </div>
   </div>
-  
+
 </template>
 
 <script>
   import { BarChart } from 'vue-chart-3';
   import { Chart, registerables } from 'chart.js';
-  import { ref, defineComponent, getCurrentInstance } from 'vue';
+  import { ref, defineComponent } from 'vue';
   import EmptyDataMessage from '../contents/EmptyDataMessage';
 
   Chart.register(...registerables);
@@ -40,7 +44,7 @@
           parentContext: Object,
       },
       setup(props) {
-        const instance = getCurrentInstance();
+        let isEmptyData = ref(false);
         let topVulnerableAssetsLabel = new Array(5);
         let topHighVulnerableAssetsData = new Array(5);
         let topMediumVulnerableAssetsData = new Array(5);
@@ -48,9 +52,9 @@
         topHighVulnerableAssetsData.fill(0);
         topMediumVulnerableAssetsData.fill(0);
         if (props.topVulContainers.top5Containers.length === 0) {
-          instance.isEmptyData = true;
+          isEmptyData.value = true;
         } else {
-          instance.isEmptyData = false;
+          isEmptyData.value = false;
           props.topVulContainers.top5Containers.forEach((asset, index) => {
             topVulnerableAssetsLabel[index] = asset.display_name;
             topHighVulnerableAssetsData[index] = asset.high4Dashboard;
@@ -84,6 +88,7 @@
         });
 
         const chartOptions = ref({
+          responsive: true,
           animation: false,
           indexAxis: 'y',
           scales: {
@@ -110,7 +115,7 @@
           maintainAspectRatio: false
         });
 
-        return { chartData, chartOptions };
+        return { chartData, chartOptions, isEmptyData };
       },
   });
 </script>
@@ -120,6 +125,17 @@
       position: relative;
       width: 100%;
       max-width: 600px;
+      height: 300px;
       margin: auto;
+  }
+
+  .chart-container :deep(> div) {
+      width: 100%;
+  }
+
+  .message-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 </style>
