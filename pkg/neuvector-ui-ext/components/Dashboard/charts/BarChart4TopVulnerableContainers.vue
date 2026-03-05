@@ -32,11 +32,6 @@
         BarChart,
         EmptyDataMessage,
       },
-      data() {
-        return {
-          isEmptyData: false,
-        };
-      },
       props: {
           width: { type: Number, default: 400 },
           height: { type: Number, default: 300 },
