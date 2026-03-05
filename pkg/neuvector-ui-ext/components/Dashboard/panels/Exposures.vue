@@ -211,7 +211,7 @@ export default {
     </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .exposure-chart {
   width: 100%;
   max-width: 600px;

@@ -15,20 +15,23 @@
         />
       </div>
   </div>
-  
+
 </template>
 
 <script>
   import { BarChart } from 'vue-chart-3';
   import { Chart, registerables } from 'chart.js';
-  import { ref, defineComponent, computed } from 'vue';
+  import { ref, defineComponent } from 'vue';
   import EmptyDataMessage from '../contents/EmptyDataMessage';
 
   Chart.register(...registerables);
 
   export default defineComponent({
       name: 'BarChart4TopVulnerableContainers',
-      components: { BarChart, EmptyDataMessage },
+      components: {
+        BarChart,
+        EmptyDataMessage,
+      },
       props: {
           width: { type: Number, default: 400 },
           height: { type: Number, default: 300 },
