@@ -46,14 +46,14 @@ export default {
       <div class="subtitle">
       </div>
     </div>
-    <div class="risk-section-details d-flex align-items-center justify-content-center" v-if="!riskFactor.isFactorError">
-      <div class="">
+    <div class="risk-section-details risk-factor-layout" v-if="!riskFactor.isFactorError">
+      <div class="risk-factor-rank">
         <div class="secure-rank-wrap">
           <div class="secure-rank"></div>
           <div class="empty" :style="riskFactor.subScore"></div>
         </div>
       </div>
-      <table class="">
+      <table class="table risk-factor-table">
         <tr v-for="factor in riskFactor.factors" :key="factor">
           <td>{{factor.category}}</td>
           <td style="text-align: left;">
@@ -225,6 +225,23 @@ export default {
     //   color: #45505c;
     }
   }
+}
+
+.risk-factor-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.risk-factor-rank {
+  flex: 0 0 auto;
+  order: 2;
+}
+
+.risk-factor-table {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+  order: 1;
 }
 
 .secure-rank-wrap {
