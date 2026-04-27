@@ -91,10 +91,11 @@
         computed: {
           vulnerbilityCount() {
             return this.vulnerabilities.reduce((cnt, vul) => {
+              cnt.critical += vul.severity.toLowerCase() === 'critical' ? 1 : 0;
               cnt.high += vul.severity.toLowerCase() === 'high' ? 1 : 0;
               cnt.medium += vul.severity.toLowerCase() === 'medium' ? 1 : 0;
               return cnt;
-            }, {high: 0, medium: 0});
+            }, {critical: 0, high: 0, medium: 0});
           }
         }
     };
@@ -105,6 +106,10 @@
     <div v-if="vulnerabilities.length > 0" class="download-btn">
       <DownloadVulnerabilititesCSV class="pull-left" :csvFileName="csvFileName" :vulnerabilities="vulnerabilities"></DownloadVulnerabilititesCSV>
       <div class="pull-left" style="margin-top: -3px;">
+        <div class="vul-cnt row">
+          <span class="pl-2 pr-2 col-6 badge badge-critical">Critical</span>
+          <span class="col-6">{{ vulnerbilityCount.critical }}</span>
+        </div>
         <div class="vul-cnt row">
           <span class="pl-2 pr-2 col-6 badge badge-danger">High</span>
           <span class="col-6">{{ vulnerbilityCount.high }}</span>
@@ -134,7 +139,7 @@
 
       <template #col:severity="{row}">
         <td>
-          <span :class="'pl-2 pr-2 badge ' + (row.severity.toLowerCase() === 'high' ? 'badge-danger' : 'badge-warning')">{{ row.severity || '-' }}</span>
+          <span :class="'pl-2 pr-2 badge ' + (row.severity.toLowerCase() === 'critical' ? 'badge-critical' : row.severity.toLowerCase() === 'high' ? 'badge-danger' : 'badge-warning')">{{ row.severity || '-' }}</span>
         </td>
       </template>
 
