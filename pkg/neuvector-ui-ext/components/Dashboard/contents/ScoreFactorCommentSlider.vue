@@ -92,4 +92,7 @@ export default {
   color: var(--text-secondary);
   text-align: left;
 }
+.carousel__pagination {
+  top: 100px;
+}
 </style>
