@@ -4,7 +4,7 @@
   </div>
   <div v-else>
     {{ t('dashboard.heading.guideline.AUTO_SCAN_OFF') }}
-    <div class="toggle-switch mt-10">
+    <div v-if="isAutoScanAuthorized" class="toggle-switch mt-10">
       <ToggleSwitch @update:value="toggleAutoScan" :value="autoScan" :offLabel="'Auto Scan'" />
     </div>
   </div>
@@ -12,16 +12,27 @@
 <script>
 import { ToggleSwitch } from '@components/Form/ToggleSwitch';
 import { updateAutoScan } from '../../../plugins/dashboard-class';
+import { getDisplayFlag } from '../../../utils/auth';
+import { refreshAuth } from '../../../plugins/neuvector-class';
+import { nvVariables } from '../../../types/neuvector';
 
 export default {
-  fetch() {
 
+  async fetch() {
+    let authRes = await refreshAuth();
+    nvVariables.user = authRes.data.token;
+    this.isAutoScanAuthorized = getDisplayFlag('runtime_scan', this.$store);
   },
   props: {
     autoScan: Boolean,
     token: String,
     ns: String,
     currentClusterId: String
+  },
+  data() {
+    return {
+      isAutoScanAuthorized: false
+    };
   },
   components: {
     ToggleSwitch,
